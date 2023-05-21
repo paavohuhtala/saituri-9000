@@ -2,8 +2,8 @@ import { styled } from "styled-components";
 import { gray, green } from "../theme";
 import React from "react";
 import { StyledLink } from "./StyledLink";
-import { Link } from "@tanstack/router";
 import { skeletonStyle } from "./skeleton";
+import { Link } from "react-router-dom";
 
 const Container = styled.button`
   display: flex;

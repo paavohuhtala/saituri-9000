@@ -23,7 +23,6 @@
     "@prisma/client": "4.14.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@tabler/icons-react": "^2.20.0",
-    "@tanstack/router": "0.0.1-beta.86",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "fp-ts": "^2.15.0",
@@ -33,6 +32,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
+    "react-router-dom": "^6.11.2",
     "styled-components": "^6.0.0-rc.1",
     "typera-express": "^2.4.4"
   },

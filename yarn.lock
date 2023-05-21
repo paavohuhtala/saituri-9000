@@ -1372,7 +1372,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.21.5
   resolution: "@babel/runtime@npm:7.21.5"
   dependencies:
@@ -2359,6 +2359,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remix-run/router@npm:1.6.2":
+  version: 1.6.2
+  resolution: "@remix-run/router@npm:1.6.2"
+  checksum: 5969d313bff6ba5c75917910090cebafda84b9d3b4b453fae6b3d60fea9f938078578ffca769c532ab7ce252cd4a207b78d1024d7c727ab80dd572e62fd3b3f2
+  languageName: node
+  linkType: hard
+
 "@rometools/cli-darwin-arm64@npm:12.1.2":
   version: 12.1.2
   resolution: "@rometools/cli-darwin-arm64@npm:12.1.2"
@@ -2576,41 +2583,6 @@ __metadata:
   version: 2.20.0
   resolution: "@tabler/icons@npm:2.20.0"
   checksum: 02177e14f4b3cbbbf10a7f8f60acabf45f4b1584eec6c81d9be20c34a149afafd49b72b20fd42a8bdd47ea3dd339fef0620fd144c6b96fb12381431916fe64fe
-  languageName: node
-  linkType: hard
-
-"@tanstack/react-store@npm:0.0.1-beta.86":
-  version: 0.0.1-beta.86
-  resolution: "@tanstack/react-store@npm:0.0.1-beta.86"
-  dependencies:
-    "@tanstack/store": 0.0.1-beta.86
-    use-sync-external-store: ^1.2.0
-  peerDependencies:
-    react: ">=16"
-    react-dom: ">=16"
-  checksum: 3aafd7c52ae595eb97400f5e2b606cea28f897c9ef64ca84370f8862010d2dca030dab16e135486d0ce9c3563418779af4e9a8250827557bb8aa193a1eea6ed4
-  languageName: node
-  linkType: hard
-
-"@tanstack/router@npm:0.0.1-beta.86":
-  version: 0.0.1-beta.86
-  resolution: "@tanstack/router@npm:0.0.1-beta.86"
-  dependencies:
-    "@babel/runtime": ^7.16.7
-    "@tanstack/react-store": 0.0.1-beta.86
-    tiny-invariant: ^1.3.1
-    tiny-warning: ^1.0.3
-  peerDependencies:
-    react: ">=16"
-    react-dom: ">=16"
-  checksum: e4296c26d78e39fb431c2e6d1a32bc25f3184519055a7164f4d6c219b214c5eb4793d86c46ebc75ad60dc11c6d75ff14b945d79c49673d2dee82bfa8ee690d12
-  languageName: node
-  linkType: hard
-
-"@tanstack/store@npm:0.0.1-beta.86":
-  version: 0.0.1-beta.86
-  resolution: "@tanstack/store@npm:0.0.1-beta.86"
-  checksum: 899ee56ecf5cc60a8e8cb7323e2d892a94b174b4a81382d402cf44556283b3cbe40b0efaaaa68de4cb6ac058d76719d621d07dc61be7702f8f89bddc6cb2221d
   languageName: node
   linkType: hard
 
@@ -5252,6 +5224,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-router-dom@npm:^6.11.2":
+  version: 6.11.2
+  resolution: "react-router-dom@npm:6.11.2"
+  dependencies:
+    "@remix-run/router": 1.6.2
+    react-router: 6.11.2
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: ba44ff37f2956bc18991f2eedb32a3fa46d35832f61ded6c5d167e853ca289868fca6635467866280c73bc3da00dce8437dbbec57da100c0a3e3e3850af00b83
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.11.2":
+  version: 6.11.2
+  resolution: "react-router@npm:6.11.2"
+  dependencies:
+    "@remix-run/router": 1.6.2
+  peerDependencies:
+    react: ">=16.8"
+  checksum: e47f875dca70033a3b42704cb5ec076b60f9629a5cdc3be613707f3d5a5706123fb80301037455c285c6d5a1011b443e1784e0103969ebfac7071648d360c413
+  languageName: node
+  linkType: hard
+
 "react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
@@ -5466,7 +5462,6 @@ __metadata:
     "@swc-node/register": ^1.6.5
     "@swc/core": ^1.3.59
     "@tabler/icons-react": ^2.20.0
-    "@tanstack/router": 0.0.1-beta.86
     "@types/lodash": ^4.14.194
     "@types/luxon": ^3.3.0
     "@types/react": ^18.2.6
@@ -5484,6 +5479,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-redux: ^8.0.5
+    react-router-dom: ^6.11.2
     rome: ^12.1.2
     styled-components: ^6.0.0-rc.1
     typera-express: ^2.4.4
@@ -5851,20 +5847,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-invariant@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "tiny-invariant@npm:1.3.1"
-  checksum: 872dbd1ff20a21303a2fd20ce3a15602cfa7fcf9b228bd694a52e2938224313b5385a1078cb667ed7375d1612194feaca81c4ecbe93121ca1baebe344de4f84c
-  languageName: node
-  linkType: hard
-
-"tiny-warning@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: da62c4acac565902f0624b123eed6dd3509bc9a8d30c06e017104bedcf5d35810da8ff72864400ad19c5c7806fc0a8323c68baf3e326af7cb7d969f846100d71
-  languageName: node
-  linkType: hard
-
 "to-fast-properties@npm:^2.0.0":
   version: 2.0.0
   resolution: "to-fast-properties@npm:2.0.0"
@@ -6042,7 +6024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.0.0, use-sync-external-store@npm:^1.2.0":
+"use-sync-external-store@npm:^1.0.0":
   version: 1.2.0
   resolution: "use-sync-external-store@npm:1.2.0"
   peerDependencies:

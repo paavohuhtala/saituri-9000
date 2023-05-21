@@ -1,4 +1,4 @@
-import { Link, LinkFn, RegisteredRoutesInfo } from "@tanstack/router";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const StyledLink = styled(Link)`

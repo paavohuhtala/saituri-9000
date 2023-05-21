@@ -1,9 +1,9 @@
-import { Link, Outlet } from "@tanstack/router";
 import React from "react";
 import { createGlobalStyle, styled } from "styled-components";
 import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
+import { Link, Outlet } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;

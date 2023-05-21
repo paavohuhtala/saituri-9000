@@ -61,7 +61,7 @@ export function ExpenseGroups() {
             key={expenseGroup.id}
             title={expenseGroup.name}
             as="li"
-            link={<CardLinkArea to={"/expense-group/$id"} params={{ id: expenseGroup.id }} />}
+            link={<CardLinkArea to={`/expense-group/${expenseGroup.id}`} />}
           >
             <span>{expenseGroup.members.length} jäsentä</span>
             <span>{expenseGroup.expenseCount} kulua</span>

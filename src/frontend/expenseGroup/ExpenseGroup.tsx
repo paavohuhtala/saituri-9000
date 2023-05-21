@@ -5,16 +5,18 @@ import { ErrorView } from "../common/ErrorView";
 import { Members } from "../members/Members";
 import { Select } from "../common/inputs";
 import { useGetMembersQuery } from "../redux/memberApi";
-import { Button } from "../common/Button";
+import { Button, LinkButton } from "../common/Button";
 import { IconPlus } from "@tabler/icons-react";
-import { Link } from "@tanstack/router";
+import { Link, Navigate, useParams } from "react-router-dom";
 
-interface Props {
-  groupId: string;
-}
+export function ExpenseGroup() {
+  const { id } = useParams();
 
-export function ExpenseGroup({ groupId }: Props) {
-  const { isLoading, data, error, refetch } = useGetExpenseGroupQuery(groupId);
+  if (!id) {
+    return <Navigate to="/" replace />;
+  }
+
+  const { isLoading, data, error, refetch } = useGetExpenseGroupQuery(id);
   const { isLoading: isLoadingAllMembers, data: allMembers } = useGetMembersQuery();
   const [addMember, newMemberStatus] = useAddExpenseGroupMemberMutation();
 
@@ -37,7 +39,7 @@ export function ExpenseGroup({ groupId }: Props) {
       return;
     }
 
-    addMember({ expenseGroupId: groupId, memberId: selectedMember }).then(() => {
+    addMember({ expenseGroupId: id, memberId: selectedMember }).then(() => {
       setSelectedMember("");
     });
   };
@@ -83,6 +85,9 @@ export function ExpenseGroup({ groupId }: Props) {
         </InlineForm>
       )}
       <ViewSubtitle>Kulut</ViewSubtitle>
+      <LinkButton to={`/expense-group/${id}/new`}>
+        <IconPlus /> Luo uusi kulu
+      </LinkButton>
     </ViewContainer>
   );
 }

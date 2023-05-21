@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { gray, green, red, indigo } from "../theme";
+import { Link } from "react-router-dom";
 
 const BaseButton = styled.button`
   --disabled-bg-color: ${gray.x700};
@@ -62,3 +63,11 @@ export const DangerButton = styled(BaseButton)`
 
   --hover-bg-color: ${red.x700};
 `;
+
+export const LinkButton = styled(Button).attrs({ as: Link })`
+  text-decoration: none;
+
+  &:hover {
+    color: var(--text-color);
+  }
+` as typeof Link;
