@@ -1,4 +1,4 @@
-import { Expense, ExpenseGroup, ExpenseParticipant, Member, Payment } from "./domain";
+import { Expense, ExpenseGroup, ExpenseParticipant, Member, NewExpenseGroup, Payment } from "./domain";
 
 export interface ExpenseGroupWithDetails extends ExpenseGroup {
   members: Member[];
@@ -21,3 +21,10 @@ export interface ExpenseGroupResponse extends ExpenseGroup {
   expenses: ExpenseWithDetails[];
   payments: PaymentWithDetails[];
 }
+
+export type MembersResponse = Member[];
+
+export type AddExpenseGroupRequest = NewExpenseGroup;
+export type AddExpenseGroupResponse = { id: string };
+
+export type AddExpenseGroupMemberRequest = { memberId: string };

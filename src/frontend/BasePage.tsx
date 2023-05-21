@@ -3,7 +3,7 @@ import React from "react";
 import { createGlobalStyle, styled } from "styled-components";
 import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
-import { pink } from "./theme";
+import { pink, indigo } from "./theme";
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +19,14 @@ const GlobalCss = createGlobalStyle`
     color: ${gray.x50};
     font-family: 'Inter', sans-serif;
     font-weight: 400;
+  }
+
+  a {
+    color: ${indigo.x500};
+
+    &:hover {
+      color: ${indigo.x400};
+    }
   }
 `;
 

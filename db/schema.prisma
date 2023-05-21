@@ -14,10 +14,10 @@ model Member {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  expenseGroups         ExpenseGroup[]
-  expenses              Expense[]
-  payments              Payment[]
-  expenseParticipations ExpenseParticipant[]
+  expenses                Expense[]
+  payments                Payment[]
+  expenseParticipations   ExpenseParticipant[]
+  expenseGroupMemberships ExpenseGroupMember[]
 }
 
 model ExpenseGroup {
@@ -26,9 +26,20 @@ model ExpenseGroup {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  members  Member[]
   expenses Expense[]
   payments Payment[]
+  members  ExpenseGroupMember[]
+}
+
+model ExpenseGroupMember {
+  expenseGroup   ExpenseGroup @relation(fields: [expenseGroupId], references: [id])
+  expenseGroupId String
+  member         Member       @relation(fields: [memberId], references: [id])
+  memberId       String
+  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime     @updatedAt @db.Timestamptz(3)
+
+  @@id([expenseGroupId, memberId])
 }
 
 model Expense {

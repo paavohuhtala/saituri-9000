@@ -1,27 +1,19 @@
 import React from "react";
 import { styled } from "styled-components";
 import { useCreateExpenseGroupMutation, useGetExpenseGroupsQuery } from "../redux/expenseGroupApi";
-import { InputField } from "../common/InputField";
+import { InputField } from "../common/inputs";
 import { Button } from "../common/Button";
 import { CardLinkArea, LinkCard, SkeletonCard } from "../common/Card";
-import { ViewContainer, ViewTitle } from "../common/layout";
+import { InlineForm, ViewContainer, ViewTitle } from "../common/layout";
 import { times } from "lodash";
 import { ErrorView } from "../common/ErrorView";
+import { IconPlus } from "@tabler/icons-react";
 
 const ExpenseList = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 8px;
   width: 100%;
-`;
-
-const AddNewContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-	flex-wrap: wrap;
 `;
 
 export function ExpenseGroups() {
@@ -64,7 +56,7 @@ export function ExpenseGroups() {
 
       <ExpenseList>
         {newExpenseGroupStatus.isLoading && <SkeletonCard />}
-        {data?.map((expenseGroup) => (
+        {data.map((expenseGroup) => (
           <LinkCard
             key={expenseGroup.id}
             title={expenseGroup.name}
@@ -75,17 +67,19 @@ export function ExpenseGroups() {
             <span>{expenseGroup.expenseCount} kulua</span>
           </LinkCard>
         ))}
+        {data.length < 1 && !newExpenseGroupStatus.isLoading ? <span>Ei kuluryhmiä.</span> : null}
       </ExpenseList>
 
-      <AddNewContainer>
+      <InlineForm>
         <InputField placeholder="Nimi" onChange={onChangeExpenseGroupName} value={newExpenseGroupName} />
         <Button
           disabled={newExpenseGroupName.length < 1 || newExpenseGroupStatus.isLoading}
           onClick={onCreateNewExpenseGroup}
         >
-          + Luo uusi
+          <IconPlus />
+          Lisää kuluryhmä
         </Button>
-      </AddNewContainer>
+      </InlineForm>
     </ViewContainer>
   );
 }

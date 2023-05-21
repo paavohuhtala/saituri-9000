@@ -3,7 +3,6 @@
 
 Expense tracking for individuals.
 
-
 ## How to run
 
 ### Requirements
@@ -12,7 +11,8 @@ Expense tracking for individuals.
   - Use [`fnm`](https://github.com/Schniz/fnm) for Node.js version management. It will automatically use the
     correct version of Node.js when you `cd` into the project directory.
 - [Yarn](https://yarnpkg.com/getting-started/install)
-- Docker (for local Postgres database)
+- Docker and Docker Compose (for local Postgres database)
+  - Or compatible alternative (e.g. Podman)
 
 ### Steps
 

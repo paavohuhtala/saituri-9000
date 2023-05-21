@@ -29,6 +29,11 @@ export const ExpenseGroup = t.intersection([
 ]);
 export type ExpenseGroup = t.TypeOf<typeof ExpenseGroup>;
 
+export const NewExpenseGroupMember = t.type({
+  memberId: t.string,
+});
+export type NewExpenseGroupMember = t.TypeOf<typeof NewExpenseGroupMember>;
+
 export const NewExpense = t.type({
   name: t.string,
   // In cents

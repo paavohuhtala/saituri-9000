@@ -19,6 +19,16 @@ CREATE TABLE "ExpenseGroup" (
 );
 
 -- CreateTable
+CREATE TABLE "ExpenseGroupMember" (
+    "expenseGroupId" TEXT NOT NULL,
+    "memberId" TEXT NOT NULL,
+    "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(3) NOT NULL,
+
+    CONSTRAINT "ExpenseGroupMember_pkey" PRIMARY KEY ("expenseGroupId","memberId")
+);
+
+-- CreateTable
 CREATE TABLE "Expense" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -54,17 +64,11 @@ CREATE TABLE "Payment" (
     CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "_ExpenseGroupToMember" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
+-- AddForeignKey
+ALTER TABLE "ExpenseGroupMember" ADD CONSTRAINT "ExpenseGroupMember_expenseGroupId_fkey" FOREIGN KEY ("expenseGroupId") REFERENCES "ExpenseGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
--- CreateIndex
-CREATE UNIQUE INDEX "_ExpenseGroupToMember_AB_unique" ON "_ExpenseGroupToMember"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_ExpenseGroupToMember_B_index" ON "_ExpenseGroupToMember"("B");
+-- AddForeignKey
+ALTER TABLE "ExpenseGroupMember" ADD CONSTRAINT "ExpenseGroupMember_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "Member"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Expense" ADD CONSTRAINT "Expense_expenseGroupId_fkey" FOREIGN KEY ("expenseGroupId") REFERENCES "ExpenseGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -83,9 +87,3 @@ ALTER TABLE "Payment" ADD CONSTRAINT "Payment_payerId_fkey" FOREIGN KEY ("payerI
 
 -- AddForeignKey
 ALTER TABLE "Payment" ADD CONSTRAINT "Payment_expenseGroupId_fkey" FOREIGN KEY ("expenseGroupId") REFERENCES "ExpenseGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ExpenseGroupToMember" ADD CONSTRAINT "_ExpenseGroupToMember_A_fkey" FOREIGN KEY ("A") REFERENCES "ExpenseGroup"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ExpenseGroupToMember" ADD CONSTRAINT "_ExpenseGroupToMember_B_fkey" FOREIGN KEY ("B") REFERENCES "Member"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -25,3 +25,12 @@ export const ViewSubtitle = styled.h2`
   line-height: 32px;
   color: ${gray.x100};
 `;
+
+export const InlineForm = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+`;

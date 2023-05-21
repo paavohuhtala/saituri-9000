@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { NewExpenseGroup } from "../../common/domain";
-import { ExpenseGroupResponse, ExpenseGroupsResponse } from "../../common/api";
+import {
+  AddExpenseGroupMemberRequest,
+  AddExpenseGroupRequest,
+  AddExpenseGroupResponse,
+  ExpenseGroupResponse,
+  ExpenseGroupsResponse,
+} from "../../common/api";
 
 export const expenseGroupApi = createApi({
   reducerPath: "expenseGroupApi",
@@ -15,7 +21,7 @@ export const expenseGroupApi = createApi({
       providesTags: ["ExpenseGroup"],
       query: (id) => `/expense-groups/${id}`,
     }),
-    createExpenseGroup: builder.mutation<string, NewExpenseGroup>({
+    createExpenseGroup: builder.mutation<AddExpenseGroupResponse, AddExpenseGroupRequest>({
       invalidatesTags: ["ExpenseGroup"],
       query: (newExpenseGroup) => ({
         url: "/expense-groups",
@@ -23,7 +29,20 @@ export const expenseGroupApi = createApi({
         body: newExpenseGroup,
       }),
     }),
+    addExpenseGroupMember: builder.mutation<void, AddExpenseGroupMemberRequest & { expenseGroupId: string }>({
+      invalidatesTags: ["ExpenseGroup"],
+      query: ({ memberId, expenseGroupId }) => ({
+        url: `/expense-groups/${expenseGroupId}/members`,
+        method: "POST",
+        body: { memberId },
+      }),
+    }),
   }),
 });
 
-export const { useGetExpenseGroupsQuery, useGetExpenseGroupQuery, useCreateExpenseGroupMutation } = expenseGroupApi;
+export const {
+  useGetExpenseGroupsQuery,
+  useGetExpenseGroupQuery,
+  useCreateExpenseGroupMutation,
+  useAddExpenseGroupMemberMutation,
+} = expenseGroupApi;

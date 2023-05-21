@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { blue, gray } from "../theme";
 
-export const InputField = styled.input`
+const baseInputStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -11,10 +11,7 @@ export const InputField = styled.input`
   background-color: ${gray.x700};
   border: 1px solid ${gray.x500};
   color: ${gray.x200};
-
   height: 44px;
-
-  cursor: text;
 
   &:hover {
     border: 1px solid ${blue.x500};
@@ -23,4 +20,14 @@ export const InputField = styled.input`
   &::placeholder {
     color: ${gray.x300};
   }
+`;
+
+export const InputField = styled.input`
+  ${baseInputStyle}
+  cursor: text;
+`;
+
+export const Select = styled.select`
+  ${baseInputStyle}
+  cursor: pointer;
 `;
