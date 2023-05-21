@@ -1,0 +1,69 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+model Member {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  expenseGroups         ExpenseGroup[]
+  expenses              Expense[]
+  payments              Payment[]
+  expenseParticipations ExpenseParticipant[]
+}
+
+model ExpenseGroup {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  members  Member[]
+  expenses Expense[]
+  payments Payment[]
+}
+
+model Expense {
+  id             String       @id @default(uuid())
+  name           String
+  amount         Int
+  expenseGroup   ExpenseGroup @relation(fields: [expenseGroupId], references: [id])
+  expenseGroupId String
+  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime     @updatedAt @db.Timestamptz(3)
+  createdBy      Member       @relation(fields: [createdById], references: [id])
+  createdById    String
+
+  participants ExpenseParticipant[]
+}
+
+model ExpenseParticipant {
+  expense    Expense  @relation(fields: [expenseId], references: [id])
+  expenseId  String
+  member     Member   @relation(fields: [memberId], references: [id])
+  memberId   String
+  multiplier Int      @default(1)
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(3)
+
+  @@id([expenseId, memberId])
+}
+
+model Payment {
+  id             String       @id @default(uuid())
+  amount         Int
+  payer          Member       @relation(fields: [payerId], references: [id])
+  payerId        String
+  expenseGroup   ExpenseGroup @relation(fields: [expenseGroupId], references: [id])
+  expenseGroupId String
+  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime     @updatedAt @db.Timestamptz(3)
+}
