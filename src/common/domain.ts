@@ -53,15 +53,12 @@ export const Expense = t.intersection([
 ]);
 export type Expense = t.TypeOf<typeof Expense>;
 
-export const NewExpenseParticipant = t.intersection([
-  t.type({
-    expenseId: t.string,
-    memberId: t.string,
-  }),
-  t.partial({
-    weight: t.number,
-  }),
-]);
+export const NewExpenseParticipant = t.type({
+  expenseId: t.string,
+  memberId: t.string,
+  weight: t.number,
+});
+
 export type NewExpenseParticipant = t.TypeOf<typeof NewExpenseParticipant>;
 
 export const ExpenseParticipant = t.intersection([

@@ -29,6 +29,7 @@ const CardHeader = styled.div<{ $selected: boolean }>`
   padding: 8px;
   color: ${gray.x50};
   border: none;
+  user-select: none;
 
   ${({ $selected }) =>
     $selected &&
@@ -67,9 +68,7 @@ interface Props {
 }
 
 export function ParticipantEditor({ member, isParticipant, setIsParticipant, initialWeight, setWeight, share }: Props) {
-  const [pendingWeight, setPendingWeight] = React.useState<string | undefined>(
-    initialWeight?.toFixed(1).replace(".", ","),
-  );
+  const [pendingWeight, setPendingWeight] = React.useState<string>(initialWeight?.toFixed(1).replace(".", ",") ?? "");
 
   return (
     <ParticipantCard key={member.id}>

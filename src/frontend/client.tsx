@@ -7,8 +7,9 @@ import { appStore } from "./redux/store";
 import { Home } from "./Home";
 import { Layout } from "./BasePage";
 import { ExpenseGroup } from "./expenseGroup/ExpenseGroup";
-import { NewExpense } from "./expense/NewExpense";
+import { NewExpenseForm } from "./expense/NewExpenseForm";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { EditExpenseForm } from "./expense/EditExpenseForm";
 
 const root = document.getElementById("root");
 
@@ -25,7 +26,8 @@ const App = () => {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="expense-group/:id" element={<ExpenseGroup />} />
-              <Route path="expense-group/:id/new" element={<NewExpense />} />
+              <Route path="expense-group/:id/expenses/new" element={<NewExpenseForm />} />
+              <Route path="expense-group/:id/expenses/:expenseId" element={<EditExpenseForm />} />
               <Route path="*" element={<Navigate to={"/"} replace />} />
             </Route>
           </Routes>

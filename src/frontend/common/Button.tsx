@@ -1,11 +1,11 @@
 import { styled } from "styled-components";
-import { gray, green, red, indigo } from "../theme";
+import { gray, green, red, indigo, blue } from "../theme";
 import { Link } from "react-router-dom";
 
 const BaseButton = styled.button`
-  --disabled-bg-color: ${gray.x700};
-  --disabled-border-color: ${gray.x500};
-  --disabled-text-color: ${gray.x300};
+  --disabled-bg-color: ${gray.x900};
+  --disabled-border-color: ${gray.x700};
+  --disabled-text-color: ${gray.x700};
 
   display: flex;
   flex-direction: row;
@@ -64,10 +64,51 @@ export const DangerButton = styled(BaseButton)`
   --hover-bg-color: ${red.x700};
 `;
 
-export const LinkButton = styled(Button).attrs({ as: Link })`
+/**
+ * A link that looks like a button.
+ */
+export const ButtonLink = styled(Button).attrs({ as: Link })`
   text-decoration: none;
 
   &:hover {
     color: var(--text-color);
   }
 ` as typeof Link;
+
+export const SecondaryButtonLink = styled(SecondaryButton).attrs({
+  as: Link,
+})`
+  text-decoration: none;
+
+  &:hover {
+    color: var(--text-color);
+  }
+` as typeof Link;
+
+/**
+ * A button that looks like a link.
+ */
+const BaseLinkButton = styled.button`
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 500;
+
+  color: var(--text-color);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--hover-text-color);
+  }
+`;
+
+export const PrimaryLinkButton = styled(BaseLinkButton)`
+  --text-color: ${blue.x600};
+  --hover-text-color: ${blue.x500};
+`;
+
+export const DangerLinkButton = styled(BaseLinkButton)`
+  --text-color: ${red.x600};
+  --hover-text-color: ${red.x500};
+`;

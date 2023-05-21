@@ -52,16 +52,25 @@ const getExpenseGroup: Route<
         include: {
           member: true,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       },
       expenses: {
         include: {
           paidBy: true,
           participants: true,
         },
+        orderBy: {
+          updatedAt: "desc",
+        },
       },
       payments: {
         include: {
           payer: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       },
     },
@@ -154,7 +163,7 @@ const createExpense: Route<
   .use(Parser.body(CreateExpenseRequest))
   .handler(async (request) => {
     const { id: expenseGroupId } = request.routeParams;
-    const { payerId: createdById, name, amount, participants } = request.body;
+    const { payerId, name, amount, participants } = request.body;
 
     const expenseGroup = await prisma.expenseGroup.findUnique({
       where: {
@@ -171,7 +180,7 @@ const createExpense: Route<
         name,
         amount,
         expenseGroupId,
-        payerId: createdById,
+        payerId,
         participants: {
           create: participants.map((participant) => ({
             memberId: participant.id,
@@ -184,6 +193,82 @@ const createExpense: Route<
     return Response.ok({ id });
   });
 
+const updateExpense: Route<
+  Response.Ok<CreateExpenseResponse> | Response.BadRequest<string> | Response.NotFound<string>
+> = route
+  .put("/expense-groups/:id/expenses/:expenseId")
+  .use(Parser.body(CreateExpenseRequest))
+  .handler(async (request) => {
+    const { id: expenseGroupId, expenseId } = request.routeParams;
+    const { payerId, name, amount, participants } = request.body;
+
+    const expenseGroup = await prisma.expenseGroup.findUnique({
+      where: {
+        id: expenseGroupId,
+      },
+    });
+
+    if (!expenseGroup) {
+      return Response.notFound("Expense group not found");
+    }
+
+    const expense = await prisma.expense.findUnique({
+      where: {
+        id: expenseId,
+      },
+    });
+
+    if (!expense) {
+      return Response.notFound("Expense not found");
+    }
+
+    await prisma.expense.update({
+      where: {
+        id: expenseId,
+      },
+      data: {
+        name,
+        amount,
+        payerId,
+        participants: {
+          deleteMany: {},
+          create: participants.map((participant) => ({
+            memberId: participant.id,
+            weight: participant.weight,
+          })),
+        },
+      },
+    });
+
+    return Response.ok({ id: expenseId });
+  });
+
+const deleteExpense: Route<Response.Ok<void> | Response.BadRequest<string> | Response.NotFound<string>> = route
+  .delete("/expense-groups/:id/expenses/:expenseId")
+  .handler(async (request) => {
+    const { id: expenseGroupId, expenseId } = request.routeParams;
+
+    const expenseGroup = await prisma.expenseGroup.findUnique({
+      where: {
+        id: expenseGroupId,
+      },
+    });
+
+    if (!expenseGroup) {
+      return Response.notFound("Expense group not found");
+    }
+
+    // We do not check if the expense exists because we want the API to be idempotent
+
+    await prisma.expense.delete({
+      where: {
+        id: expenseId,
+      },
+    });
+
+    return Response.ok();
+  });
+
 export const expenseGroupApi = router(
   getAllExpenseGroups,
   getExpenseGroup,
@@ -191,4 +276,6 @@ export const expenseGroupApi = router(
   addExpenseGroupMember,
   removeExpenseGroupMember,
   createExpense,
+  updateExpense,
+  deleteExpense,
 );

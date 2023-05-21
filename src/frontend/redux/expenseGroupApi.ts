@@ -46,6 +46,14 @@ export const expenseGroupApi = createApi({
         body: newExpense,
       }),
     }),
+    updateExpense: builder.mutation<void, CreateExpenseRequest & { expenseGroupId: string; expenseId: string }>({
+      invalidatesTags: ["ExpenseGroup"],
+      query: ({ expenseGroupId, expenseId, ...newExpense }) => ({
+        url: `/expense-groups/${expenseGroupId}/expenses/${expenseId}`,
+        method: "PUT",
+        body: newExpense,
+      }),
+    }),
   }),
 });
 
@@ -55,4 +63,5 @@ export const {
   useCreateExpenseGroupMutation,
   useAddExpenseGroupMemberMutation,
   useCreateExpenseMutation,
+  useUpdateExpenseMutation,
 } = expenseGroupApi;
