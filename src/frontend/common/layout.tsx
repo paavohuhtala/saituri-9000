@@ -34,3 +34,33 @@ export const InlineForm = styled.div`
   gap: 16px;
   flex-wrap: wrap;
 `;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+`;
+
+export const FormField = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+`;
+
+export const FormLabel = styled.label`
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: ${gray.x100};
+`;
+
+export const FormConstant = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: ${gray.x100};
+`;

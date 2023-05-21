@@ -2,6 +2,8 @@ import { Parser, Route, Response, route, router } from "typera-express";
 import { DbType, NewExpenseGroup, NewExpenseGroupMember } from "../common/domain.js";
 import {
   AddExpenseGroupResponse,
+  CreateExpenseRequest,
+  CreateExpenseResponse,
   ExpenseGroupResponse,
   ExpenseGroupWithDetails,
   ExpenseGroupsResponse,
@@ -53,7 +55,7 @@ const getExpenseGroup: Route<
       },
       expenses: {
         include: {
-          createdBy: true,
+          paidBy: true,
           participants: true,
         },
       },
@@ -145,10 +147,48 @@ const removeExpenseGroupMember: Route<Response.Ok<void> | Response.BadRequest<st
     return Response.ok();
   });
 
+const createExpense: Route<
+  Response.Ok<CreateExpenseResponse> | Response.BadRequest<string> | Response.NotFound<string>
+> = route
+  .post("/expense-groups/:id/expenses")
+  .use(Parser.body(CreateExpenseRequest))
+  .handler(async (request) => {
+    const { id: expenseGroupId } = request.routeParams;
+    const { payerId: createdById, name, amount, participants } = request.body;
+
+    const expenseGroup = await prisma.expenseGroup.findUnique({
+      where: {
+        id: expenseGroupId,
+      },
+    });
+
+    if (!expenseGroup) {
+      return Response.notFound("Expense group not found");
+    }
+
+    const { id } = await prisma.expense.create({
+      data: {
+        name,
+        amount,
+        expenseGroupId,
+        payerId: createdById,
+        participants: {
+          create: participants.map((participant) => ({
+            memberId: participant.id,
+            weight: participant.weight,
+          })),
+        },
+      },
+    });
+
+    return Response.ok({ id });
+  });
+
 export const expenseGroupApi = router(
   getAllExpenseGroups,
   getExpenseGroup,
   createExpenseGroup,
   addExpenseGroupMember,
   removeExpenseGroupMember,
+  createExpense,
 );

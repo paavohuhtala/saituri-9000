@@ -5,7 +5,7 @@ import { StyledLink } from "./StyledLink";
 import { skeletonStyle } from "./skeleton";
 import { Link } from "react-router-dom";
 
-const Container = styled.button`
+const CardContainer = styled.button`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -13,7 +13,7 @@ const Container = styled.button`
   position: relative;
 
   background-color: ${gray.x800};
-  padding: 16px 16px;
+  padding: 16px;
   border-radius: 8px;
   border: 1px solid ${gray.x700};
   color: ${gray.x50};
@@ -51,10 +51,10 @@ interface ButtonCardProps extends CardProps {
 
 export function ButtonCard({ title, children, onClick, as }: ButtonCardProps) {
   return (
-    <Container onClick={onClick} as={as}>
+    <CardContainer onClick={onClick} as={as}>
       <CardTitle>{title}</CardTitle>
       {children && <CardDetails>{children}</CardDetails>}
-    </Container>
+    </CardContainer>
   );
 }
 
@@ -64,11 +64,11 @@ interface LinkCardProps extends CardProps {
 
 export function LinkCard({ title, children, as, link }: LinkCardProps) {
   return (
-    <Container as={as}>
+    <CardContainer as={as}>
       {link}
       <CardTitle>{title}</CardTitle>
       {children && <CardDetails>{children}</CardDetails>}
-    </Container>
+    </CardContainer>
   );
 }
 
@@ -80,7 +80,7 @@ export const CardLinkArea = styled(StyledLink)`
   bottom: 0;
 ` as typeof Link;
 
-export const SkeletonCard = styled(Container)`
+export const SkeletonCard = styled(CardContainer)`
   ${skeletonStyle}
   border: 1px solid ${gray.x600};
   cursor: default;

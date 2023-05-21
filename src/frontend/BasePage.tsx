@@ -4,6 +4,7 @@ import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
 import { Link, Outlet } from "react-router-dom";
+import { IconPigMoney } from "@tabler/icons-react";
 
 const Container = styled.div`
   display: flex;
@@ -67,8 +68,11 @@ const Logo = styled(StyledLink)`
   font-weight: 900;
   line-height: 32px;
   min-width: max-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-  & > :nth-child(2) {
+  & > :last-child {
     color: ${pink.x500};
     font-weight: 700;
   }
@@ -86,12 +90,28 @@ const MainContent = styled.div`
   padding-right: 16px;
 `;
 
+const PiggyContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  background: ${pink.x500};
+  color: ${pink.x900};
+  border-radius: 50%;
+  margin-right: 8px;
+`;
+
 export function Layout() {
   return (
     <Container>
       <GlobalCss />
       <NavContainer>
         <Logo to="/">
+          <PiggyContainer>
+            <IconPigMoney width={32} height={32} />
+          </PiggyContainer>
           <span>Saituri&nbsp;</span>
           <span>9000</span>
         </Logo>

@@ -39,7 +39,7 @@ export const NewExpense = t.type({
   // In cents
   amount: t.Integer,
   expenseGroupId: t.string,
-  createdById: t.string,
+  payerId: t.string,
 });
 export type NewExpense = t.TypeOf<typeof NewExpense>;
 
@@ -59,7 +59,7 @@ export const NewExpenseParticipant = t.intersection([
     memberId: t.string,
   }),
   t.partial({
-    multiplier: t.Integer,
+    weight: t.number,
   }),
 ]);
 export type NewExpenseParticipant = t.TypeOf<typeof NewExpenseParticipant>;
