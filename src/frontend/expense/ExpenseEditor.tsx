@@ -197,7 +197,9 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
             </option>
           ))}
         </Select>
-        <Button onClick={() => setPayerId(suggestedPayerId)}>Käytä suositeltua maksajaa: {suggestedPayer.name}</Button>
+        <Button type="button" onClick={() => setPayerId(suggestedPayerId)}>
+          Käytä suositeltua maksajaa: {suggestedPayer.name}
+        </Button>
       </FormField>
       <FormField>
         <FormLabel>Summa €</FormLabel>

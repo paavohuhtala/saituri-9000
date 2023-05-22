@@ -73,7 +73,7 @@ export function EditExpenseForm() {
       <ExpenseEditor
         hidden={updateExpenseStatus.isLoading}
         initialExpense={expense}
-        expenseGroupId={id}
+        expenseGroup={expenseGroup}
         members={members}
         onSaveExpense={onSaveExpense}
       />
