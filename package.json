@@ -48,6 +48,7 @@
     "infra:down": "docker-compose down",
     "db:generate-client": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:migrate-prod": "prisma migrate deploy",
     "tsc:check": "tsc --noEmit",
     "tsc:watch": "tsc --noEmit --watch",
     "lint:check": "rome check src"
