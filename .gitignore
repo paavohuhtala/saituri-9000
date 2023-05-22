@@ -5,3 +5,4 @@ yarn-error.log
 .swc
 .parcel-cache
 dist
+install-state.gz
