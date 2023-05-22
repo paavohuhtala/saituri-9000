@@ -69,15 +69,15 @@ export function ExpenseEditor({ initialExpense, expenseGroupId, members, onSaveE
   };
 
   const participantsWithWeights = React.useMemo(() => {
-    return Object.entries(participants).flatMap(([id, selected]) => {
+    return Object.entries(participants).flatMap(([memberId, selected]) => {
       if (!selected) {
         return [];
       }
 
       return [
         {
-          id,
-          weight: participantWeights[id] ?? 0,
+          memberId,
+          weight: participantWeights[memberId] ?? 0,
         },
       ];
     });

@@ -15,7 +15,8 @@ model Member {
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   expenses                Expense[]
-  payments                Payment[]
+  sentPayments            Payment[]            @relation("SentPayments")
+  receivedPayments        Payment[]            @relation("ReceivedPayments")
   expenseParticipations   ExpenseParticipant[]
   expenseGroupMemberships ExpenseGroupMember[]
 }
@@ -71,8 +72,10 @@ model ExpenseParticipant {
 model Payment {
   id             String       @id @default(uuid())
   amount         Int
-  payer          Member       @relation(fields: [payerId], references: [id])
+  payer          Member       @relation("SentPayments", fields: [payerId], references: [id])
   payerId        String
+  payee          Member       @relation("ReceivedPayments", fields: [payeeId], references: [id])
+  payeeId        String
   expenseGroup   ExpenseGroup @relation(fields: [expenseGroupId], references: [id])
   expenseGroupId String
   createdAt      DateTime     @default(now()) @db.Timestamptz(3)

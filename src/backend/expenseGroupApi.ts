@@ -183,7 +183,7 @@ const createExpense: Route<
         payerId,
         participants: {
           create: participants.map((participant) => ({
-            memberId: participant.id,
+            memberId: participant.memberId,
             weight: participant.weight,
           })),
         },
@@ -233,7 +233,7 @@ const updateExpense: Route<
         participants: {
           deleteMany: {},
           create: participants.map((participant) => ({
-            memberId: participant.id,
+            memberId: participant.memberId,
             weight: participant.weight,
           })),
         },

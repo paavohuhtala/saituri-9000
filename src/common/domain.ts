@@ -73,6 +73,7 @@ export type ExpenseParticipant = t.TypeOf<typeof ExpenseParticipant>;
 export const NewPayment = t.type({
   amount: t.Integer,
   payerId: t.string,
+  payeeId: t.string,
   expenseGroupId: t.string,
 });
 export type NewPayment = t.TypeOf<typeof NewPayment>;

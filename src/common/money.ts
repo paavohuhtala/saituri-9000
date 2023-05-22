@@ -1,5 +1,5 @@
 export function centsToEurPrice(cents: number): string {
-  const price = (cents / 100).toFixed(2).replace(".", ",");
+  const price = (cents / 100).toFixed(2).replace(".", ",").replace("-", "− ");
 
   return `${price} €`;
 }

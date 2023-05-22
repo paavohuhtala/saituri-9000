@@ -39,7 +39,7 @@ export const CreateExpenseRequest = t.type({
   payerId: t.string,
   participants: t.array(
     t.type({
-      id: t.string,
+      memberId: t.string,
       weight: t.number,
     }),
   ),

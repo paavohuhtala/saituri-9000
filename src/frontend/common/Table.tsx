@@ -16,7 +16,6 @@ export const Table = styled.table`
   }
 
   thead {
-    text-align: left;
     border-bottom: 1px solid ${gray.x700};
   }
 
@@ -24,6 +23,7 @@ export const Table = styled.table`
     background-color: ${gray.x600};
     padding: 16px;
     font-weight: 700;
+    text-align: left;
   }
 
   td {

@@ -6,12 +6,13 @@ import { Members } from "../members/Members";
 import { Select } from "../common/inputs";
 import { useGetMembersQuery } from "../redux/memberApi";
 import { Button, ButtonLink } from "../common/Button";
-import { IconChevronRight, IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconTrademark } from "@tabler/icons-react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { Table, TextCell } from "../common/Table";
 import { styled } from "styled-components";
 import { centsToEurPrice } from "../../common/money";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { calculateBalanceMatrix } from "../../common/share";
 
 const ExpensesTable = styled(Table)`
   grid-template-columns:
@@ -25,6 +26,10 @@ const ExpensesTable = styled(Table)`
     white-space: nowrap;
     overflow: hidden;
   }
+`;
+
+const BalanceMatrixTable = styled(Table)<{ $memberCount: number }>`
+  grid-template-columns: max-content repeat(${(props) => props.$memberCount}, minmax(max-content, 1fr));
 `;
 
 export function ExpenseGroup() {
@@ -62,6 +67,8 @@ export function ExpenseGroup() {
     });
   };
 
+  const balanceMatrix = React.useMemo(() => (data ? calculateBalanceMatrix(data) : undefined), [data]);
+
   if (isLoading || isLoadingAllMembers) {
     return (
       <ViewContainer>
@@ -70,7 +77,7 @@ export function ExpenseGroup() {
     );
   }
 
-  if (!data) {
+  if (!data || !balanceMatrix) {
     return <ErrorView error={error} refetch={refetch} />;
   }
 
@@ -132,6 +139,38 @@ export function ExpenseGroup() {
           ))}
         </tbody>
       </ExpensesTable>
+      <ViewSubtitle>
+        VelkaMatriisi
+        <IconTrademark />
+      </ViewSubtitle>
+
+      <BalanceMatrixTable $memberCount={data.members.length}>
+        <thead>
+          <tr>
+            <th />
+            {data.members.map((member) => (
+              <th key={member.id}>{member.name} saa</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.members.map((member) => (
+            <tr key={member.id}>
+              <th>{member.name} maksaa</th>
+              {data.members.map((otherMember) => {
+                const isSelf = member.id === otherMember.id;
+                const balance = balanceMatrix[otherMember.id][member.id];
+
+                if (isSelf || isNaN(balance) || balance <= 0) {
+                  return <TextCell key={otherMember.id}>-</TextCell>;
+                }
+
+                return <TextCell key={otherMember.id}>{centsToEurPrice(balance)}</TextCell>;
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </BalanceMatrixTable>
     </ViewContainer>
   );
 }
