@@ -5,4 +5,6 @@ yarn-error.log
 .swc
 .parcel-cache
 dist
+dist-dev
 install-state.gz
+build

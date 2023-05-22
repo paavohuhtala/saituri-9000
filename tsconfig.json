@@ -9,7 +9,9 @@
     "jsx": "react",
     "strict": true,
     "alwaysStrict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "build",
+    "sourceMap":true
   },
   "include": ["src/**/*"]
 }

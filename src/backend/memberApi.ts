@@ -1,6 +1,6 @@
 import { Parser, Response, Route, route, router } from "typera-express";
-import { DbType, Member, NewMember } from "../common/domain";
-import { prisma } from "./db";
+import { DbType, Member, NewMember } from "../common/domain.js";
+import { prisma } from "./db.js";
 
 const getAllMembers: Route<Response.Ok<DbType<Member[]>>> = route.get("/members").handler(async () => {
   const members = await prisma.member.findMany({

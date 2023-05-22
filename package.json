@@ -1,7 +1,6 @@
 {
   "name": "saituri-9000",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "packageManager": "yarn@3.5.1",
   "type": "module",
@@ -39,7 +38,12 @@
   },
   "scripts": {
     "backend:start": "nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/server.ts'",
-    "frontend:start": "parcel src/frontend/index.html",
+    "backend:build": "NODE_ENV=production tsc",
+    "backend:start-prod": "NODE_ENV=production node build/backend/server.js",
+    "frontend:start": "PORT=1234 parcel src/frontend/index.html --dist-dir dist-dev",
+    "frontend:build": "NODE_ENV=production parcel build --public-url /assets src/frontend/index.html",
+    "build": "yarn backend:build && yarn frontend:build",
+    "clean": "rm -rf build dist-dev dist .parcel-cache",
     "infra:up": "docker-compose up -d",
     "infra:down": "docker-compose down",
     "db:generate-client": "prisma generate",
