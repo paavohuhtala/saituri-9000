@@ -33,9 +33,7 @@ Backend is automatically restarted on changes. Frontend will hot reload on chang
 
 ## Production
 
-- Build everything: `yarn build`
-- Before starting server, run migrations `yarn db:migrate-prod`
-- Run the backend server: `yarn backend:start-prod`
+- Run `docker compose -f saituri-compose.yaml up`
 - The server should now be running on http://localhost:3001.
 
 You can use `/api/health` for health checks.
