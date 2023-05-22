@@ -12,6 +12,14 @@ export const ViewContainer = styled.div`
   width: 100%;
 `;
 
+export const HorizontalContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 100%;
+`;
+
 export const ViewTitle = styled.h1`
   font-size: 32px;
   font-weight: 700;
