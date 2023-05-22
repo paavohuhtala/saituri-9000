@@ -34,6 +34,7 @@ Backend is automatically restarted on changes. Frontend will hot reload on chang
 ## Production
 
 - Run `docker compose -f saituri-compose.yaml up`
+  - Pass `--build` to rebuild the images.
 - The server should now be running on http://localhost:3001.
 
 You can use `/api/health` for health checks.

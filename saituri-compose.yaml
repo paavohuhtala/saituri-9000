@@ -14,18 +14,23 @@ services:
       - ${DB_PORT}:${DB_PORT}
     volumes:
       - db:/var/lib/postgresql/data
+    command: -p ${DB_PORT}
 
   app:
     build: .
+    depends_on:
+      - db
     restart: always
     command: sh -c "yarn db:migrate && yarn backend:start-prod"
     ports:
       - ${PORT}:${PORT}
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
       TZ: ${TZ}
+      PORT: ${PORT}
+      NODE_ENV: production
+      BASIC_AUTH_USER: ${BASIC_AUTH_USER}
+      BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
 
 volumes:
   db:
