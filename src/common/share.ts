@@ -62,3 +62,14 @@ export function calculateBalanceMatrix(group: ExpenseGroupResponse): BalanceMatr
 
   return balanceMatrix;
 }
+
+export function calculateSuggestedPayerId(group: ExpenseGroupResponse, participantIds: string[]): string {
+  const matrix = calculateBalanceMatrix(group);
+  const sortedBalanceAndId = participantIds
+    .map((payerId): [number, string] => [
+      participantIds.reduce((acc, payeeId) => acc + (matrix[payerId][payeeId] ?? 0), 0),
+      payerId,
+    ])
+    .sort();
+  return sortedBalanceAndId[0][1];
+}

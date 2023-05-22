@@ -58,7 +58,7 @@ export function NewExpenseForm() {
       {createExpenseStatus.isLoading && <ViewTitle>Luodaan kulua...</ViewTitle>}
       <ExpenseEditor
         hidden={createExpenseStatus.isLoading}
-        expenseGroupId={id}
+        expenseGroup={expenseGroup}
         members={members}
         onSaveExpense={onSaveExpense}
       />

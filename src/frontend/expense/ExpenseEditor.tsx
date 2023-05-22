@@ -3,12 +3,12 @@ import { Form, FormField, FormLabel, InlineForm } from "../common/layout";
 import { InputField, Select } from "../common/inputs";
 import { styled } from "styled-components";
 import { Member } from "../../common/domain";
-import { calculateShares } from "../../common/share";
+import { calculateShares, calculateSuggestedPayerId } from "../../common/share";
 import { ParticipantEditor } from "./ParticipantEditor";
 import { Button, SecondaryButtonLink } from "../common/Button";
 import { IconPigMoney } from "@tabler/icons-react";
 import { centsToFloatEur, floatEurToInputValue } from "../../common/money";
-import { CreateExpenseRequest, ExpenseWithDetails } from "../../common/api";
+import { CreateExpenseRequest, ExpenseGroupResponse, ExpenseWithDetails } from "../../common/api";
 
 const Participants = styled.ul`
   display: grid;
@@ -24,13 +24,13 @@ const NameField = styled(InputField)`
 
 interface Props {
   initialExpense?: ExpenseWithDetails;
-  expenseGroupId: string;
+  expenseGroup: ExpenseGroupResponse;
   members: Member[];
   onSaveExpense: (expense: CreateExpenseRequest) => void;
   hidden?: boolean;
 }
 
-export function ExpenseEditor({ initialExpense, expenseGroupId, members, onSaveExpense, hidden }: Props) {
+export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExpense, hidden }: Props) {
   const [name, setName] = React.useState(initialExpense?.name ?? "");
   const [amount, setAmount] = React.useState<number | null>(() => centsToFloatEur(initialExpense?.amount));
   const [pendingAmount, setPendingAmount] = React.useState<string | null>(() => floatEurToInputValue(amount));
@@ -63,6 +63,15 @@ export function ExpenseEditor({ initialExpense, expenseGroupId, members, onSaveE
       return acc;
     }, {} as Record<string, number>);
   });
+
+  const participantIds = Object.entries(participants)
+    .filter(([_, value]) => value)
+    .map(([key, _]) => key);
+  const suggestedPayerId = React.useMemo(
+    () => calculateSuggestedPayerId(expenseGroup, participantIds),
+    [expenseGroup, participantIds],
+  );
+  const suggestedPayer = members.filter((member) => member.id === suggestedPayerId)[0];
 
   const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -134,49 +143,6 @@ export function ExpenseEditor({ initialExpense, expenseGroupId, members, onSaveE
         />
       </FormField>
       <FormField>
-        <FormLabel>Maksaja</FormLabel>
-        <Select
-          value={payerId ?? ""}
-          onChange={(event) => {
-            setPayerId(event.target.value);
-          }}
-        >
-          <option value="" disabled>
-            Valitse maksaja
-          </option>
-          {members.map((member) => (
-            <option key={member.id} value={member.id}>
-              {member.name}
-            </option>
-          ))}
-        </Select>
-      </FormField>
-      <FormField>
-        <FormLabel>Summa €</FormLabel>
-        <InputField
-          placeholder="esim. 6,66"
-          inputMode="numeric"
-          onChange={(event) => {
-            setPendingAmount(event.target.value);
-          }}
-          onBlur={() => {
-            if (pendingAmount !== null) {
-              const isValidFloat = /^\d*([,.]\d*)?$/.test(pendingAmount);
-              const amount = parseFloat(pendingAmount.replace(",", "."));
-
-              if (!isValidFloat || isNaN(amount)) {
-                setPendingAmount("");
-                setAmount(null);
-              } else {
-                setAmount(amount);
-                setPendingAmount(floatEurToInputValue(amount) ?? "");
-              }
-            }
-          }}
-          value={pendingAmount ?? amount ?? ""}
-        />
-      </FormField>
-      <FormField>
         <FormLabel>Osallistujat</FormLabel>
         {members.length > 0 && (
           <Participants>
@@ -214,12 +180,56 @@ export function ExpenseEditor({ initialExpense, expenseGroupId, members, onSaveE
           </Participants>
         )}
       </FormField>
+      <FormField>
+        <FormLabel>Maksaja</FormLabel>
+        <Select
+          value={payerId ?? ""}
+          onChange={(event) => {
+            setPayerId(event.target.value);
+          }}
+        >
+          <option value="" disabled>
+            Valitse maksaja
+          </option>
+          {members.map((member) => (
+            <option key={member.id} value={member.id}>
+              {member.name}
+            </option>
+          ))}
+        </Select>
+        <Button onClick={() => setPayerId(suggestedPayerId)}>Käytä suositeltua maksajaa: {suggestedPayer.name}</Button>
+      </FormField>
+      <FormField>
+        <FormLabel>Summa €</FormLabel>
+        <InputField
+          placeholder="esim. 6,66"
+          inputMode="numeric"
+          onChange={(event) => {
+            setPendingAmount(event.target.value);
+          }}
+          onBlur={() => {
+            if (pendingAmount !== null) {
+              const isValidFloat = /^\d*([,.]\d*)?$/.test(pendingAmount);
+              const amount = parseFloat(pendingAmount.replace(",", "."));
+
+              if (!isValidFloat || isNaN(amount)) {
+                setPendingAmount("");
+                setAmount(null);
+              } else {
+                setAmount(amount);
+                setPendingAmount(floatEurToInputValue(amount) ?? "");
+              }
+            }
+          }}
+          value={pendingAmount ?? amount ?? ""}
+        />
+      </FormField>
       <InlineForm>
         <Button type="submit" disabled={!isFormValid}>
           <IconPigMoney />
           Tallenna kulu
         </Button>
-        <SecondaryButtonLink to={`/expense-group/${expenseGroupId}`}>Peruuta</SecondaryButtonLink>
+        <SecondaryButtonLink to={`/expense-group/${expenseGroup.id}`}>Peruuta</SecondaryButtonLink>
       </InlineForm>
     </Form>
   );
