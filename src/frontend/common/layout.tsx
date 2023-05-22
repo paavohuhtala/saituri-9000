@@ -15,9 +15,11 @@ export const ViewContainer = styled.div`
 export const HorizontalContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-
   width: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
 `;
 
 export const ViewTitle = styled.h1`

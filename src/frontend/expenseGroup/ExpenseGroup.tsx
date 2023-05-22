@@ -13,6 +13,7 @@ import { styled } from "styled-components";
 import { centsToEurPrice } from "../../common/money";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { calculateBalanceMatrix } from "../../common/share";
+import { Checkbox } from "../common/Checkbox";
 
 const ExpensesTable = styled(Table)`
   grid-template-columns:
@@ -30,6 +31,10 @@ const ExpensesTable = styled(Table)`
 
 const BalanceMatrixTable = styled(Table)<{ $memberCount: number }>`
   grid-template-columns: max-content repeat(${(props) => props.$memberCount}, minmax(max-content, 1fr));
+
+  td {
+    height: 100%;
+  }
 `;
 
 export function ExpenseGroup() {
@@ -149,10 +154,7 @@ export function ExpenseGroup() {
           VelkaMatriisi
           <IconTrademark />
         </ViewSubtitle>
-        <label>
-          <input type="checkbox" checked={showNegative} onChange={onChangeShowNegative} />
-          Näytä negatiiviset balanssit
-        </label>
+        <Checkbox label="Näytä negatiiviset balanssit" checked={showNegative} onChange={onChangeShowNegative} />
       </HorizontalContainer>
 
       <BalanceMatrixTable $memberCount={data.members.length}>
