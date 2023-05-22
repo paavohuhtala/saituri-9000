@@ -1,6 +1,6 @@
 import React from "react";
 import { useAddExpenseGroupMemberMutation, useGetExpenseGroupQuery } from "../redux/expenseGroupApi";
-import { InlineForm, ViewContainer, ViewSubtitle, ViewTitle } from "../common/layout";
+import { InlineForm, ViewContainer, HorizontalContainer, ViewSubtitle, ViewTitle } from "../common/layout";
 import { ErrorView } from "../common/ErrorView";
 import { Members } from "../members/Members";
 import { Select } from "../common/inputs";
@@ -44,6 +44,7 @@ export function ExpenseGroup() {
   const [addMember, newMemberStatus] = useAddExpenseGroupMemberMutation();
 
   const [selectedMember, setSelectedMember] = React.useState("");
+  const [showNegative, setShowNegative] = React.useState(false);
 
   const availableMembers = React.useMemo(() => {
     if (!allMembers) {
@@ -55,6 +56,10 @@ export function ExpenseGroup() {
 
   const onChangeSelectedMember = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedMember(event.target.value);
+  };
+
+  const onChangeShowNegative = () => {
+    setShowNegative(!showNegative);
   };
 
   const onAddMember = () => {
@@ -139,10 +144,16 @@ export function ExpenseGroup() {
           ))}
         </tbody>
       </ExpensesTable>
-      <ViewSubtitle>
-        VelkaMatriisi
-        <IconTrademark />
-      </ViewSubtitle>
+      <HorizontalContainer>
+        <ViewSubtitle>
+          VelkaMatriisi
+          <IconTrademark />
+        </ViewSubtitle>
+        <label>
+          <input type="checkbox" checked={showNegative} onChange={onChangeShowNegative} />
+          Näytä negatiiviset balanssit
+        </label>
+      </HorizontalContainer>
 
       <BalanceMatrixTable $memberCount={data.members.length}>
         <thead>
@@ -161,7 +172,7 @@ export function ExpenseGroup() {
                 const isSelf = member.id === otherMember.id;
                 const balance = balanceMatrix[otherMember.id][member.id];
 
-                if (isSelf || isNaN(balance) || balance <= 0) {
+                if (isSelf || isNaN(balance) || (showNegative ? balance === 0 : balance <= 0)) {
                   return <TextCell key={otherMember.id}>-</TextCell>;
                 }
 
