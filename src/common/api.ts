@@ -1,5 +1,6 @@
 import * as t from "io-ts";
-import { Expense, ExpenseGroup, ExpenseParticipant, Member, NewExpense, NewExpenseGroup, Payment } from "./domain";
+import { Expense, ExpenseGroup, ExpenseParticipant, Member, NewExpenseGroup, Payment } from "./domain";
+import { BalanceMatrix } from "./share";
 
 export interface ExpenseGroupWithDetails extends ExpenseGroup {
   members: Member[];
@@ -17,10 +18,14 @@ export interface ExpenseWithDetails extends Expense {
   participants: ExpenseParticipant[];
 }
 
-export interface ExpenseGroupResponse extends ExpenseGroup {
+export interface ExpenseGroupWithFullDetails extends ExpenseGroup {
   members: Member[];
   expenses: ExpenseWithDetails[];
   payments: PaymentWithDetails[];
+}
+
+export interface ExpenseGroupResponse extends ExpenseGroupWithFullDetails {
+  balanceMatrix: BalanceMatrix;
 }
 
 export type MembersResponse = Member[];

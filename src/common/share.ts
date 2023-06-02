@@ -1,19 +1,24 @@
-import { ExpenseGroupResponse, ExpenseGroupWithDetails } from "./api";
+import { ExpenseGroupWithFullDetails } from "./api";
+import _ from "lodash";
+import { DbType } from "./domain";
 
-export function calculateShares({
-  amount,
-  participants,
-}: {
-  amount: number;
-  participants: { memberId: string; weight: number }[];
-}): Record<string, number> {
+export type SharesByMemberId = Partial<Record<string, number>>;
+
+export interface ParticipantWithWeight {
+  memberId: string;
+  weight: number;
+}
+
+export type WeightByMemberId = Partial<Record<string, number>>;
+
+export function calculateShares(amount: number, participants: ParticipantWithWeight[]): SharesByMemberId {
   const totalWeight = participants.reduce((acc, { weight }) => acc + weight, 0);
 
   const shares = participants.reduce((acc, { memberId, weight }) => {
     const share = (amount * weight) / totalWeight;
     acc[memberId] = share;
     return acc;
-  }, {} as Record<string, number>);
+  }, {} as Partial<Record<string, number>>);
 
   return shares;
 }
@@ -28,7 +33,7 @@ export interface BalanceMatrix {
  * Given an expense group, calculate the balance matrix.
  * The balance matrix tells how much each member owes to each other member.
  */
-export function calculateBalanceMatrix(group: ExpenseGroupResponse): BalanceMatrix {
+export function calculateBalanceMatrix(group: DbType<ExpenseGroupWithFullDetails>): BalanceMatrix {
   const { expenses, payments, members } = group;
 
   const balanceMatrix = members.reduce((acc, member) => {
@@ -46,7 +51,7 @@ export function calculateBalanceMatrix(group: ExpenseGroupResponse): BalanceMatr
   // Then, add all the expenses to the matrix
   for (const expense of expenses) {
     const { amount, payerId, participants } = expense;
-    const shares = calculateShares({ amount, participants });
+    const shares = calculateShares(amount, participants);
     const payeeIds = Object.keys(shares);
 
     for (const payeeId of payeeIds) {
@@ -55,21 +60,21 @@ export function calculateBalanceMatrix(group: ExpenseGroupResponse): BalanceMatr
         continue;
       }
 
-      balanceMatrix[payerId][payeeId] = (balanceMatrix[payerId][payeeId] ?? 0) + shares[payeeId];
-      balanceMatrix[payeeId][payerId] = (balanceMatrix[payeeId][payerId] ?? 0) - shares[payeeId];
+      balanceMatrix[payerId][payeeId] = (balanceMatrix[payerId][payeeId] ?? 0) + (shares[payeeId] ?? 0);
+      balanceMatrix[payeeId][payerId] = (balanceMatrix[payeeId][payerId] ?? 0) - (shares[payeeId] ?? 0);
     }
   }
 
   return balanceMatrix;
 }
 
-export function calculateSuggestedPayerId(group: ExpenseGroupResponse, participantIds: string[]): string {
-  const matrix = calculateBalanceMatrix(group);
-  const sortedBalanceAndId = participantIds
-    .map((payerId): [number, string] => [
+export function calculateSuggestedPayerId(matrix: BalanceMatrix, participantIds: string[]): string {
+  const sortedBalanceAndId = _.sortBy(
+    participantIds.map((payerId): [number, string] => [
       participantIds.reduce((acc, payeeId) => acc + (matrix[payerId][payeeId] ?? 0), 0),
       payerId,
-    ])
-    .sort();
+    ]),
+    (e) => e[0],
+  );
   return sortedBalanceAndId[0][1];
 }

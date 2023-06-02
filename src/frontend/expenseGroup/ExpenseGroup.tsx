@@ -12,17 +12,26 @@ import { Table, TextCell } from "../common/Table";
 import { styled } from "styled-components";
 import { centsToEurPrice } from "../../common/money";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
-import { calculateBalanceMatrix } from "../../common/share";
 import { Checkbox } from "../common/Checkbox";
 
 const ExpensesTable = styled(Table)`
   grid-template-columns:
     minmax(max-content, 2fr)
-    minmax(max-content, 2fr)
+    minmax(64px, 200px)
     minmax(max-content, 2fr)
     max-content;
 
   td {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+`;
+
+const ExpensePayerCell = styled(TextCell)`
+  max-width: 200px;
+
+  span {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -34,6 +43,19 @@ const BalanceMatrixTable = styled(Table)<{ $memberCount: number }>`
 
   td {
     height: 100%;
+  }
+
+  th {
+    display: flex;
+    gap: 4px;
+
+    p {
+      max-width: 100px;
+      text-overflow: ellipsis;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 `;
 
@@ -77,8 +99,6 @@ export function ExpenseGroup() {
     });
   };
 
-  const balanceMatrix = React.useMemo(() => (data ? calculateBalanceMatrix(data) : undefined), [data]);
-
   if (isLoading || isLoadingAllMembers) {
     return (
       <ViewContainer>
@@ -87,19 +107,21 @@ export function ExpenseGroup() {
     );
   }
 
-  if (!data || !balanceMatrix) {
+  if (!data) {
     return <ErrorView error={error} refetch={refetch} />;
   }
+
+  const { name, members, expenses, balanceMatrix } = data;
 
   return (
     <ViewContainer>
       <Breadcrumbs>
         <BreadcrumbLink to="/">Kuluryhmät</BreadcrumbLink>
         <BreadcrumbArrow />
-        <StaticBreadcrumb>{data.name}</StaticBreadcrumb>
+        <StaticBreadcrumb>{name}</StaticBreadcrumb>
       </Breadcrumbs>
       <ViewSubtitle>Jäsenet</ViewSubtitle>
-      <Members members={data.members} />
+      <Members members={members} />
 
       {availableMembers.length === 0 ? (
         <p>
@@ -137,10 +159,12 @@ export function ExpenseGroup() {
           </tr>
         </thead>
         <tbody>
-          {data.expenses.map((expense) => (
+          {expenses.map((expense) => (
             <tr key={expense.id}>
               <TextCell>{expense.name}</TextCell>
-              <TextCell>{expense.paidBy.name}</TextCell>
+              <ExpensePayerCell>
+                <span>{expense.paidBy.name}</span>
+              </ExpensePayerCell>
               <TextCell>{centsToEurPrice(expense.amount)}</TextCell>
               <TextCell>
                 <Link to={`/expense-group/${id}/expenses/${expense.id}`}>Muokkaa</Link>
@@ -157,20 +181,24 @@ export function ExpenseGroup() {
         <Checkbox label="Näytä negatiiviset balanssit" checked={showNegative} onChange={onChangeShowNegative} />
       </HorizontalContainer>
 
-      <BalanceMatrixTable $memberCount={data.members.length}>
+      <BalanceMatrixTable $memberCount={members.length}>
         <thead>
           <tr>
             <th />
-            {data.members.map((member) => (
-              <th key={member.id}>{member.name} saa</th>
+            {members.map((member) => (
+              <th key={member.id}>
+                <p>{member.name}</p> saa
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.members.map((member) => (
+          {members.map((member) => (
             <tr key={member.id}>
-              <th>{member.name} maksaa</th>
-              {data.members.map((otherMember) => {
+              <th>
+                <p>{member.name}</p> maksaa
+              </th>
+              {members.map((otherMember) => {
                 const isSelf = member.id === otherMember.id;
                 const balance = balanceMatrix[otherMember.id][member.id];
 

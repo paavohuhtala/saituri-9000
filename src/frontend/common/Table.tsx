@@ -27,7 +27,7 @@ export const Table = styled.table`
   }
 
   td {
-    height: 44px;
+    line-height: 32px;
     display: flex;
     align-items: center;
   }
@@ -53,7 +53,7 @@ export const CellInput = styled(InputField)`
 `;
 
 export const TextCell = styled.td`
-  padding: 0px 16px;
+  padding: 4px 16px;
 `;
 
 export const FullWidthTextCell = styled(TextCell)`

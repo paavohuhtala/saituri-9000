@@ -9,6 +9,7 @@ import {
   ExpenseGroupsResponse,
 } from "../common/api.js";
 import { prisma } from "./db.js";
+import { calculateBalanceMatrix } from "../common/share.js";
 
 const getAllExpenseGroups: Route<Response.Ok<DbType<ExpenseGroupsResponse>>> = route
   .get("/expense-groups")
@@ -80,12 +81,17 @@ const getExpenseGroup: Route<
     return Response.notFound("Expense group not found");
   }
 
-  const mappedGroup: DbType<ExpenseGroupResponse> = {
+  const mappedGroup = {
     ...expenseGroup,
     members: expenseGroup.members.map(({ member }) => member),
   };
 
-  return Response.ok(mappedGroup);
+  const response: DbType<ExpenseGroupResponse> = {
+    ...mappedGroup,
+    balanceMatrix: calculateBalanceMatrix(mappedGroup),
+  };
+
+  return Response.ok(response);
 });
 
 const createExpenseGroup: Route<Response.Ok<AddExpenseGroupResponse> | Response.BadRequest<string>> = route

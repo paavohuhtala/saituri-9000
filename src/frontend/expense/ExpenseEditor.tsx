@@ -3,13 +3,14 @@ import { Form, FormField, FormLabel, InlineForm } from "../common/layout";
 import { InputField, Select } from "../common/inputs";
 import { styled } from "styled-components";
 import { Member } from "../../common/domain";
-import { calculateShares, calculateSuggestedPayerId } from "../../common/share";
+import { WeightByMemberId, calculateShares, calculateSuggestedPayerId } from "../../common/share";
 import { ParticipantEditor } from "./ParticipantEditor";
 import { Button, SecondaryButtonLink } from "../common/Button";
 import { IconPigMoney, IconThumbUpFilled } from "@tabler/icons-react";
 import { centsToFloatEur, floatEurToInputValue } from "../../common/money";
 import { CreateExpenseRequest, ExpenseGroupResponse, ExpenseWithDetails } from "../../common/api";
 import { green } from "../theme";
+import { createNextState } from "@reduxjs/toolkit";
 
 const Participants = styled.ul`
   display: grid;
@@ -45,71 +46,54 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
   const [pendingAmount, setPendingAmount] = React.useState<string | null>(() => floatEurToInputValue(amount));
   const [payerId, setPayerId] = React.useState<string | null>(initialExpense?.payerId ?? null);
 
-  const [participants, setParticipants] = React.useState<Record<string, boolean>>(() => {
-    if (initialExpense) {
-      return initialExpense.participants.reduce((acc, participant) => {
-        acc[participant.memberId] = true;
-        return acc;
-      }, {} as Record<string, boolean>);
-    }
-
-    return members.reduce((acc, member) => {
-      acc[member.id] = true;
-      return acc;
-    }, {} as Record<string, boolean>);
-  });
-
-  const [participantWeights, setParticipantWeights] = React.useState<Record<string, number>>(() => {
+  const [participantWeights, setParticipantWeights] = React.useState<WeightByMemberId>(() => {
     if (initialExpense) {
       return initialExpense.participants.reduce((acc, participant) => {
         acc[participant.memberId] = participant.weight;
         return acc;
-      }, {} as Record<string, number>);
+      }, {} as WeightByMemberId);
     }
 
     return members.reduce((acc, member) => {
       acc[member.id] = 1;
       return acc;
-    }, {} as Record<string, number>);
+    }, {} as WeightByMemberId);
   });
 
   const suggestedPayer = React.useMemo(() => {
-    const participantIds = Object.entries(participants)
-      .filter(([_, value]) => value)
+    const participantIds = Object.entries(participantWeights)
+      .filter(([_, value]) => (value ?? 0) > 0)
       .map(([key, _]) => key);
 
     if (participantIds.length === 0) {
       return undefined;
     }
 
-    const id = calculateSuggestedPayerId(expenseGroup, participantIds);
+    const id = calculateSuggestedPayerId(expenseGroup.balanceMatrix, participantIds);
     return members.find((member) => member.id === id);
-  }, [expenseGroup]);
+  }, [expenseGroup, participantWeights]);
 
   const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
   const participantsWithWeights = React.useMemo(() => {
-    return Object.entries(participants).flatMap(([memberId, selected]) => {
-      if (!selected) {
+    return Object.entries(participantWeights).flatMap(([memberId, weight]) => {
+      if (weight === undefined || weight <= 0) {
         return [];
       }
 
       return [
         {
           memberId,
-          weight: participantWeights[memberId] ?? 0,
+          weight,
         },
       ];
     });
-  }, [participants, participantWeights]);
+  }, [participantWeights]);
 
   const shareByParticipant = React.useMemo(() => {
-    return calculateShares({
-      amount: amount ?? 0,
-      participants: participantsWithWeights,
-    });
+    return calculateShares(amount ?? 0, participantsWithWeights);
   }, [amount, participantsWithWeights]);
 
   const isFormValid = React.useMemo(() => {
@@ -118,9 +102,9 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
       amount !== null &&
       amount > 0 &&
       members.some((member) => member.id === payerId) &&
-      Object.values(participants).some((selected) => selected)
+      Object.values(participantWeights).some((weight) => (weight ?? 0) > 0)
     );
-  }, [name, amount, participants, payerId]);
+  }, [name, amount, participantWeights, payerId]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -131,7 +115,7 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
       return;
     }
 
-    const amountInCents = Math.ceil(amount * 100);
+    const amountInCents = Math.round(amount * 100);
 
     const expense: CreateExpenseRequest = {
       payerId,
@@ -185,9 +169,9 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
         {members.length > 0 && (
           <Participants>
             {members.map((member) => {
-              const share: number | undefined = shareByParticipant[member.id];
-              const isParticipant = participants[member.id];
-              const weight = participantWeights[member.id];
+              const share = shareByParticipant[member.id];
+              const weight = participantWeights[member.id] ?? 0;
+              const isParticipant = weight > 0;
 
               return (
                 <ParticipantEditor
@@ -195,21 +179,23 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
                   member={member}
                   isParticipant={isParticipant}
                   setIsParticipant={(value) => {
-                    setParticipants((prev) => {
-                      return {
-                        ...prev,
-                        [member.id]: value,
-                      };
-                    });
+                    setParticipantWeights(
+                      createNextState((participants) => {
+                        if (value) {
+                          participants[member.id] = 1.0;
+                        } else {
+                          delete participants[member.id];
+                        }
+                      }),
+                    );
                   }}
                   initialWeight={weight}
                   setWeight={(value) => {
-                    setParticipantWeights((prev) => {
-                      return {
-                        ...prev,
-                        [member.id]: value,
-                      };
-                    });
+                    setParticipantWeights(
+                      createNextState((participants) => {
+                        participants[member.id] = value;
+                      }),
+                    );
                   }}
                   share={share}
                 />

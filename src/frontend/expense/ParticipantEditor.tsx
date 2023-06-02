@@ -78,6 +78,9 @@ export function ParticipantEditor({ member, isParticipant, setIsParticipant, ini
         $selected={isParticipant}
         onClick={() => {
           setIsParticipant(!isParticipant);
+          if (!isParticipant) {
+            setPendingWeight("1,0");
+          }
         }}
       >
         {isParticipant ? <IconCheck /> : <IconX />}

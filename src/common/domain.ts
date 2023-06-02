@@ -58,7 +58,6 @@ export const NewExpenseParticipant = t.type({
   memberId: t.string,
   weight: t.number,
 });
-
 export type NewExpenseParticipant = t.TypeOf<typeof NewExpenseParticipant>;
 
 export const ExpenseParticipant = t.intersection([

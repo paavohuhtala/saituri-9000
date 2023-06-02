@@ -69,7 +69,7 @@ export function EditExpenseForm() {
         <BreadcrumbArrow />
         <StaticBreadcrumb>{expense.name}</StaticBreadcrumb>
       </Breadcrumbs>
-      {updateExpenseStatus.isLoading && <ViewTitle>Luodaan kulua...</ViewTitle>}
+      {updateExpenseStatus.isLoading && <ViewTitle>Tallennetaan kulua...</ViewTitle>}
       <ExpenseEditor
         hidden={updateExpenseStatus.isLoading}
         initialExpense={expense}
