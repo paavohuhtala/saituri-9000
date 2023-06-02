@@ -56,6 +56,17 @@ export const TextCell = styled.td`
   padding: 4px 16px;
 `;
 
+export const MoneyCell = styled(TextCell)`
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+`;
+
+export const MoneyHeader = styled.th`
+  display: flex;
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+`;
+
 export const FullWidthTextCell = styled(TextCell)`
   grid-column: 1 / -1;
 `;

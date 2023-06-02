@@ -78,3 +78,12 @@ export function calculateSuggestedPayerId(matrix: BalanceMatrix, participantIds:
   );
   return sortedBalanceAndId[0][1];
 }
+
+export type BalancePerMember = Partial<Record<string, number>>;
+
+export function calculatePersonalBalances(matrix: BalanceMatrix): BalancePerMember {
+  return Object.entries(matrix).reduce((acc, [memberId, balances]) => {
+    acc[memberId] = Object.values(balances).reduce((acc, balance) => acc + balance, 0);
+    return acc;
+  }, {} as Partial<Record<string, number>>);
+}

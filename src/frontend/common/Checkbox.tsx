@@ -3,6 +3,13 @@ import React from "react";
 import styled from "styled-components";
 import { gray } from "../theme";
 
+const Label = styled.label`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  cursor: pointer;
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -15,19 +22,16 @@ const Container = styled.div`
   border-radius: 4px;
   position: relative;
   cursor: pointer;
+
+  &:hover, ${Label}:hover & {
+    background: ${gray.x700};
+  }
 `;
 
 const NativeCheckbox = styled.input.attrs({ type: "checkbox" })`
   appearance: none;
   width: 16px;
   height: 16px;
-  cursor: pointer;
-`;
-
-const Label = styled.label`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
   cursor: pointer;
 `;
 

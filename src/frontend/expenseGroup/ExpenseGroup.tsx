@@ -8,56 +8,10 @@ import { useGetMembersQuery } from "../redux/memberApi";
 import { Button, ButtonLink } from "../common/Button";
 import { IconPlus, IconTrademark } from "@tabler/icons-react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { Table, TextCell } from "../common/Table";
-import { styled } from "styled-components";
-import { centsToEurPrice } from "../../common/money";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { Checkbox } from "../common/Checkbox";
-
-const ExpensesTable = styled(Table)`
-  grid-template-columns:
-    minmax(max-content, 2fr)
-    minmax(64px, 200px)
-    minmax(max-content, 2fr)
-    max-content;
-
-  td {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-`;
-
-const ExpensePayerCell = styled(TextCell)`
-  max-width: 200px;
-
-  span {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-`;
-
-const BalanceMatrixTable = styled(Table)<{ $memberCount: number }>`
-  grid-template-columns: max-content repeat(${(props) => props.$memberCount}, minmax(max-content, 1fr));
-
-  td {
-    height: 100%;
-  }
-
-  th {
-    display: flex;
-    gap: 4px;
-
-    p {
-      max-width: 100px;
-      text-overflow: ellipsis;
-      display: inline-block;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-  }
-`;
+import { BalanceMatrix } from "./BalanceMatrix";
+import { Expenses } from "./Expenses";
 
 export function ExpenseGroup() {
   const { id } = useParams();
@@ -121,7 +75,7 @@ export function ExpenseGroup() {
         <StaticBreadcrumb>{name}</StaticBreadcrumb>
       </Breadcrumbs>
       <ViewSubtitle>Jäsenet</ViewSubtitle>
-      <Members members={members} />
+      <Members members={members} balanceMatrix={balanceMatrix} />
 
       {availableMembers.length === 0 ? (
         <p>
@@ -145,34 +99,13 @@ export function ExpenseGroup() {
           </Button>
         </InlineForm>
       )}
+
       <ViewSubtitle>Kulut</ViewSubtitle>
       <ButtonLink to={`/expense-group/${id}/expenses/new`}>
         <IconPlus /> Luo uusi kulu
       </ButtonLink>
-      <ExpensesTable>
-        <thead>
-          <tr>
-            <th>Selite</th>
-            <th>Maksaja</th>
-            <th>Summa</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((expense) => (
-            <tr key={expense.id}>
-              <TextCell>{expense.name}</TextCell>
-              <ExpensePayerCell>
-                <span>{expense.paidBy.name}</span>
-              </ExpensePayerCell>
-              <TextCell>{centsToEurPrice(expense.amount)}</TextCell>
-              <TextCell>
-                <Link to={`/expense-group/${id}/expenses/${expense.id}`}>Muokkaa</Link>
-              </TextCell>
-            </tr>
-          ))}
-        </tbody>
-      </ExpensesTable>
+      <Expenses expenseGroupId={id} expenses={expenses} />
+
       <HorizontalContainer>
         <ViewSubtitle>
           VelkaMatriisi
@@ -180,38 +113,7 @@ export function ExpenseGroup() {
         </ViewSubtitle>
         <Checkbox label="Näytä negatiiviset balanssit" checked={showNegative} onChange={onChangeShowNegative} />
       </HorizontalContainer>
-
-      <BalanceMatrixTable $memberCount={members.length}>
-        <thead>
-          <tr>
-            <th />
-            {members.map((member) => (
-              <th key={member.id}>
-                <p>{member.name}</p> saa
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {members.map((member) => (
-            <tr key={member.id}>
-              <th>
-                <p>{member.name}</p> maksaa
-              </th>
-              {members.map((otherMember) => {
-                const isSelf = member.id === otherMember.id;
-                const balance = balanceMatrix[otherMember.id][member.id];
-
-                if (isSelf || isNaN(balance) || (showNegative ? balance === 0 : balance <= 0)) {
-                  return <TextCell key={otherMember.id}>-</TextCell>;
-                }
-
-                return <TextCell key={otherMember.id}>{centsToEurPrice(balance)}</TextCell>;
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </BalanceMatrixTable>
+      <BalanceMatrix expenseGroup={data} showNegative={showNegative} />
     </ViewContainer>
   );
 }
