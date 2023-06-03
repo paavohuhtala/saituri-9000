@@ -1,7 +1,7 @@
 import React from "react";
 import { ViewContainer, ViewTitle } from "../common/layout";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useCreateExpenseMutation, useGetExpenseGroupQuery } from "../redux/expenseGroupApi";
+import { useCreateExpenseMutation, useGetExpenseGroupQuery } from "../redux/saituriApi";
 import { ExpenseEditor } from "./ExpenseEditor";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { CreateExpenseRequest } from "../../common/api";

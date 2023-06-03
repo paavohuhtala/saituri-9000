@@ -1,10 +1,10 @@
 import React from "react";
-import { useAddExpenseGroupMemberMutation, useGetExpenseGroupQuery } from "../redux/expenseGroupApi";
+import { useAddExpenseGroupMemberMutation, useGetExpenseGroupQuery } from "../redux/saituriApi";
 import { InlineForm, ViewContainer, HorizontalContainer, ViewSubtitle, ViewTitle } from "../common/layout";
 import { ErrorView } from "../common/ErrorView";
 import { Members } from "../members/Members";
 import { Select } from "../common/inputs";
-import { useGetMembersQuery } from "../redux/memberApi";
+import { useGetAllMembersQuery } from "../redux/saituriApi";
 import { Button, ButtonLink } from "../common/Button";
 import { IconPlus, IconTrademark } from "@tabler/icons-react";
 import { Link, Navigate, useParams } from "react-router-dom";
@@ -21,7 +21,7 @@ export function ExpenseGroup() {
   }
 
   const { isLoading, data, error, refetch } = useGetExpenseGroupQuery(id);
-  const { isLoading: isLoadingAllMembers, data: allMembers } = useGetMembersQuery();
+  const { isLoading: isLoadingAllMembers, data: allMembers } = useGetAllMembersQuery();
   const [addMember, newMemberStatus] = useAddExpenseGroupMemberMutation();
 
   const [selectedMember, setSelectedMember] = React.useState("");
@@ -75,7 +75,7 @@ export function ExpenseGroup() {
         <StaticBreadcrumb>{name}</StaticBreadcrumb>
       </Breadcrumbs>
       <ViewSubtitle>Jäsenet</ViewSubtitle>
-      <Members members={members} balanceMatrix={balanceMatrix} />
+      <Members members={members} balanceMatrix={balanceMatrix} expenseGroupId={id} />
 
       {availableMembers.length === 0 ? (
         <p>

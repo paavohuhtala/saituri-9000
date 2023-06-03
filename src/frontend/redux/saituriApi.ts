@@ -8,12 +8,14 @@ import {
   CreateExpenseResponse,
   ExpenseGroupResponse,
   ExpenseGroupsResponse,
+  MembersResponse,
 } from "../../common/api";
+import { NewMember } from "../../common/domain";
 
-export const expenseGroupApi = createApi({
-  reducerPath: "expenseGroupApi",
+export const saituriApi = createApi({
+  reducerPath: "saituriApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["ExpenseGroup"],
+  tagTypes: ["ExpenseGroup", "Member"],
   endpoints: (builder) => ({
     getExpenseGroups: builder.query<ExpenseGroupsResponse, void>({
       providesTags: ["ExpenseGroup"],
@@ -55,6 +57,26 @@ export const expenseGroupApi = createApi({
         body: newExpense,
       }),
     }),
+    getAllMembers: builder.query<MembersResponse, void>({
+      providesTags: ["Member"],
+      query: () => "/members",
+    }),
+    addMember: builder.mutation<string, string>({
+      invalidatesTags: ["Member"],
+      query: (name) => ({
+        url: "/members",
+        method: "POST",
+        body: { name },
+      }),
+    }),
+    updateMember: builder.mutation<string, NewMember & { id: string }>({
+      invalidatesTags: ["Member", "ExpenseGroup"],
+      query: ({ id, ...body }) => ({
+        url: `/members/${id}`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -65,4 +87,7 @@ export const {
   useAddExpenseGroupMemberMutation,
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
-} = expenseGroupApi;
+  useGetAllMembersQuery,
+  useAddMemberMutation,
+  useUpdateMemberMutation,
+} = saituriApi;

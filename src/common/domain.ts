@@ -1,8 +1,14 @@
 import * as t from "io-ts";
 
-export const NewMember = t.type({
-  name: t.string,
-});
+export const NewMember = t.intersection([
+  t.type({
+    name: t.string,
+  }),
+  t.partial({
+    phone: t.union([t.string, t.null]),
+    email: t.union([t.string, t.null]),
+  }),
+]);
 export type NewMember = t.TypeOf<typeof NewMember>;
 
 export const Member = t.intersection([

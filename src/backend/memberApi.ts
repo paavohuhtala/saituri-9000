@@ -45,4 +45,25 @@ const createMember: Route<Response.Ok<DbType<Member>> | Response.BadRequest<stri
     return Response.ok(member);
   });
 
-export const membersApi = router(getAllMembers, getMember, createMember);
+const updateMember: Route<Response.Ok<DbType<void>> | Response.BadRequest<string> | Response.NotFound<string>> = route
+  .put("/members/:id")
+  .use(Parser.body(NewMember))
+  .handler(async (request) => {
+    const { id } = request.routeParams;
+    const { name, email, phone } = request.body;
+
+    const member = await prisma.member.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        email,
+        phone,
+      },
+    });
+
+    return Response.ok();
+  });
+
+export const membersApi = router(getAllMembers, getMember, createMember, updateMember);

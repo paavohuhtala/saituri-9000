@@ -10,6 +10,8 @@ import { ExpenseGroup } from "./expenseGroup/ExpenseGroup";
 import { NewExpenseForm } from "./expense/NewExpenseForm";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { EditExpenseForm } from "./expense/EditExpenseForm";
+import { EditMember } from "./member/EditMember";
+import { EditExpenseGroupMember } from "./member/EditExpenseGroupMember";
 
 const root = document.getElementById("root");
 
@@ -25,6 +27,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="member/:id" element={<EditMember />} />
+              <Route path="expense-group/:expenseGroupId/member/:memberId" element={<EditExpenseGroupMember />} />
               <Route path="expense-group/:id" element={<ExpenseGroup />} />
               <Route path="expense-group/:id/expenses/new" element={<NewExpenseForm />} />
               <Route path="expense-group/:id/expenses/:expenseId" element={<EditExpenseForm />} />

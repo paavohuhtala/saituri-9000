@@ -13,6 +13,8 @@ model Member {
   name      String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  phone     String?
+  email     String?
 
   expenses                Expense[]
   sentPayments            Payment[]            @relation("SentPayments")

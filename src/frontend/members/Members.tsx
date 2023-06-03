@@ -3,9 +3,9 @@ import { Member } from "../../common/domain";
 import React from "react";
 import { skeletonStyle } from "../common/skeleton";
 import { FullWidthTextCell, MoneyCell, MoneyHeader, Table, TextCell } from "../common/Table";
-import { DangerLinkButton } from "../common/Button";
 import { BalanceMatrix, calculatePersonalBalances } from "../../common/share";
 import { centsToEurPrice } from "../../common/money";
+import { Link } from "react-router-dom";
 
 const MembersTable = styled(Table)<{ $includeBalanceColumn?: boolean }>`
   grid-template-columns:
@@ -22,9 +22,10 @@ const TableSkeleton = styled(MembersTable).attrs({ as: "div" })`
 interface Props {
   members: Member[];
   balanceMatrix?: BalanceMatrix;
+  expenseGroupId?: string;
 }
 
-export function Members({ members, balanceMatrix }: Props) {
+export function Members({ members, balanceMatrix, expenseGroupId }: Props) {
   const balancePerMember = React.useMemo(
     () => (balanceMatrix ? calculatePersonalBalances(balanceMatrix) : undefined),
     [balanceMatrix],
@@ -50,7 +51,11 @@ export function Members({ members, balanceMatrix }: Props) {
               <TextCell>{member.name}</TextCell>
               {includeBalanceColumn && <MoneyCell>{centsToEurPrice(balance ?? 0)}</MoneyCell>}
               <TextCell>
-                <DangerLinkButton>Poista</DangerLinkButton>
+                <Link
+                  to={expenseGroupId ? `/expense-group/${expenseGroupId}/member/${member.id}` : `/member/${member.id}`}
+                >
+                  Muokkaa
+                </Link>
               </TextCell>
             </tr>
           );

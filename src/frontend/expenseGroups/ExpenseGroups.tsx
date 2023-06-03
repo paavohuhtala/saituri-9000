@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
-import { useCreateExpenseGroupMutation, useGetExpenseGroupsQuery } from "../redux/expenseGroupApi";
+import { useCreateExpenseGroupMutation, useGetExpenseGroupsQuery } from "../redux/saituriApi";
 import { InputField } from "../common/inputs";
 import { Button } from "../common/Button";
 import { CardLinkArea, LinkCard, SkeletonCard } from "../common/Card";
