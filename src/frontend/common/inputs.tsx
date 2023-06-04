@@ -30,4 +30,5 @@ export const InputField = styled.input`
 export const Select = styled.select`
   ${baseInputStyle}
   cursor: pointer;
+  max-width: 100%;
 `;

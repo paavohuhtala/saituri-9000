@@ -17,9 +17,10 @@ const CardContainer = styled.button`
   border-radius: 8px;
   border: 1px solid ${gray.x700};
   color: ${gray.x50};
+`;
 
+const InteractiveCardContainer = styled(CardContainer)`
   cursor: pointer;
-
   &:hover {
     background-color: ${gray.x700};
   }
@@ -32,6 +33,13 @@ const CardTitle = styled.span`
   text-align: start;
 `;
 
+export const CardSubtitle = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: start;
+`;
+
 const CardDetails = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,6 +49,7 @@ const CardDetails = styled.div`
 
 interface CardProps {
   title: string;
+  subtitle?: string;
   children?: React.ReactNode;
   as?: React.ElementType;
 }
@@ -49,12 +58,13 @@ interface ButtonCardProps extends CardProps {
   onClick?: () => void;
 }
 
-export function ButtonCard({ title, children, onClick, as }: ButtonCardProps) {
+export function ButtonCard({ title, subtitle, children, onClick, as }: ButtonCardProps) {
   return (
-    <CardContainer onClick={onClick} as={as}>
+    <InteractiveCardContainer onClick={onClick} as={as}>
       <CardTitle>{title}</CardTitle>
+      {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
       {children && <CardDetails>{children}</CardDetails>}
-    </CardContainer>
+    </InteractiveCardContainer>
   );
 }
 
@@ -62,11 +72,22 @@ interface LinkCardProps extends CardProps {
   link: React.ReactNode;
 }
 
-export function LinkCard({ title, children, as, link }: LinkCardProps) {
+export function LinkCard({ title, subtitle, children, as, link }: LinkCardProps) {
   return (
-    <CardContainer as={as}>
+    <InteractiveCardContainer as={as}>
       {link}
       <CardTitle>{title}</CardTitle>
+      {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
+      {children && <CardDetails>{children}</CardDetails>}
+    </InteractiveCardContainer>
+  );
+}
+
+export function Card({ title, subtitle, children, as }: CardProps) {
+  return (
+    <CardContainer as={as}>
+      <CardTitle>{title}</CardTitle>
+      {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
       {children && <CardDetails>{children}</CardDetails>}
     </CardContainer>
   );

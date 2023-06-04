@@ -13,13 +13,13 @@ export const Breadcrumbs = styled.div`
   line-height: 24px;
   color: ${gray.x50};
   overflow: hidden;
+  flex-wrap: wrap;
 `;
 
 export const StaticBreadcrumb = styled.span`
   // Break on several lines if needed
   white-space: pre-wrap;
   word-wrap: break-word;
-  word-break: break-all;
 `;
 
 export const BreadcrumbLink = styled(Link)`

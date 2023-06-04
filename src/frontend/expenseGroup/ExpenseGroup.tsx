@@ -1,17 +1,19 @@
 import React from "react";
 import { useAddExpenseGroupMemberMutation, useGetExpenseGroupQuery } from "../redux/saituriApi";
-import { InlineForm, ViewContainer, HorizontalContainer, ViewSubtitle, ViewTitle } from "../common/layout";
+import { InlineForm, ViewContainer, HorizontalContainer, ViewSubtitle } from "../common/layout";
 import { ErrorView } from "../common/ErrorView";
 import { Members } from "../members/Members";
 import { Select } from "../common/inputs";
 import { useGetAllMembersQuery } from "../redux/saituriApi";
 import { Button, ButtonLink } from "../common/Button";
-import { IconPlus, IconTrademark } from "@tabler/icons-react";
+import { IconAxe, IconPlus, IconTrademark } from "@tabler/icons-react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { Checkbox } from "../common/Checkbox";
 import { BalanceMatrix } from "./BalanceMatrix";
 import { Expenses } from "./Expenses";
+import { Payments } from "./Payments";
+import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function ExpenseGroup() {
   const { id } = useParams();
@@ -56,7 +58,7 @@ export function ExpenseGroup() {
   if (isLoading || isLoadingAllMembers) {
     return (
       <ViewContainer>
-        <ViewTitle>Ladataan...</ViewTitle>
+        <LoadingIndicator />
       </ViewContainer>
     );
   }
@@ -65,7 +67,7 @@ export function ExpenseGroup() {
     return <ErrorView error={error} refetch={refetch} />;
   }
 
-  const { name, members, expenses, balanceMatrix } = data;
+  const { name, members, expenses, balanceMatrix, payments } = data;
 
   return (
     <ViewContainer>
@@ -94,7 +96,7 @@ export function ExpenseGroup() {
             ))}
           </Select>
           <Button disabled={selectedMember === "" || newMemberStatus.isLoading} onClick={onAddMember}>
-            <IconPlus />
+            <IconPlus size={16} />
             Lisää jäsen ryhmään
           </Button>
         </InlineForm>
@@ -102,7 +104,7 @@ export function ExpenseGroup() {
 
       <ViewSubtitle>Kulut</ViewSubtitle>
       <ButtonLink to={`/expense-group/${id}/expenses/new`}>
-        <IconPlus /> Luo uusi kulu
+        <IconPlus size={16} /> Luo uusi kulu
       </ButtonLink>
       <Expenses expenseGroupId={id} expenses={expenses} />
 
@@ -114,6 +116,12 @@ export function ExpenseGroup() {
         <Checkbox label="Näytä negatiiviset balanssit" checked={showNegative} onChange={onChangeShowNegative} />
       </HorizontalContainer>
       <BalanceMatrix expenseGroup={data} showNegative={showNegative} />
+
+      <ViewSubtitle>Maksut</ViewSubtitle>
+      <ButtonLink to={`/expense-group/${id}/payments/new`}>
+        <IconAxe size={16} /> Maksa velat
+      </ButtonLink>
+      <Payments payments={payments} />
     </ViewContainer>
   );
 }

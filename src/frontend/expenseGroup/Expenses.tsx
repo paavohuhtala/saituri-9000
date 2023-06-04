@@ -52,7 +52,9 @@ export function Expenses({ expenseGroupId, expenses }: Props) {
           <tr key={expense.id}>
             <TextCell>{expense.name}</TextCell>
             <ExpensePayerCell>
-              <span>{expense.paidBy.name}</span>
+              <span>
+                <Link to={`./member/${expense.paidBy.id}`}>{expense.paidBy.name}</Link>
+              </span>
             </ExpensePayerCell>
             <MoneyCell>{centsToEurPrice(expense.amount)}</MoneyCell>
             <TextCell>

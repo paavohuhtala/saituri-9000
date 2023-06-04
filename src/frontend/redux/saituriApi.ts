@@ -6,6 +6,8 @@ import {
   AddExpenseGroupResponse,
   CreateExpenseRequest,
   CreateExpenseResponse,
+  CreatePaymentRequest,
+  CreatePaymentResponse,
   ExpenseGroupResponse,
   ExpenseGroupsResponse,
   MembersResponse,
@@ -77,6 +79,29 @@ export const saituriApi = createApi({
         body,
       }),
     }),
+    createPayment: builder.mutation<CreatePaymentResponse, CreatePaymentRequest & { expenseGroupId: string }>({
+      invalidatesTags: ["ExpenseGroup"],
+      query: ({ expenseGroupId, ...newPayment }) => ({
+        url: `/expense-groups/${expenseGroupId}/payments`,
+        method: "POST",
+        body: newPayment,
+      }),
+    }),
+    updatePayment: builder.mutation<void, CreatePaymentRequest & { expenseGroupId: string; paymentId: string }>({
+      invalidatesTags: ["ExpenseGroup"],
+      query: ({ expenseGroupId, paymentId, ...newPayment }) => ({
+        url: `/expense-groups/${expenseGroupId}/payments/${paymentId}`,
+        method: "PUT",
+        body: newPayment,
+      }),
+    }),
+    deletePayment: builder.mutation<void, { expenseGroupId: string; paymentId: string }>({
+      invalidatesTags: ["ExpenseGroup"],
+      query: ({ expenseGroupId, paymentId }) => ({
+        url: `/expense-groups/${expenseGroupId}/payments/${paymentId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -90,4 +115,6 @@ export const {
   useGetAllMembersQuery,
   useAddMemberMutation,
   useUpdateMemberMutation,
+  useCreatePaymentMutation,
+  useDeletePaymentMutation,
 } = saituriApi;

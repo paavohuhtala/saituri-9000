@@ -12,6 +12,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { EditExpenseForm } from "./expense/EditExpenseForm";
 import { EditMember } from "./member/EditMember";
 import { EditExpenseGroupMember } from "./member/EditExpenseGroupMember";
+import { CreatePayments } from "./payments/CreatePayments";
 
 const root = document.getElementById("root");
 
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="expense-group/:id" element={<ExpenseGroup />} />
               <Route path="expense-group/:id/expenses/new" element={<NewExpenseForm />} />
               <Route path="expense-group/:id/expenses/:expenseId" element={<EditExpenseForm />} />
+              <Route path="expense-group/:id/payments/new" element={<CreatePayments />} />
               <Route path="*" element={<Navigate to={"/"} replace />} />
             </Route>
           </Routes>

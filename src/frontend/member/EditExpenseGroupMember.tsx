@@ -5,6 +5,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { MemberEditor } from "./MemberEditor";
 import { Breadcrumbs, BreadcrumbLink, BreadcrumbArrow, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { useGetExpenseGroupQuery } from "../redux/saituriApi";
+import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function EditExpenseGroupMember() {
   const navigate = useNavigate();
@@ -18,7 +19,11 @@ export function EditExpenseGroupMember() {
   const { data: expenseGroup } = useGetExpenseGroupQuery(expenseGroupId);
 
   if (!members || !expenseGroup) {
-    return <ViewContainer>Ladataan...</ViewContainer>;
+    return (
+      <ViewContainer>
+        <LoadingIndicator />
+      </ViewContainer>
+    );
   }
 
   const member = members.find((m) => m.id === memberId);

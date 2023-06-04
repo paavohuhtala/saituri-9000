@@ -7,6 +7,7 @@ import { ButtonLink } from "../common/Button";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
+import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function EditExpenseForm() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export function EditExpenseForm() {
   if (!expenseGroup) {
     return (
       <ViewContainer>
-        <ViewTitle>Ladataan...</ViewTitle>
+        <LoadingIndicator />
       </ViewContainer>
     );
   }
@@ -69,7 +70,7 @@ export function EditExpenseForm() {
         <BreadcrumbArrow />
         <StaticBreadcrumb>{expense.name}</StaticBreadcrumb>
       </Breadcrumbs>
-      {updateExpenseStatus.isLoading && <ViewTitle>Tallennetaan kulua...</ViewTitle>}
+      {updateExpenseStatus.isLoading && <LoadingIndicator />}
       <ExpenseEditor
         hidden={updateExpenseStatus.isLoading}
         initialExpense={expense}

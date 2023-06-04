@@ -12,20 +12,20 @@ const BaseButton = styled.button`
   align-items: center;
   justify-content: center;
   flex-grow: 0;
-  gap: 4px;
+  gap: 8px;
 
   padding: 0px 16px;
   background-color: var(--bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);
   color: ${gray.x200};
-
+  text-decoration: none;
   height: 44px;
-
   cursor: pointer;
 
   &:hover {
     background-color: var(--hover-bg-color);
+    color: ${gray.x200};
   }
 
   &:disabled {

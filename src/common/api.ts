@@ -11,6 +11,7 @@ export type ExpenseGroupsResponse = ExpenseGroupWithDetails[];
 
 export interface PaymentWithDetails extends Payment {
   payer: Member;
+  payee: Member;
 }
 
 export interface ExpenseWithDetails extends Expense {
@@ -51,3 +52,11 @@ export const CreateExpenseRequest = t.type({
 });
 export type CreateExpenseRequest = t.TypeOf<typeof CreateExpenseRequest>;
 export type CreateExpenseResponse = { id: string };
+
+export const CreatePaymentRequest = t.type({
+  amount: t.Integer,
+  payerId: t.string,
+  payeeId: t.string,
+});
+export type CreatePaymentRequest = t.TypeOf<typeof CreatePaymentRequest>;
+export type CreatePaymentResponse = { id: string };

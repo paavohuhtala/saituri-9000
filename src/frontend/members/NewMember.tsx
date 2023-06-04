@@ -32,7 +32,7 @@ export function NewMember({ onAddMember }: Props) {
       <InputField placeholder="Nimi" value={name} onChange={onChangeName} disabled={adding} maxLength={48} />
 
       <Button onClick={onClickAdd} disabled={name.length < 1 || adding}>
-        <IconPlus />
+        <IconPlus size={16} />
         Lisää jäsen
       </Button>
     </InlineForm>

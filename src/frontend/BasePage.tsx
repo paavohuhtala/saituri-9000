@@ -23,10 +23,12 @@ const GlobalCss = createGlobalStyle`
   }
 
   a {
+    text-decoration: none;
     color: ${indigo.x500};
 
     &:hover {
       color: ${indigo.x400};
+      text-decoration: underline;
     }
   }
 `;

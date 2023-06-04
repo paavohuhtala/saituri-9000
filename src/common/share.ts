@@ -65,6 +65,13 @@ export function calculateBalanceMatrix(group: DbType<ExpenseGroupWithFullDetails
     }
   }
 
+  // Round everything to integers
+  for (const payerId of Object.keys(balanceMatrix)) {
+    for (const payeeId of Object.keys(balanceMatrix[payerId])) {
+      balanceMatrix[payerId][payeeId] = Math.round(balanceMatrix[payerId][payeeId]);
+    }
+  }
+
   return balanceMatrix;
 }
 

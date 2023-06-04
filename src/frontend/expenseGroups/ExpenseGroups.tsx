@@ -76,7 +76,7 @@ export function ExpenseGroups() {
           disabled={newExpenseGroupName.length < 1 || newExpenseGroupStatus.isLoading}
           onClick={onCreateNewExpenseGroup}
         >
-          <IconPlus />
+          <IconPlus size={16} />
           Lisää kuluryhmä
         </Button>
       </InlineForm>

@@ -6,6 +6,7 @@ import { ExpenseEditor } from "./ExpenseEditor";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
 import { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
+import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function NewExpenseForm() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export function NewExpenseForm() {
   if (!expenseGroup) {
     return (
       <ViewContainer>
-        <ViewTitle>Ladataan...</ViewTitle>
+        <LoadingIndicator />
       </ViewContainer>
     );
   }

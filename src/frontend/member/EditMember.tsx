@@ -1,21 +1,29 @@
 import React from "react";
 import { ViewContainer, ViewTitle } from "../common/layout";
 import { useGetAllMembersQuery } from "../redux/saituriApi";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { MemberEditor } from "./MemberEditor";
 import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function EditMember() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const { currentData: members } = useGetAllMembersQuery();
+
+  const returnTo = searchParams.get("returnTo") ?? "/";
 
   if (!id) {
     return <Navigate to="/" replace />;
   }
 
   if (!members) {
-    return <ViewContainer>Ladataan...</ViewContainer>;
+    return (
+      <ViewContainer>
+        <LoadingIndicator />
+      </ViewContainer>
+    );
   }
 
   const member = members.find((m) => m.id === id);
@@ -30,7 +38,7 @@ export function EditMember() {
 
   const onSaved = () => {
     setTimeout(() => {
-      navigate("/");
+      navigate(returnTo);
     }, 1000);
   };
 

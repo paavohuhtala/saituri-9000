@@ -5,7 +5,7 @@ import { InputField } from "../common/inputs";
 import { styled } from "styled-components";
 import { useUpdateMemberMutation } from "../redux/saituriApi";
 import { Button } from "../common/Button";
-import { useNavigate } from "react-router-dom";
+import { LoadingIndicator } from "../common/LoadingIndicator";
 
 const FieldInfo = styled.p`
   line-height: 1.5;
@@ -13,6 +13,7 @@ const FieldInfo = styled.p`
 
 const NameField = styled(InputField)`
   width: 45ch;
+  max-width: 100%;
 `;
 
 interface Props {
@@ -49,7 +50,7 @@ export function MemberEditor({ initialMember, onSaved }: Props) {
   if (updateMemberStatus.isLoading) {
     return (
       <ViewContainer>
-        <ViewTitle>Tallennetaan...</ViewTitle>
+        <LoadingIndicator />
       </ViewContainer>
     );
   }
