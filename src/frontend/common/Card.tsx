@@ -5,7 +5,7 @@ import { StyledLink } from "./StyledLink";
 import { skeletonStyle } from "./skeleton";
 import { Link } from "react-router-dom";
 
-const CardContainer = styled.button`
+const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -19,7 +19,7 @@ const CardContainer = styled.button`
   color: ${gray.x50};
 `;
 
-const InteractiveCardContainer = styled(CardContainer)`
+const InteractiveCardContainer = styled(CardContainer).attrs({ as: "button" })`
   cursor: pointer;
   &:hover {
     background-color: ${gray.x700};
