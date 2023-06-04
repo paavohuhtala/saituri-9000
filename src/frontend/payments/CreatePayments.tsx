@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Navigate, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useCreatePaymentMutation, useDeletePaymentMutation, useGetExpenseGroupQuery } from "../redux/saituriApi";
-import { FormField, HorizontalContainer, ViewContainer, ViewTitle } from "../common/layout";
+import { FormField, ViewContainer } from "../common/layout";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 import { FormLabel } from "../common/layout";
 import { Select } from "../common/inputs";
@@ -13,6 +13,7 @@ import { IconCheck, IconDeviceMobile } from "@tabler/icons-react";
 import { Button, SecondaryButton } from "../common/Button";
 import { Member } from "../../common/domain";
 import { generateMobilePayAppLink } from "../../common/mobilePay";
+import { Breadcrumbs } from "../common/Breadcrumbs";
 
 const CardList = styled.div`
   display: flex;
@@ -157,7 +158,7 @@ function CreatedPaymentEntry({ payee, amount, paymentId, expenseGroupId, onUndoF
 }
 
 export function CreatePayments() {
-  const { id } = useParams();
+  const { expenseGroupId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const payerId = searchParams.get("payer") ?? "";
   const [createdPayments, setCreatedPayments] = React.useState<
@@ -168,11 +169,11 @@ export function CreatePayments() {
     }[]
   >([]);
 
-  if (!id) {
+  if (!expenseGroupId) {
     return <Navigate to="/" replace />;
   }
 
-  const { data } = useGetExpenseGroupQuery(id);
+  const { data } = useGetExpenseGroupQuery(expenseGroupId);
 
   const pendingPayments = React.useMemo(() => {
     if (!data) {
@@ -219,7 +220,7 @@ export function CreatePayments() {
 
   return (
     <ViewContainer>
-      <ViewTitle>Maksa velat</ViewTitle>
+      <Breadcrumbs expenseGroup={data} />
       <FormField>
         <FormLabel>Maksaja</FormLabel>
         <Select value={payerId} onChange={onChangePayer}>
@@ -240,7 +241,7 @@ export function CreatePayments() {
             key={member.id}
             payee={member}
             amount={amount}
-            expenseGroupId={id}
+            expenseGroupId={expenseGroupId}
             payerId={payerId}
             onPaymentCreated={({ id }) => {
               setCreatedPayments((prev) => [...prev, { payeeId: member.id, paymentId: id, amount }]);
@@ -260,7 +261,7 @@ export function CreatePayments() {
               payee={payee}
               paymentId={paymentId}
               amount={amount}
-              expenseGroupId={id}
+              expenseGroupId={expenseGroupId}
               onUndoFinished={() => {
                 setCreatedPayments((prev) => prev.filter((p) => p.paymentId !== paymentId));
               }}

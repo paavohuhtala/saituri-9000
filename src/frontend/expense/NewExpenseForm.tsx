@@ -3,20 +3,20 @@ import { ViewContainer, ViewTitle } from "../common/layout";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useCreateExpenseMutation, useGetExpenseGroupQuery } from "../redux/saituriApi";
 import { ExpenseEditor } from "./ExpenseEditor";
-import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { Breadcrumbs } from "../common/Breadcrumbs";
 import { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function NewExpenseForm() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { expenseGroupId } = useParams();
 
-  if (!id) {
+  if (!expenseGroupId) {
     return <Navigate to="/" replace />;
   }
 
-  const { data: expenseGroup } = useGetExpenseGroupQuery(id);
+  const { data: expenseGroup } = useGetExpenseGroupQuery(expenseGroupId);
   const members = expenseGroup?.members ?? [];
   const [createExpense, createExpenseStatus] = useCreateExpenseMutation();
 
@@ -39,23 +39,17 @@ export function NewExpenseForm() {
 
     await createExpense({
       ...expense,
-      expenseGroupId: id,
+      expenseGroupId: expenseGroupId,
     });
 
     setTimeout(() => {
-      navigate(`/expense-group/${id}`);
+      navigate(`/expense-group/${expenseGroupId}`);
     }, 1000);
   };
 
   return (
     <ViewContainer>
-      <Breadcrumbs>
-        <BreadcrumbLink to="/">Kuluryhmät</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <BreadcrumbLink to={`/expense-group/${id}`}>{expenseGroup.name}</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <StaticBreadcrumb>Uusi kulu</StaticBreadcrumb>
-      </Breadcrumbs>
+      <Breadcrumbs expenseGroup={expenseGroup} />
       {createExpenseStatus.isLoading && <ViewTitle>Luodaan kulua...</ViewTitle>}
       <ExpenseEditor
         hidden={createExpenseStatus.isLoading}

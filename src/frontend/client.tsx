@@ -8,11 +8,12 @@ import { Home } from "./Home";
 import { Layout } from "./BasePage";
 import { ExpenseGroup } from "./expenseGroup/ExpenseGroup";
 import { NewExpenseForm } from "./expense/NewExpenseForm";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { EditExpenseForm } from "./expense/EditExpenseForm";
 import { EditMember } from "./member/EditMember";
 import { EditExpenseGroupMember } from "./member/EditExpenseGroupMember";
 import { CreatePayments } from "./payments/CreatePayments";
+import { Crumb, CrumbParams } from "./common/Breadcrumbs";
 
 const root = document.getElementById("root");
 
@@ -20,24 +21,78 @@ if (!root) {
   throw new Error("Root element not found");
 }
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "/", element: <Home /> },
+      {
+        path: "member/:id",
+        element: <EditMember />,
+        handle: {
+          crumb: ({ member }: CrumbParams): Crumb[] => [
+            { label: "Kaikki jäsenet", to: "/" },
+            { label: member?.name ?? "Jäsen" },
+          ],
+        },
+      },
+      {
+        path: "expense-group/:expenseGroupId",
+        handle: {
+          crumb: ({ expenseGroup }: CrumbParams): Crumb[] => [
+            { label: "Kuluryhmät", to: "/" },
+            { label: expenseGroup?.name ?? "Kuluryhmä", to: `/expense-group/${expenseGroup?.id}` },
+          ],
+        },
+        children: [
+          { path: "", element: <ExpenseGroup /> },
+          {
+            path: "member/:memberId",
+            element: <EditExpenseGroupMember />,
+            handle: {
+              crumb: ({ member }: CrumbParams): Crumb[] => [{ label: "Jäsenet" }, { label: member?.name ?? "Jäsen" }],
+            },
+          },
+          {
+            path: "expenses",
+            handle: {
+              crumb: () => [{ label: "Kulut" }],
+            },
+            children: [
+              {
+                path: ":expenseId",
+                element: <EditExpenseForm />,
+                handle: {
+                  crumb: ({ expense }: CrumbParams): Crumb[] => [{ label: expense?.name ?? "Kulu" }],
+                },
+              },
+              {
+                path: "new",
+                element: <NewExpenseForm />,
+                handle: {
+                  crumb: () => [{ label: "Uusi kulu" }],
+                },
+              },
+            ],
+          },
+          {
+            path: "payments/new",
+            element: <CreatePayments />,
+            handle: { crumb: () => [{ label: "Maksut" }, { label: "Maksa velat" }] },
+          },
+        ],
+      },
+      { path: "*", element: <Navigate to={"/"} replace /> },
+    ],
+  },
+]);
+
 const App = () => {
   return (
     <StrictMode>
       <Provider store={appStore}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="member/:id" element={<EditMember />} />
-              <Route path="expense-group/:expenseGroupId/member/:memberId" element={<EditExpenseGroupMember />} />
-              <Route path="expense-group/:id" element={<ExpenseGroup />} />
-              <Route path="expense-group/:id/expenses/new" element={<NewExpenseForm />} />
-              <Route path="expense-group/:id/expenses/:expenseId" element={<EditExpenseForm />} />
-              <Route path="expense-group/:id/payments/new" element={<CreatePayments />} />
-              <Route path="*" element={<Navigate to={"/"} replace />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </Provider>
     </StrictMode>
   );

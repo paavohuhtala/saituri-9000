@@ -3,7 +3,7 @@ import { ViewContainer, ViewTitle } from "../common/layout";
 import { useGetAllMembersQuery } from "../redux/saituriApi";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { MemberEditor } from "./MemberEditor";
-import { Breadcrumbs, BreadcrumbLink, BreadcrumbArrow, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { Breadcrumbs } from "../common/Breadcrumbs";
 import { useGetExpenseGroupQuery } from "../redux/saituriApi";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 
@@ -44,15 +44,7 @@ export function EditExpenseGroupMember() {
 
   return (
     <ViewContainer>
-      <Breadcrumbs>
-        <BreadcrumbLink to="/">Kuluryhmät</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <BreadcrumbLink to={`/expense-group/${expenseGroupId}`}>{expenseGroup?.name}</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <StaticBreadcrumb>Jäsenet</StaticBreadcrumb>
-        <BreadcrumbArrow />
-        <StaticBreadcrumb>{member.name}</StaticBreadcrumb>
-      </Breadcrumbs>
+      <Breadcrumbs member={member} expenseGroup={expenseGroup} />
       <MemberEditor initialMember={member} onSaved={onSaved} />
     </ViewContainer>
   );

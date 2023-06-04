@@ -4,21 +4,21 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useGetExpenseGroupQuery, useUpdateExpenseMutation } from "../redux/saituriApi";
 import { ExpenseEditor } from "./ExpenseEditor";
 import { ButtonLink } from "../common/Button";
-import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { Breadcrumbs } from "../common/Breadcrumbs";
 import { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function EditExpenseForm() {
   const navigate = useNavigate();
-  const { id, expenseId } = useParams();
+  const { expenseGroupId, expenseId } = useParams();
 
-  if (!id || !expenseId) {
+  if (!expenseGroupId || !expenseId) {
     return <Navigate to="/" replace />;
   }
 
   // Use currentData to ensure we get the latest data from the server
-  const { currentData: expenseGroup } = useGetExpenseGroupQuery(id, { refetchOnMountOrArgChange: true });
+  const { currentData: expenseGroup } = useGetExpenseGroupQuery(expenseGroupId, { refetchOnMountOrArgChange: true });
   const members = expenseGroup?.members ?? [];
   const [updateExpense, updateExpenseStatus] = useUpdateExpenseMutation();
 
@@ -36,7 +36,7 @@ export function EditExpenseForm() {
     return (
       <ViewContainer>
         <ViewTitle>Pyydettyä kulua ei löytynyt :(</ViewTitle>
-        <ButtonLink to={`/expense-group/${id}`}>Palaa kuluryhmään</ButtonLink>
+        <ButtonLink to={`/expense-group/${expenseGroupId}`}>Palaa kuluryhmään</ButtonLink>
       </ViewContainer>
     );
   }
@@ -52,24 +52,18 @@ export function EditExpenseForm() {
 
     await updateExpense({
       ...expense,
-      expenseGroupId: id,
+      expenseGroupId: expenseGroupId,
       expenseId: expenseId,
     });
 
     setTimeout(() => {
-      navigate(`/expense-group/${id}`);
+      navigate(`/expense-group/${expenseGroupId}`);
     }, 1000);
   };
 
   return (
     <ViewContainer>
-      <Breadcrumbs>
-        <BreadcrumbLink to="/">Kuluryhmät</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <BreadcrumbLink to={`/expense-group/${id}`}>{expenseGroup.name}</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <StaticBreadcrumb>{expense.name}</StaticBreadcrumb>
-      </Breadcrumbs>
+      <Breadcrumbs expenseGroup={expenseGroup} expense={expense} />
       {updateExpenseStatus.isLoading && <LoadingIndicator />}
       <ExpenseEditor
         hidden={updateExpenseStatus.isLoading}

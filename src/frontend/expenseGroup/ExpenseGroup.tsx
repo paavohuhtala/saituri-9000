@@ -8,7 +8,7 @@ import { useGetAllMembersQuery } from "../redux/saituriApi";
 import { Button, ButtonLink } from "../common/Button";
 import { IconAxe, IconPlus, IconTrademark } from "@tabler/icons-react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { Breadcrumbs } from "../common/Breadcrumbs";
 import { Checkbox } from "../common/Checkbox";
 import { BalanceMatrix } from "./BalanceMatrix";
 import { Expenses } from "./Expenses";
@@ -16,13 +16,13 @@ import { Payments } from "./Payments";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function ExpenseGroup() {
-  const { id } = useParams();
+  const { expenseGroupId } = useParams();
 
-  if (!id) {
+  if (!expenseGroupId) {
     return <Navigate to="/" replace />;
   }
 
-  const { isLoading, data, error, refetch } = useGetExpenseGroupQuery(id);
+  const { isLoading, data, error, refetch } = useGetExpenseGroupQuery(expenseGroupId);
   const { isLoading: isLoadingAllMembers, data: allMembers } = useGetAllMembersQuery();
   const [addMember, newMemberStatus] = useAddExpenseGroupMemberMutation();
 
@@ -50,7 +50,7 @@ export function ExpenseGroup() {
       return;
     }
 
-    addMember({ expenseGroupId: id, memberId: selectedMember }).then(() => {
+    addMember({ expenseGroupId: expenseGroupId, memberId: selectedMember }).then(() => {
       setSelectedMember("");
     });
   };
@@ -67,17 +67,13 @@ export function ExpenseGroup() {
     return <ErrorView error={error} refetch={refetch} />;
   }
 
-  const { name, members, expenses, balanceMatrix, payments } = data;
+  const { members, expenses, balanceMatrix, payments } = data;
 
   return (
     <ViewContainer>
-      <Breadcrumbs>
-        <BreadcrumbLink to="/">Kuluryhmät</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <StaticBreadcrumb>{name}</StaticBreadcrumb>
-      </Breadcrumbs>
+      <Breadcrumbs expenseGroup={data} />
       <ViewSubtitle>Jäsenet</ViewSubtitle>
-      <Members members={members} balanceMatrix={balanceMatrix} expenseGroupId={id} />
+      <Members members={members} balanceMatrix={balanceMatrix} expenseGroupId={expenseGroupId} />
 
       {availableMembers.length === 0 ? (
         <p>
@@ -103,10 +99,10 @@ export function ExpenseGroup() {
       )}
 
       <ViewSubtitle>Kulut</ViewSubtitle>
-      <ButtonLink to={`/expense-group/${id}/expenses/new`}>
+      <ButtonLink to={`/expense-group/${expenseGroupId}/expenses/new`}>
         <IconPlus size={16} /> Luo uusi kulu
       </ButtonLink>
-      <Expenses expenseGroupId={id} expenses={expenses} />
+      <Expenses expenseGroupId={expenseGroupId} expenses={expenses} />
 
       <HorizontalContainer>
         <ViewSubtitle>
@@ -118,7 +114,7 @@ export function ExpenseGroup() {
       <BalanceMatrix expenseGroup={data} showNegative={showNegative} />
 
       <ViewSubtitle>Maksut</ViewSubtitle>
-      <ButtonLink to={`/expense-group/${id}/payments/new`}>
+      <ButtonLink to={`/expense-group/${expenseGroupId}/payments/new`}>
         <IconAxe size={16} /> Maksa velat
       </ButtonLink>
       <Payments payments={payments} />

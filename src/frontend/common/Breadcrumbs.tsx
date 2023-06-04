@@ -1,9 +1,23 @@
 import styled from "styled-components";
-import { blue, gray, indigo } from "../theme";
-import { Link } from "react-router-dom";
+import { gray } from "../theme";
+import { Link, useMatches } from "react-router-dom";
 import { IconChevronRight } from "@tabler/icons-react";
+import React from "react";
 
-export const Breadcrumbs = styled.div`
+export interface CrumbParams {
+  expenseGroup?: { name: string; id: string };
+  member?: { name: string; id: string };
+  expense?: { name: string; id: string };
+}
+
+export interface Crumb {
+  label: string;
+  to?: string;
+}
+
+export type CrumbCreator = (params: CrumbParams) => Crumb[];
+
+export const BreadcrumbsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -29,3 +43,44 @@ export const BreadcrumbLink = styled(Link)`
 export const BreadcrumbArrow = styled(IconChevronRight).attrs({ size: 16 })`
   flex-shrink: 0;
 `;
+
+function getCrumbCreator(handle: unknown): CrumbCreator | undefined {
+  if (handle && typeof handle === "object" && "crumb" in handle) {
+    return handle.crumb as CrumbCreator;
+  } else {
+    return undefined;
+  }
+}
+
+export function Breadcrumbs(props: CrumbParams) {
+  const matches = useMatches();
+
+  const crumbs: Crumb[] = React.useMemo(
+    () =>
+      matches.flatMap((match) => {
+        const createCrumbs = getCrumbCreator(match.handle);
+
+        if (createCrumbs) {
+          return [...createCrumbs(props)];
+        } else {
+          return [];
+        }
+      }),
+    [matches, props],
+  );
+
+  return (
+    <BreadcrumbsContainer>
+      {crumbs.map((crumb, index) => (
+        <React.Fragment key={crumb.label + (crumb.to ?? "")}>
+          {crumb.to && index !== crumbs.length - 1 ? (
+            <BreadcrumbLink to={crumb.to}>{crumb.label}</BreadcrumbLink>
+          ) : (
+            <StaticBreadcrumb>{crumb.label}</StaticBreadcrumb>
+          )}
+          {index < crumbs.length - 1 && <BreadcrumbArrow />}
+        </React.Fragment>
+      ))}
+    </BreadcrumbsContainer>
+  );
+}

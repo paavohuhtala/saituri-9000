@@ -3,7 +3,7 @@ import { ViewContainer, ViewTitle } from "../common/layout";
 import { useGetAllMembersQuery } from "../redux/saituriApi";
 import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { MemberEditor } from "./MemberEditor";
-import { BreadcrumbArrow, BreadcrumbLink, Breadcrumbs, StaticBreadcrumb } from "../common/Breadcrumbs";
+import { Breadcrumbs } from "../common/Breadcrumbs";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function EditMember() {
@@ -44,11 +44,7 @@ export function EditMember() {
 
   return (
     <ViewContainer>
-      <Breadcrumbs>
-        <BreadcrumbLink to="/">Kaikki jäsenet</BreadcrumbLink>
-        <BreadcrumbArrow />
-        <StaticBreadcrumb>{member.name}</StaticBreadcrumb>
-      </Breadcrumbs>
+      <Breadcrumbs member={member} />
       <MemberEditor initialMember={member} onSaved={onSaved} />
     </ViewContainer>
   );
