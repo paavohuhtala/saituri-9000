@@ -49,22 +49,6 @@ const NavContainer = styled.nav`
   border-bottom: 1px solid ${gray.x700};
 `;
 
-const NavButtons = styled.ul`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  list-style: none;
-  gap: 16px;
-`;
-
-const NavButton = styled.li`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
-  cursor: pointer;
-`;
-
 const Logo = styled(StyledLink)`
   font-size: 24px;
   font-weight: 900;
@@ -117,9 +101,6 @@ export function Layout() {
           <span>Saituri&nbsp;</span>
           <span>9000</span>
         </Logo>
-        <NavButtons>
-          <NavButton>Etusivu</NavButton>
-        </NavButtons>
       </NavContainer>
       <MainContent>
         <Outlet />
