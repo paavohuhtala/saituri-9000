@@ -48,6 +48,14 @@ export const Button = styled(BaseButton)`
   --hover-bg-color: ${green.x700};
 `;
 
+export const MultiLineButton = styled(Button)`
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 44px;
+  height: unset;
+  padding: 8px 16px;
+`;
+
 export const SecondaryButton = styled(BaseButton)`
   --bg-color: ${gray.x800};
   --border-color: ${gray.x700};
@@ -71,6 +79,7 @@ export const ButtonLink = styled(Button).attrs({ as: Link })`
   text-decoration: none;
 
   &:hover {
+    text-decoration: none;
     color: var(--text-color);
   }
 ` as typeof Link;

@@ -43,6 +43,7 @@ export const InlineForm = styled.div`
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+  max-width: 100%;
 `;
 
 export const Form = styled.form`

@@ -5,7 +5,7 @@ import { styled } from "styled-components";
 import { Member } from "../../common/domain";
 import { WeightByMemberId, calculateShares, calculateSuggestedPayerId } from "../../common/share";
 import { ParticipantEditor } from "./ParticipantEditor";
-import { Button, SecondaryButtonLink } from "../common/Button";
+import { Button, MultiLineButton, SecondaryButtonLink } from "../common/Button";
 import { IconPigMoney, IconThumbUpFilled } from "@tabler/icons-react";
 import { centsToFloatEur, floatEurToInputValue } from "../../common/money";
 import { CreateExpenseRequest, ExpenseGroupResponse, ExpenseWithDetails } from "../../common/api";
@@ -224,9 +224,9 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
           </Select>
           {suggestedPayer ? (
             payerId !== suggestedPayer.id ? (
-              <Button type="button" onClick={() => setPayerId(suggestedPayer.id)}>
+              <MultiLineButton type="button" onClick={() => setPayerId(suggestedPayer.id)}>
                 Käytä suositeltua maksajaa: {suggestedPayer.name}
-              </Button>
+              </MultiLineButton>
             ) : (
               <SuggestedPayerLabel>
                 Suositeltu maksaja
