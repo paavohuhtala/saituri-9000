@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       TZ: ${TZ}
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - ${HOST}:${DB_PORT}:${DB_PORT}
     volumes:
       - db:/var/lib/postgresql/data
     command: -p ${DB_PORT}
@@ -23,7 +23,7 @@ services:
     restart: always
     command: sh -c "yarn db:migrate && yarn backend:start-prod"
     ports:
-      - ${PORT}:${PORT}
+      - ${HOST}:${PORT}:${PORT}
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
       TZ: ${TZ}
