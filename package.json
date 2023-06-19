@@ -5,6 +5,7 @@
   "packageManager": "yarn@3.5.1",
   "type": "module",
   "devDependencies": {
+    "@playwright/test": "^1.35.1",
     "@swc-node/register": "^1.6.5",
     "@swc/core": "^1.3.59",
     "@types/lodash": "^4.14.194",
@@ -21,7 +22,9 @@
     "@prisma/client": "4.14.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@tabler/icons-react": "^2.20.0",
+    "@types/axios": "^0.14.0",
     "@types/qrcode": "^1.5.0",
+    "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-basic-auth": "^1.2.1",
@@ -39,11 +42,14 @@
     "typera-express": "^2.4.4"
   },
   "scripts": {
-    "backend:start": "nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/server.ts'",
+    "backend:start": "SAITURI_ENV=development nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/index.ts'",
+    "backend:test:start": "SAITURI_ENV=test nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/testServer.ts'",
     "backend:build": "NODE_ENV=production tsc",
-    "backend:start-prod": "NODE_ENV=production node build/backend/server.js",
+    "backend:start-prod": "NODE_ENV=production SAITURI_ENV=production node build/backend/server.js",
     "frontend:start": "PORT=1234 parcel src/frontend/index.html --dist-dir dist-dev",
     "frontend:build": "NODE_ENV=production parcel build --public-url /assets src/frontend/index.html",
+    "frontend:watch-test": "parcel watch --public-url /assets src/frontend/index.html --dist-dir dist-test",
+    "frontend:build-test": "parcel build --public-url /assets src/frontend/index.html --dist-dir dist-test",
     "build": "yarn backend:build && yarn frontend:build",
     "clean": "rm -rf build dist-dev dist .parcel-cache",
     "infra:up": "docker-compose -f db-compose.yaml up -d",
@@ -53,7 +59,11 @@
     "db:migrate-prod": "prisma migrate deploy",
     "tsc:check": "tsc --noEmit",
     "tsc:watch": "tsc --noEmit --watch",
-    "lint:check": "rome check src"
+    "lint:check": "rome check src",
+    "test:e2e:ui": "e2e-tests/test-ui.sh",
+    "test:e2e:ci": "e2e-tests/test-ci.sh",
+    "db:test:start": "docker-compose -f test-db-compose.yaml up --no-recreate -d --wait",
+    "db:test:stop": "docker-compose -f test-db-compose.yaml down"
   },
   "prisma": {
     "schema": "db/schema.prisma"

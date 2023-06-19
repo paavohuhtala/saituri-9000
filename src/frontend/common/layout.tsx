@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { gray } from "../theme";
 
-export const ViewContainer = styled.div`
+export const ViewContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: flex-start;

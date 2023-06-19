@@ -6,5 +6,9 @@ yarn-error.log
 .parcel-cache
 dist
 dist-dev
+dist-test
 install-state.gz
 build
+/test-results/
+/playwright-report/
+/playwright/.cache/
