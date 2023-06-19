@@ -4030,10 +4030,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fp-ts@npm:>=2.0.0, fp-ts@npm:^2.15.0":
+"fp-ts@npm:>=2.0.0":
   version: 2.15.0
   resolution: "fp-ts@npm:2.15.0"
   checksum: 750e61ce9a448972b2ab7d2372f55efa831cfb967e62fb5a484c0df6356dcc8a81da4e94af442fcacd2245cce2e6a0de04f6ac3783a914bcb8ed2ab1dbf659aa
+  languageName: node
+  linkType: hard
+
+"fp-ts@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "fp-ts@npm:2.16.0"
+  checksum: 0724a4d8b2171cc98e9d9a05e6fe7e0acbc8c79eaabe8e257cbe3a6a5a77acdbdd2572e2ca8135e91d6e02542237499db6e952a58829ba0796ab96063dd39eb2
   languageName: node
   linkType: hard
 
@@ -6110,7 +6117,7 @@ __metadata:
     body-parser: ^1.20.2
     express: ^4.18.2
     express-basic-auth: ^1.2.1
-    fp-ts: ^2.15.0
+    fp-ts: ^2.16.0
     io-ts: ^2.2.20
     lodash: ^4.17.21
     luxon: ^3.3.0
