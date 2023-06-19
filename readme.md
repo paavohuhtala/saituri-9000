@@ -1,7 +1,7 @@
 
 # Saituri 9000
 
-Expense tracking for individuals.
+Expense tracking for small groups AKA self-hosted WeShare replacement.
 
 ## Requirements
 
@@ -9,8 +9,8 @@ Expense tracking for individuals.
   - Use [`fnm`](https://github.com/Schniz/fnm) for Node.js version management. It will automatically use the
     correct version of Node.js when you `cd` into the project directory.
 - [Yarn](https://yarnpkg.com/getting-started/install)
-- Docker and Docker Compose (for local Postgres database)
-  - Or compatible alternative (e.g. Podman)
+- Docker and Docker Compose 2+ (for local Postgres database)
+  - Compatible alternative (e.g. Podman) might work
 
 ## First run
 
@@ -30,6 +30,18 @@ Remember to run migrations and / or generate the database client when the databa
 4. Open http://localhost:1234 in your browser
 
 Backend is automatically restarted on changes. Frontend will hot reload on changes.
+
+### Testing
+
+Saituri supports integration / browser tests using Playwright. Tests require Docker Compose, because they run against a real PostgreSQL instance. Test scripts build, start and stop the necessary infrastructure automatically.
+
+There are two different ways to run the tests:
+- `yarn test:e2e:ci`
+  - This runs the tests once and prints the results to the terminal. There is some overhead in starting and stopping the infrastructure, so this is better suited for CI than for local development.
+- `yarn test:e2e:ui`
+  - This command starts the necessary infrastructure and then Playwright in [UI mode](https://playwright.dev/docs/test-ui-mode). The UI makes it easy to create and debug tests, and it supports running tests in watch mode. Backend, frontend and test code is automatically reloaded on changes, though tests are only re-run on changes to test code. The UI starts as a separate Chromium instance.
+
+Tests are run in GitHub Actions as a part of the CI pipeline. Error traces are uploaded as artifacts, and after downloading they can be viewed using `yarn playwright show-trace [filename]`.
 
 ## Production
 
