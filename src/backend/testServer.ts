@@ -8,6 +8,7 @@ import { Parser, Response, Route, route, router } from "typera-express";
 import { TEST_SERVER_FIRST_PORT, TEST_SERVER_HEALTH_CHECK_PORT, TestApiCommand } from "./testCommon.js";
 import { pino } from "pino";
 import pretty from "pino-pretty";
+import { mkdir } from "fs/promises";
 
 const TEST_INSTANCES = parseInt(process.env.TEST_INSTANCES ?? "1", 10);
 const BASE_DATABASE_URL = "postgresql://postgres:postgres@localhost:5499";
@@ -62,14 +63,19 @@ async function createTestContext(index: number): Promise<BackendContext> {
     assetPath: "dist-test",
   };
 
+  const db = createPrismaClient(config.databaseUrl);
+
   const isCi = process.env.CI === "true";
 
-  const db = createPrismaClient(config.databaseUrl);
+  if (!isCi) {
+    await mkdir("logs", { recursive: true });
+  }
+
   const logger = pino(
     { name: `saituri-backend-test-${index}` },
     pino.multistream([
       // Don't log to file in CI
-      ...(isCi ? [{ stream: pino.destination({ dest: `logs/test-${index}.log`, append: false, sync: true }) }] : []),
+      ...(isCi ? [] : [{ stream: pino.destination({ dest: `logs/test-${index}.log`, append: false, sync: true }) }]),
       // For some reason TypeScript in VS Code and Typescript in a terminal do not agree on the type of pretty
       // VS Code says it's an object, tsc says it's a function (which is correct)
       // @ts-ignore
