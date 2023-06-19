@@ -5,17 +5,24 @@ import { createExpenseGroupApi } from "./expenseGroupApi.js";
 import { createMemberApi } from "./memberApi.js";
 import basicAuth from "express-basic-auth";
 import { BackendContext } from "./context.js";
+import { pinoHttp } from "pino-http";
 
 export async function createServer(context: BackendContext, injectRoutes?: (server: Express) => void) {
-  const { env, config } = context;
+  const { env, config, logger } = context;
   const { port, basicAuth: basicAuthConfig } = config;
 
   const server = express();
   server.use(bodyParser.json());
 
+  const httpLogger = pinoHttp({
+    logger: context.logger,
+  });
+
+  server.use(httpLogger);
+
   if (basicAuthConfig) {
     const { user, password } = basicAuthConfig;
-    console.log(`Basic auth enabled for user ${user}`);
+    logger.info(`Basic auth enabled for user ${user}`);
     server.use(
       basicAuth({
         users: { [user]: password },
@@ -23,7 +30,7 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
       }),
     );
   } else if (env === "production") {
-    console.warn(
+    logger.warn(
       "Basic auth is not enabled. Please set BASIC_AUTH_USER and BASIC_AUTH_PASSWORD environment variables to prevent unauthorized access.",
     );
   }
@@ -52,7 +59,7 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
 
   return new Promise((resolve) => {
     server.listen(port, () => {
-      console.log(`Server is running in port http://localhost:${port}`);
+      logger.info(`Server is running at http://localhost:${port}`);
       resolve(server);
     });
   });
