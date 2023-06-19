@@ -55,8 +55,8 @@
     "frontend:build-test": "parcel build --public-url /assets src/frontend/index.html --dist-dir dist-test",
     "build": "yarn backend:build && yarn frontend:build",
     "clean": "rm -rf build dist-dev dist .parcel-cache",
-    "infra:up": "docker-compose -f db-compose.yaml up -d",
-    "infra:down": "docker-compose -f db-compose.yaml down",
+    "infra:up": "docker compose -f db-compose.yaml up -d",
+    "infra:down": "docker compose -f db-compose.yaml down",
     "db:generate-client": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate-prod": "prisma migrate deploy",
@@ -65,8 +65,8 @@
     "lint:check": "rome check src",
     "test:e2e:ui": "e2e-tests/test-ui.sh",
     "test:e2e:ci": "e2e-tests/test-ci.sh",
-    "db:test:start": "docker-compose -f test-db-compose.yaml up -d --wait",
-    "db:test:stop": "docker-compose -f test-db-compose.yaml down"
+    "db:test:start": "docker compose -f test-db-compose.yaml up -d --wait",
+    "db:test:stop": "docker compose -f test-db-compose.yaml down"
   },
   "prisma": {
     "schema": "db/schema.prisma"
