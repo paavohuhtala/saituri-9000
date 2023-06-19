@@ -79,7 +79,7 @@ async function createTestContext(index: number): Promise<BackendContext> {
 
   return {
     env: "test",
-    isCi: process.env.CI === "true",
+    isCi,
     config,
     db,
     logger,
