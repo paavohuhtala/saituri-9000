@@ -17,6 +17,7 @@ export interface BackendConfig {
 
 export interface BackendContext {
   env: Environment;
+  isCi?: boolean;
   config: BackendConfig;
   db: PrismaClient;
   logger: pino.Logger;

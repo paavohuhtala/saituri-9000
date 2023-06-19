@@ -62,11 +62,14 @@ async function createTestContext(index: number): Promise<BackendContext> {
     assetPath: "dist-test",
   };
 
+  const isCi = process.env.CI === "true";
+
   const db = createPrismaClient(config.databaseUrl);
   const logger = pino(
     { name: `saituri-backend-test-${index}` },
     pino.multistream([
-      { stream: pino.destination({ dest: `logs/test-${index}.log`, append: false, sync: true }) },
+      // Don't log to file in CI
+      ...(isCi ? [{ stream: pino.destination({ dest: `logs/test-${index}.log`, append: false, sync: true }) }] : []),
       // For some reason TypeScript in VS Code and Typescript in a terminal do not agree on the type of pretty
       // VS Code says it's an object, tsc says it's a function (which is correct)
       // @ts-ignore
@@ -76,6 +79,7 @@ async function createTestContext(index: number): Promise<BackendContext> {
 
   return {
     env: "test",
+    isCi: process.env.CI === "true",
     config,
     db,
     logger,
