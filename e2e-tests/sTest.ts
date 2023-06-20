@@ -1,9 +1,11 @@
 import { test } from "@playwright/test";
 import { SERVER_URL } from "./url";
 import { resetDatabase } from "./testApi";
+import { FrontPageModel } from "./pom/FrontPageModel";
 
-// rome-ignore lint/suspicious/noEmptyInterface: <explanation>
-interface STestFixtures {}
+interface STestFixtures {
+  frontPage: FrontPageModel;
+}
 
 export const sTest = test.extend<STestFixtures>({
   baseURL: async ({}, use) => {
@@ -12,5 +14,9 @@ export const sTest = test.extend<STestFixtures>({
   page: async ({ page }, use) => {
     await use(page);
     await resetDatabase();
+  },
+  frontPage: async ({ page }, use) => {
+    const frontPage = new FrontPageModel(page);
+    await use(frontPage);
   },
 });

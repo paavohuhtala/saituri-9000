@@ -67,6 +67,12 @@ export const FormLabel = styled.label`
   font-weight: 500;
   line-height: 24px;
   color: ${gray.x100};
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
 `;
 
 export const FormConstant = styled.div`

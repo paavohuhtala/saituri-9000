@@ -5,6 +5,7 @@ import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-
 import { MemberEditor } from "./MemberEditor";
 import { Breadcrumbs } from "../common/Breadcrumbs";
 import { LoadingIndicator } from "../common/LoadingIndicator";
+import { delayMs } from "../delay";
 
 export function EditMember() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export function EditMember() {
   const onSaved = () => {
     setTimeout(() => {
       navigate(returnTo);
-    }, 1000);
+    }, delayMs(1000));
   };
 
   return (

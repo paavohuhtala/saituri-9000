@@ -6,6 +6,7 @@ import { MemberEditor } from "./MemberEditor";
 import { Breadcrumbs } from "../common/Breadcrumbs";
 import { useGetExpenseGroupQuery } from "../redux/saituriApi";
 import { LoadingIndicator } from "../common/LoadingIndicator";
+import { delayMs } from "../delay";
 
 export function EditExpenseGroupMember() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export function EditExpenseGroupMember() {
   const onSaved = () => {
     setTimeout(() => {
       navigate(`/expense-group/${expenseGroupId}`);
-    }, 1000);
+    }, delayMs(1000));
   };
 
   return (

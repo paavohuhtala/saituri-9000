@@ -64,34 +64,40 @@ export function MemberEditor({ initialMember, onSaved }: Props) {
   }
 
   return (
-    <Form hidden={updateMemberStatus.isLoading} onSubmit={onSubmit}>
+    <Form hidden={updateMemberStatus.isLoading} onSubmit={onSubmit} data-testid="member-editor">
       <FormField>
-        <FormLabel>Nimi</FormLabel>
-        <NameField
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="esim. Jorma"
-          maxLength={48}
-        />
+        <FormLabel>
+          Nimi
+          <NameField
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="esim. Jorma"
+            maxLength={48}
+          />
+        </FormLabel>
       </FormField>
 
       <FormField>
-        <FormLabel>Puhelinnumero</FormLabel>
-        <InputField
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
-          placeholder="esim. +358 123456789"
-        />
+        <FormLabel>
+          Puhelinnumero
+          <InputField
+            value={phone}
+            onChange={(event) => setPhone(event.target.value)}
+            placeholder="esim. +358 123456789"
+          />
+        </FormLabel>
         <FieldInfo>Syötä puhelinnumero kansainvälisessä muodossa.</FieldInfo>
       </FormField>
 
       <FormField>
-        <FormLabel>Sähköposti</FormLabel>
-        <InputField
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="esim. foo@example.com"
-        />
+        <FormLabel>
+          Sähköposti
+          <InputField
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="esim. foo@example.com"
+          />
+        </FormLabel>
       </FormField>
 
       <Button type="submit" disabled={!isFormValid}>

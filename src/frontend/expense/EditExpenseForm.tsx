@@ -8,6 +8,7 @@ import { Breadcrumbs } from "../common/Breadcrumbs";
 import { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
 import { LoadingIndicator } from "../common/LoadingIndicator";
+import { delayMs } from "../delay";
 
 export function EditExpenseForm() {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ export function EditExpenseForm() {
 
     setTimeout(() => {
       navigate(`/expense-group/${expenseGroupId}`);
-    }, 1000);
+    }, delayMs(1000));
   };
 
   return (
