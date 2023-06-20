@@ -106,6 +106,7 @@ async function startTestServers() {
         const [index, callback] = resetQueue.shift()!;
         console.log(`Resetting database ${index}`);
         await recreateDatabase(templateDb, index);
+        console.log(`Database ${index} reset successfully`)
         callback();
       } else {
         await new Promise((resolve) => setTimeout(resolve, 5));
@@ -118,6 +119,15 @@ async function startTestServers() {
   for (let i = 0; i < TEST_INSTANCES; i++) {
     const context = await createTestContext(i);
     await createServer(context, (server) => {
+      // Read testName from cookie and add it to logger
+      server.use((req, _, next) => {
+        const testName = req.cookies.testName;
+        if (testName) {
+          req.log.setBindings({ testName });
+        }
+        next();
+      });
+
       // Test API uses an RPC-like interface, with a single endpoint
       const testApiEndpoint: Route<Response.Ok<void | string> | Response.BadRequest<string>> = route
         .post("/")
