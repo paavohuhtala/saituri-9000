@@ -143,7 +143,7 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
         <FormLabel>Summa €</FormLabel>
         <InputField
           placeholder="esim. 6,66"
-          inputMode="numeric"
+          inputMode="decimal"
           onChange={(event) => {
             setPendingAmount(event.target.value);
           }}
