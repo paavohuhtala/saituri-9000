@@ -99,7 +99,7 @@ export function ExpenseGroup() {
       )}
 
       <ViewSubtitle>Kulut</ViewSubtitle>
-      <ButtonLink to={`/expense-group/${expenseGroupId}/expenses/new`}>
+      <ButtonLink to={`/expense-group/${expenseGroupId}/expense/new`}>
         <IconPlus size={16} /> Luo uusi kulu
       </ButtonLink>
       <Expenses expenseGroupId={expenseGroupId} expenses={expenses} />

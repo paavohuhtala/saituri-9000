@@ -117,4 +117,5 @@ export const {
   useUpdateMemberMutation,
   useCreatePaymentMutation,
   useDeletePaymentMutation,
+  useUpdatePaymentMutation,
 } = saituriApi;
