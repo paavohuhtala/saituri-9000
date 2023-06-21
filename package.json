@@ -50,7 +50,7 @@
     "backend:start": "SAITURI_ENV=development nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/index.ts'",
     "backend:test:start": "SAITURI_ENV=test nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/testServer.ts'",
     "backend:build": "NODE_ENV=production tsc",
-    "backend:start-prod": "NODE_ENV=production SAITURI_ENV=production node build/backend/server.js",
+    "backend:start-prod": "NODE_ENV=production SAITURI_ENV=production node build/backend/index.js",
     "frontend:start": "PORT=1234 parcel src/frontend/index.html --dist-dir dist-dev",
     "frontend:build": "NODE_ENV=production parcel build --public-url /assets src/frontend/index.html",
     "frontend:watch-test": "SAITURI_ENV=test parcel watch --public-url /assets src/frontend/index.html --dist-dir dist-test",
