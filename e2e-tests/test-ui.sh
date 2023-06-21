@@ -5,15 +5,13 @@ set -e
 # Start Docker
 yarn db:test:start
 
-# Start Parcel in the background
-yarn frontend:watch-test &
+tmux \
+    new-session 'yarn frontend:watch-test' \; \
+    split-window 'yarn playwright test --ui'
 
-# Start Playwright test UI
-# Playwright also starts the backend
-yarn playwright test --ui
+function finish {
+    # Shutdown Docker
+    yarn db:test:stop
+}
 
-# Shutdown Docker
-yarn db:test:stop
-
-# Shutdown Parcel
-kill "$(jobs -p)"
+trap finish EXIT

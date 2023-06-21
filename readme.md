@@ -11,6 +11,7 @@ Expense tracking for small groups AKA self-hosted WeShare replacement.
 - [Yarn](https://yarnpkg.com/getting-started/install)
 - Docker and Docker Compose 2+ (for local Postgres database)
   - Compatible alternative (e.g. Podman) might work
+- tmux is required for running integration tests in UI mode
 
 ## First run
 
