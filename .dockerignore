@@ -8,6 +8,8 @@
 build
 dist
 dist-dev
+dist-test
+test-results
 node_modules
 .env
 .env.sample
