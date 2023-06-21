@@ -2633,15 +2633,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/axios@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "@types/axios@npm:0.14.0"
-  dependencies:
-    axios: "*"
-  checksum: 12a230b9404055d81804cb57fe4739b2317111b28a39e2477b2513250e8b85725e6f6ce509fc2a9494a6da60facb8d80df875fcd747f62f6c3abebc7db60ae66
-  languageName: node
-  linkType: hard
-
 "@types/body-parser@npm:*":
   version: 1.19.2
   resolution: "@types/body-parser@npm:1.19.2"
@@ -2977,7 +2968,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:*, axios@npm:^1.4.0":
+"axios@npm:^1.4.0":
   version: 1.4.0
   resolution: "axios@npm:1.4.0"
   dependencies:
@@ -6033,7 +6024,6 @@ __metadata:
     "@swc-node/register": ^1.6.5
     "@swc/core": ^1.3.65
     "@tabler/icons-react": ^2.20.0
-    "@types/axios": ^0.14.0
     "@types/cookie-parser": ^1.4.3
     "@types/lodash": ^4.14.195
     "@types/luxon": ^3.3.0
