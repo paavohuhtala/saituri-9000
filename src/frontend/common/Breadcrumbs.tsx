@@ -17,7 +17,7 @@ export interface Crumb {
 
 export type CrumbCreator = (params: CrumbParams) => Crumb[];
 
-export const BreadcrumbsContainer = styled.div`
+export const BreadcrumbsContainer = styled.nav`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -40,7 +40,7 @@ export const BreadcrumbLink = styled(Link)`
   text-decoration: none;
 `;
 
-export const BreadcrumbArrow = styled(IconChevronRight).attrs({ size: 16 })`
+export const BreadcrumbArrow = styled(IconChevronRight).attrs({ size: 16, "aria-hidden": true, role: "presentation" })`
   flex-shrink: 0;
 `;
 
@@ -70,13 +70,15 @@ export function Breadcrumbs(props: CrumbParams) {
   );
 
   return (
-    <BreadcrumbsContainer>
+    <BreadcrumbsContainer data-testid="breadcrumbs">
       {crumbs.map((crumb, index) => (
         <React.Fragment key={crumb.label + (crumb.to ?? "")}>
           {crumb.to && index !== crumbs.length - 1 ? (
-            <BreadcrumbLink to={crumb.to}>{crumb.label}</BreadcrumbLink>
+            <BreadcrumbLink to={crumb.to} data-testid="breadcrumb">
+              {crumb.label}
+            </BreadcrumbLink>
           ) : (
-            <StaticBreadcrumb>{crumb.label}</StaticBreadcrumb>
+            <StaticBreadcrumb data-testid="breadcrumb">{crumb.label}</StaticBreadcrumb>
           )}
           {index < crumbs.length - 1 && <BreadcrumbArrow />}
         </React.Fragment>

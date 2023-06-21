@@ -25,7 +25,11 @@ sTest("can add a member and then modify their details", async ({ page, frontPage
   await frontPage.addMember("Testi Testinen");
   let memberEditor = await frontPage.openMemberEditor("Testi Testinen");
 
+  await expect(memberEditor.breadcrumbs.items).toHaveText(["Kaikki jäsenet", "Testi Testinen"]);
+
   await memberEditor.nameInput.fill("Kesti Testinen");
+  // Breadcrumbs should not update until saving
+  await expect(memberEditor.breadcrumbs.items).toHaveText(["Kaikki jäsenet", "Testi Testinen"]);
   await memberEditor.saveButton.click();
 
   await expect(frontPage.memberNames).toHaveText(["Kesti Testinen"]);
@@ -39,6 +43,7 @@ sTest("can add a member and then modify their details", async ({ page, frontPage
   // Open the editor again and check that the changes are there, and then modify some more.
   memberEditor = await frontPage.openMemberEditor("Kesti Testinen");
   await expect(memberEditor.nameInput).toHaveValue("Kesti Testinen");
+  await expect(memberEditor.breadcrumbs.items).toHaveText(["Kaikki jäsenet", "Kesti Testinen"]);
 
   await memberEditor.nameInput.fill("Kestävä Testinen");
   await memberEditor.phoneNumberInput.fill("123456789");
