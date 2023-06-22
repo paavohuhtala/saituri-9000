@@ -20,6 +20,9 @@ RUN yarn build
 
 FROM node:18-alpine AS app
 
+# Install curl
+RUN apk add --no-cache curl
+
 WORKDIR /app
 
 COPY .yarn .yarn
@@ -33,3 +36,7 @@ COPY --from=builder /app/db/ ./db/
 COPY --from=builder /app/dist/ ./dist/
 COPY --from=builder /app/public/ ./public/
 COPY --from=builder /app/package.json ./package.json
+
+HEALTHCHECK --interval=10s --timeout=3s CMD curl --fail http://127.0.0.1:$PORT/api/health || exit 1
+
+CMD ["sh", "-c", "yarn db:prod:migrate && yarn backend:prod:start"]

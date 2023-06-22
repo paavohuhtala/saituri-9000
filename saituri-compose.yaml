@@ -21,7 +21,6 @@ services:
     depends_on:
       - db
     restart: always
-    command: sh -c "yarn db:migrate && yarn backend:start-prod"
     ports:
       - ${HOST}:${PORT}:${PORT}
     environment:
