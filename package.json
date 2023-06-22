@@ -69,7 +69,8 @@
     "test:e2e:ui": "e2e-tests/test-ui.sh",
     "test:e2e:ci": "e2e-tests/test-ci.sh",
     "db:test:start": "docker compose -f test-db-compose.yaml up -d --wait",
-    "db:test:stop": "docker compose -f test-db-compose.yaml down"
+    "db:test:stop": "docker compose -f test-db-compose.yaml down",
+    "dev:start": "yarn infra:dev:up; tmux new-session -d -s saituri-9000 'yarn backend:dev:start' \\; split-window -h 'yarn frontend:dev:start' \\; setw -g mouse on \\; attach"
   },
   "prisma": {
     "schema": "db/schema.prisma"

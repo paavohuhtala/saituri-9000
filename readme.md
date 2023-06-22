@@ -25,6 +25,11 @@ Remember to run migrations and / or generate the database client when the databa
 
 ## Development
 
+1. Start local PostgreSQL and run backend and frontend in a (mouse enabled 🤯) tmux session: `yarn dev:start`
+2. Open http://localhost:1234 in your browser
+
+Or, if you want to run the backend and frontend in separate terminals:
+
 1. Start local PostgreSQL: `yarn infra:dev:up`
 2. Start the backend server: `yarn backend:dev:start`
 3. Start the frontend dev server: `yarn frontend:dev:start`
@@ -35,6 +40,8 @@ Backend is automatically restarted on changes. Frontend will hot reload on chang
 ### Testing
 
 Saituri supports integration / browser tests using Playwright. Tests require Docker Compose, because they run against a real PostgreSQL instance. Test scripts build, start and stop the necessary infrastructure automatically.
+
+Running tests requires installing a Playwright-specific version of Chromium, which can be accomplished with `yarn playwright install chromium`. This needs to be run after each notable release 
 
 There are two different ways to run the tests:
 - `yarn test:e2e:ci`
