@@ -6,7 +6,7 @@ set -e
 yarn db:test:start
 
 # Run Parcel
-yarn frontend:build-test
+yarn frontend:test:build
 
 # Run Playwright
 yarn playwright test

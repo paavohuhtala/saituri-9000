@@ -6,7 +6,7 @@ set -e
 yarn db:test:start
 
 tmux \
-    new-session 'yarn frontend:watch-test' \; \
+    new-session 'yarn frontend:test:watch' \; \
     split-window 'yarn playwright test --ui'
 
 function finish {
