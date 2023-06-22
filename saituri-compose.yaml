@@ -10,8 +10,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       TZ: ${TZ}
-    ports:
-      - ${HOST}:${DB_PORT}:${DB_PORT}
+    expose:
+      - "$DB_PORT"
     volumes:
       - db:/var/lib/postgresql/data
     command: -p ${DB_PORT}
