@@ -13,8 +13,8 @@ services:
     ports:
       - 127.0.0.1:5432:5432
     volumes:
-      - db:/var/lib/postgresql/data
+      - db_dev:/var/lib/postgresql/data
 volumes:
-  db:
+  db_dev:
     driver: local
 
