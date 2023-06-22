@@ -1,13 +1,13 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy static assets
 COPY public public
 
 # Install dependencies
-COPY .yarnrc.yml yarn.lock package.json .
 COPY .yarn .yarn
-RUN yarn
+COPY .yarnrc.yml yarn.lock package.json ./
+RUN yarn install --immutable
 
 # Copy DB schema and generate client
 COPY db db
@@ -18,5 +18,18 @@ COPY tsconfig.json .
 COPY src src
 RUN yarn build
 
-# Remove dev dependencies
-RUN yarn workspaces focus --production --all
+FROM node:18-alpine AS app
+
+WORKDIR /app
+
+COPY .yarn .yarn
+COPY .yarnrc.yml yarn.lock package.json ./
+# install only prod deps
+RUN YARN_CACHE_FOLDER=/root/.yarn yarn workspaces focus --production --all \
+  && rm -rf /root/.yarn /root/.cache/prisma
+
+COPY --from=builder /app/build/ ./build/
+COPY --from=builder /app/db/ ./db/
+COPY --from=builder /app/dist/ ./dist/
+COPY --from=builder /app/public/ ./public/
+COPY --from=builder /app/package.json ./package.json
