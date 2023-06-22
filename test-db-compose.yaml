@@ -14,7 +14,3 @@ services:
       - 127.0.0.1:5499:5432
     tmpfs:
       - /var/lib/postgresql/data
-volumes:
-  db:
-    driver: local
-
