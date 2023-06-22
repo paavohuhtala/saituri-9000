@@ -17,7 +17,7 @@ Expense tracking for small groups AKA self-hosted WeShare replacement.
 
 1. Copy `.env.sample` to `.env` and fill in the values. The defaults should work for local development.
 2. Install dependencies: `yarn`
-3. Start local PostgreSQL: `yarn infra:up`
+3. Start local PostgreSQL: `yarn infra:dev:up`
 4. Run migrations: `yarn db:dev:migrate`
 5. Previous step should automatically generate the database client, but if it didn't, generate it manually with `yarn db:generate-client`.
 
@@ -25,7 +25,7 @@ Remember to run migrations and / or generate the database client when the databa
 
 ## Development
 
-1. Start local PostgreSQL: `yarn infra:up`
+1. Start local PostgreSQL: `yarn infra:dev:up`
 2. Start the backend server: `yarn backend:dev:start`
 3. Start the frontend dev server: `yarn frontend:dev:start`
 4. Open http://localhost:1234 in your browser
@@ -46,10 +46,11 @@ Tests are run in GitHub Actions as a part of the CI pipeline. Error traces are u
 
 ## Production
 
-- Run `docker compose -f saituri-compose.yaml up`
+- Saituri doesn't support HTTPS by itself, so it's highly recommended to run it behind a reverse proxy that handles HTTPS, like Nginx.
+- Make sure to create a separate `.env` file for production use, and set `HOST` and `PORT` to the correct values.
+- Run `yarn infra:prod:up` (or `docker compose -f saituri-compose.yaml up` if you don't have Yarn installed on the server)
   - Pass `--build` to rebuild the images.
-- The server should now be running on http://localhost:3001.
-- Make sure to set `HOST` and `PORT` in `.env` to match the production environment.
+- The server should now be running on http://localhost:3001 (or whatever you set `PORT` to in `.env`).
 
 You can use `/api/health` for health checks.
 
