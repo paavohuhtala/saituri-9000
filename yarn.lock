@@ -2441,20 +2441,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc-node/core@npm:^1.10.3":
-  version: 1.10.3
-  resolution: "@swc-node/core@npm:1.10.3"
+"@swc-node/core@npm:^1.10.4":
+  version: 1.10.4
+  resolution: "@swc-node/core@npm:1.10.4"
   peerDependencies:
     "@swc/core": ">= 1.3"
-  checksum: 6e3e50a44d7a1c1aa62599d83c58f21568c1da03422124b46634488aba02747939063eeb1a2710aab0ab9f14f347386226a017ed72e6ba608d4a26532cd426af
+  checksum: 0c6469d1410a20f5bbbac61447dd869773a180e9ba7ae8b8a5d3392e94167daea83ea2358e476195bf7dc3f6ca8c1e08c712a4c5069d77129e250452b18aa963
   languageName: node
   linkType: hard
 
-"@swc-node/register@npm:^1.6.5":
-  version: 1.6.5
-  resolution: "@swc-node/register@npm:1.6.5"
+"@swc-node/register@npm:^1.6.6":
+  version: 1.6.6
+  resolution: "@swc-node/register@npm:1.6.6"
   dependencies:
-    "@swc-node/core": ^1.10.3
+    "@swc-node/core": ^1.10.4
     "@swc-node/sourcemap-support": ^0.3.0
     colorette: ^2.0.19
     debug: ^4.3.4
@@ -2463,7 +2463,7 @@ __metadata:
   peerDependencies:
     "@swc/core": ">= 1.3"
     typescript: ">= 4.3"
-  checksum: 490b2c6d04d4be3e80f3cc4aeccd4e064f49100e7e21675de3e2a125d844857589a3e0b91a17f088c471cbb20725a02fadc9edd244c08253d1bae19b2e88e8e6
+  checksum: 2d8d054fd782735570a1b57fbb96f2667745bb905f4aee7504b4a56e54186a5b2a5c91f8e520012695489cb208096c72468b528d49ddd0ad85e1642b218f945d
   languageName: node
   linkType: hard
 
@@ -6021,7 +6021,7 @@ __metadata:
     "@playwright/test": ^1.35.1
     "@prisma/client": 4.15.0
     "@reduxjs/toolkit": ^1.9.5
-    "@swc-node/register": ^1.6.5
+    "@swc-node/register": ^1.6.6
     "@swc/core": ^1.3.65
     "@tabler/icons-react": ^2.20.0
     "@types/cookie-parser": ^1.4.3
