@@ -14,6 +14,7 @@ import { EditMember } from "./member/EditMember";
 import { EditExpenseGroupMember } from "./member/EditExpenseGroupMember";
 import { CreatePayments } from "./payments/CreatePayments";
 import { Crumb, CrumbParams } from "./common/Breadcrumbs";
+import { EditPaymentForm } from "./payments/EditPaymentForm";
 
 const root = document.getElementById("root");
 
@@ -55,7 +56,7 @@ const router = createBrowserRouter([
             },
           },
           {
-            path: "expenses",
+            path: "expense",
             handle: {
               crumb: () => [{ label: "Kulut" }],
             },
@@ -77,9 +78,25 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "payments/new",
-            element: <CreatePayments />,
-            handle: { crumb: () => [{ label: "Maksut" }, { label: "Maksa velat" }] },
+            path: "payment",
+            handle: { crumb: () => [{ label: "Maksut" }] },
+            children: [
+              {
+                path: ":paymentId",
+                element: <EditPaymentForm />,
+                handle: {
+                  // TODO: Add optional description to payment
+                  crumb: ({}: CrumbParams): Crumb[] => [{ label: "Maksu" }],
+                },
+              },
+              {
+                path: "new",
+                element: <CreatePayments />,
+                handle: {
+                  crumb: () => [{ label: "Maksa velat" }],
+                },
+              },
+            ],
           },
         ],
       },

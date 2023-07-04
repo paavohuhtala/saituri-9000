@@ -2,7 +2,6 @@ import React from "react";
 import { Form, FormField, FormLabel, InlineForm } from "../common/layout";
 import { InputField, Select } from "../common/inputs";
 import { styled } from "styled-components";
-import { Member } from "../../common/domain";
 import { WeightByMemberId, calculateShares, calculateSuggestedPayerId } from "../../common/share";
 import { ParticipantEditor } from "./ParticipantEditor";
 import { Button, MultiLineButton, SecondaryButtonLink } from "../common/Button";
@@ -35,16 +34,17 @@ const SuggestedPayerLabel = styled.span`
 interface Props {
   initialExpense?: ExpenseWithDetails;
   expenseGroup: ExpenseGroupResponse;
-  members: Member[];
-  onSaveExpense: (expense: CreateExpenseRequest) => void;
+  onSave: (expense: CreateExpenseRequest) => void;
   hidden?: boolean;
 }
 
-export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExpense, hidden }: Props) {
+export function ExpenseEditor({ initialExpense, expenseGroup, onSave, hidden }: Props) {
   const [name, setName] = React.useState(initialExpense?.name ?? "");
   const [amount, setAmount] = React.useState<number | null>(() => centsToFloatEur(initialExpense?.amount));
   const [pendingAmount, setPendingAmount] = React.useState<string | null>(() => floatEurToInputValue(amount));
   const [payerId, setPayerId] = React.useState<string | null>(initialExpense?.payerId ?? null);
+
+  const members = expenseGroup.members ?? [];
 
   const [participantWeights, setParticipantWeights] = React.useState<WeightByMemberId>(() => {
     if (initialExpense) {
@@ -124,7 +124,7 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
       participants: participantsWithWeights,
     };
 
-    onSaveExpense(expense);
+    onSave(expense);
   };
 
   return (

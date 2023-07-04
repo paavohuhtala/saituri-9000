@@ -58,7 +58,7 @@ export function Expenses({ expenseGroupId, expenses }: Props) {
             </ExpensePayerCell>
             <MoneyCell>{centsToEurPrice(expense.amount)}</MoneyCell>
             <TextCell>
-              <Link to={`/expense-group/${expenseGroupId}/expenses/${expense.id}`}>Muokkaa</Link>
+              <Link to={`/expense-group/${expenseGroupId}/expense/${expense.id}`}>Muokkaa</Link>
             </TextCell>
           </tr>
         ))}
