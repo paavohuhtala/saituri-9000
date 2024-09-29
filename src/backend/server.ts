@@ -17,7 +17,7 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
 
   const server = express();
   server.use(bodyParser.json());
-  server.use(cookieParser())
+  server.use(cookieParser());
 
   const httpLogger = pinoHttp({
     logger: context.logger,
@@ -66,7 +66,7 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
   server.use((err: unknown, req: Request, res: Response, _: NextFunction) => {
     logger.error({ err, url: req.url }, "Error handling request");
     res.sendStatus(500);
-  })
+  });
 
   return new Promise((resolve) => {
     server.listen(port, () => {
