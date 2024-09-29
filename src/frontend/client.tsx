@@ -13,7 +13,7 @@ import { EditExpenseForm } from "./expense/EditExpenseForm";
 import { EditMember } from "./member/EditMember";
 import { EditExpenseGroupMember } from "./member/EditExpenseGroupMember";
 import { CreatePayments } from "./payments/CreatePayments";
-import { Crumb, CrumbParams } from "./common/Breadcrumbs";
+import type { Crumb, CrumbParams } from "./common/Breadcrumbs";
 
 const root = document.getElementById("root");
 

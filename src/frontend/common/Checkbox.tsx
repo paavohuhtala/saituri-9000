@@ -1,5 +1,5 @@
 import { IconCheck } from "@tabler/icons-react";
-import React from "react";
+import type React from "react";
 import styled from "styled-components";
 import { gray } from "../theme";
 

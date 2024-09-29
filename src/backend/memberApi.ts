@@ -1,6 +1,6 @@
-import { Parser, Response, Route, route, router } from "typera-express";
-import { DbType, Member, NewMember } from "../common/domain.js";
-import { BackendContext } from "./context.js";
+import { Parser, Response, type Route, route, router } from "typera-express";
+import { type DbType, type Member, NewMember } from "../common/domain.js";
+import type { BackendContext } from "./context.js";
 
 export function createMemberApi({ db }: BackendContext) {
   const getAllMembers: Route<Response.Ok<DbType<Member[]>>> = route.get("/members").handler(async () => {

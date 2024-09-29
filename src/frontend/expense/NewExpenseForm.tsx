@@ -4,7 +4,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useCreateExpenseMutation, useGetExpenseGroupQuery } from "../redux/saituriApi";
 import { ExpenseEditor } from "./ExpenseEditor";
 import { Breadcrumbs } from "../common/Breadcrumbs";
-import { CreateExpenseRequest } from "../../common/api";
+import type { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 import { delayMs } from "../delay";

@@ -1,17 +1,17 @@
-import { Parser, Route, Response, route, router, Middleware, Router } from "typera-express";
-import { DbType, NewExpenseGroup, NewExpenseGroupMember } from "../common/domain.js";
+import { Parser, type Route, Response, route, router, Middleware, type Router } from "typera-express";
+import { type DbType, NewExpenseGroup, NewExpenseGroupMember } from "../common/domain.js";
 import {
-  AddExpenseGroupResponse,
+  type AddExpenseGroupResponse,
   CreateExpenseRequest,
-  CreateExpenseResponse,
+  type CreateExpenseResponse,
   CreatePaymentRequest,
-  CreatePaymentResponse,
-  ExpenseGroupResponse,
-  ExpenseGroupWithDetails,
-  ExpenseGroupsResponse,
+  type CreatePaymentResponse,
+  type ExpenseGroupResponse,
+  type ExpenseGroupWithDetails,
+  type ExpenseGroupsResponse,
 } from "../common/api.js";
 import { calculateBalanceMatrix } from "../common/share.js";
-import { BackendContext } from "./context.js";
+import type { BackendContext } from "./context.js";
 
 export function createExpenseGroupApi({ db }: BackendContext): Router {
   const getAllExpenseGroups: Route<Response.Ok<DbType<ExpenseGroupsResponse>>> = route

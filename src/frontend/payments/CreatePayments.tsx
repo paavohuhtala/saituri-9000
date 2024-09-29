@@ -11,7 +11,7 @@ import { centsToEurPrice } from "../../common/money";
 import { MobilePayQrCode } from "./MobilePayQrCode";
 import { IconCheck, IconDeviceMobile } from "@tabler/icons-react";
 import { Button, SecondaryButton } from "../common/Button";
-import { Member } from "../../common/domain";
+import type { Member } from "../../common/domain";
 import { generateMobilePayAppLink } from "../../common/mobilePay";
 import { Breadcrumbs } from "../common/Breadcrumbs";
 

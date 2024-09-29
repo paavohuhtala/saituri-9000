@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { ExpenseGroupResponse } from "../../common/api";
+import type { ExpenseGroupResponse } from "../../common/api";
 import React from "react";
 import { MoneyCell, Table, TextCell } from "../common/Table";
 import { centsToEurPrice } from "../../common/money";
@@ -53,7 +53,7 @@ export function BalanceMatrix({ expenseGroup: { members, balanceMatrix }, showNe
               const isSelf = member.id === otherMember.id;
               const balance = balanceMatrix[otherMember.id][member.id];
 
-              if (isSelf || isNaN(balance) || (showNegative ? balance === 0 : balance <= 0)) {
+              if (isSelf || Number.isNaN(balance) || (showNegative ? balance === 0 : balance <= 0)) {
                 return <MoneyCell key={otherMember.id}>-</MoneyCell>;
               }
 

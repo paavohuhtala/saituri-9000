@@ -2,13 +2,13 @@ import React from "react";
 import { Form, FormField, FormLabel, InlineForm } from "../common/layout";
 import { InputField, Select } from "../common/inputs";
 import { styled } from "styled-components";
-import { Member } from "../../common/domain";
-import { WeightByMemberId, calculateShares, calculateSuggestedPayerId } from "../../common/share";
+import type { Member } from "../../common/domain";
+import { type WeightByMemberId, calculateShares, calculateSuggestedPayerId } from "../../common/share";
 import { ParticipantEditor } from "./ParticipantEditor";
 import { Button, MultiLineButton, SecondaryButtonLink } from "../common/Button";
 import { IconPigMoney, IconThumbUpFilled } from "@tabler/icons-react";
 import { centsToFloatEur, floatEurToInputValue } from "../../common/money";
-import { CreateExpenseRequest, ExpenseGroupResponse, ExpenseWithDetails } from "../../common/api";
+import type { CreateExpenseRequest, ExpenseGroupResponse, ExpenseWithDetails } from "../../common/api";
 import { green } from "../theme";
 import { createNextState } from "@reduxjs/toolkit";
 
@@ -71,7 +71,7 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
 
     const id = calculateSuggestedPayerId(expenseGroup.balanceMatrix, participantIds);
     return members.find((member) => member.id === id);
-  }, [expenseGroup, participantWeights]);
+  }, [members, expenseGroup, participantWeights]);
 
   const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -104,7 +104,7 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
       members.some((member) => member.id === payerId) &&
       Object.values(participantWeights).some((weight) => (weight ?? 0) > 0)
     );
-  }, [name, amount, participantWeights, payerId]);
+  }, [name, amount, participantWeights, payerId, members]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -150,9 +150,9 @@ export function ExpenseEditor({ initialExpense, expenseGroup, members, onSaveExp
           onBlur={() => {
             if (pendingAmount !== null) {
               const isValidFloat = /^\d*([,.]\d*)?$/.test(pendingAmount);
-              const amount = parseFloat(pendingAmount.replace(",", "."));
+              const amount = Number.parseFloat(pendingAmount.replace(",", "."));
 
-              if (!isValidFloat || isNaN(amount)) {
+              if (!isValidFloat || Number.isNaN(amount)) {
                 setPendingAmount("");
                 setAmount(null);
               } else {

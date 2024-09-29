@@ -4,11 +4,11 @@ import type { Express } from "express";
 import { createExpenseGroupApi } from "./expenseGroupApi.js";
 import { createMemberApi } from "./memberApi.js";
 import basicAuth from "express-basic-auth";
-import { BackendContext } from "./context.js";
+import type { BackendContext } from "./context.js";
 import { pinoHttp } from "pino-http";
-import { Request } from "express";
-import { Response } from "express";
-import { NextFunction } from "express";
+import type { Request } from "express";
+import type { Response } from "express";
+import type { NextFunction } from "express";
 import cookieParser from "cookie-parser";
 
 export async function createServer(context: BackendContext, injectRoutes?: (server: Express) => void) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, FormField, FormLabel, ViewContainer, ViewTitle } from "../common/layout";
-import { Member } from "../../common/domain";
+import type { Member } from "../../common/domain";
 import { InputField } from "../common/inputs";
 import { styled } from "styled-components";
 import { useUpdateMemberMutation } from "../redux/saituriApi";

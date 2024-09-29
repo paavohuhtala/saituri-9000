@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { PaymentWithDetails } from "../../common/api";
+import type { PaymentWithDetails } from "../../common/api";
 import { MoneyCell, MoneyHeader, Table, TextCell } from "../common/Table";
 import React from "react";
 import { centsToEurPrice } from "../../common/money";

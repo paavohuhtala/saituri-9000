@@ -47,9 +47,8 @@ export const BreadcrumbArrow = styled(IconChevronRight).attrs({ size: 16, "aria-
 function getCrumbCreator(handle: unknown): CrumbCreator | undefined {
   if (handle && typeof handle === "object" && "crumb" in handle) {
     return handle.crumb as CrumbCreator;
-  } else {
-    return undefined;
   }
+  return undefined;
 }
 
 export function Breadcrumbs(props: CrumbParams) {
@@ -62,9 +61,8 @@ export function Breadcrumbs(props: CrumbParams) {
 
         if (createCrumbs) {
           return [...createCrumbs(props)];
-        } else {
-          return [];
         }
+        return [];
       }),
     [matches, props],
   );

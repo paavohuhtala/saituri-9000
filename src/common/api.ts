@@ -1,6 +1,6 @@
 import * as t from "io-ts";
-import { Expense, ExpenseGroup, ExpenseParticipant, Member, NewExpenseGroup, Payment } from "./domain";
-import { BalanceMatrix } from "./share";
+import type { Expense, ExpenseGroup, ExpenseParticipant, Member, NewExpenseGroup, Payment } from "./domain";
+import type { BalanceMatrix } from "./share";
 
 export interface ExpenseGroupWithDetails extends ExpenseGroup {
   members: Member[];

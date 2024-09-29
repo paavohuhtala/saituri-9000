@@ -1,9 +1,9 @@
+import React from "react";
 import { styled } from "styled-components";
 import { gray, green } from "../theme";
-import React from "react";
 import { StyledLink } from "./StyledLink";
 import { skeletonStyle } from "./skeleton";
-import { Link } from "react-router-dom";
+import type { Link } from "react-router-dom";
 
 const CardContainer = styled.div`
   display: flex;

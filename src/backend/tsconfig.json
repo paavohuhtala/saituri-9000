@@ -3,6 +3,6 @@
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "nodenext",
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": false
   }
 }

@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-import {
+import type {
   AddExpenseGroupMemberRequest,
   AddExpenseGroupRequest,
   AddExpenseGroupResponse,
@@ -12,7 +12,7 @@ import {
   ExpenseGroupsResponse,
   MembersResponse,
 } from "../../common/api";
-import { NewMember } from "../../common/domain";
+import type { NewMember } from "../../common/domain";
 
 export const saituriApi = createApi({
   reducerPath: "saituriApi",

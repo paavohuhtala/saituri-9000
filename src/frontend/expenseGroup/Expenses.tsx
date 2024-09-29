@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { MoneyCell, MoneyHeader, Table, TextCell } from "../common/Table";
 import React from "react";
-import { ExpenseWithDetails } from "../../common/api";
+import type { ExpenseWithDetails } from "../../common/api";
 import { Link } from "react-router-dom";
 import { centsToEurPrice } from "../../common/money";
 

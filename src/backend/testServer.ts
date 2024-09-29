@@ -1,16 +1,16 @@
 import _ from "lodash";
 import express from "express";
-import { BackendContext, BackendConfig, createPrismaClient } from "./context.js";
+import { type BackendContext, type BackendConfig, createPrismaClient } from "./context.js";
 import { createServer } from "./server.js";
 import { execSync } from "node:child_process";
-import { PrismaClient } from "../../db/generated/client/index.js";
-import { Parser, Response, Route, route, router } from "typera-express";
+import type { PrismaClient } from "../../db/generated/client/index.js";
+import { Parser, Response, type Route, route, router } from "typera-express";
 import { TEST_SERVER_FIRST_PORT, TEST_SERVER_HEALTH_CHECK_PORT, TestApiCommand } from "./testCommon.js";
 import { pino } from "pino";
 import pretty from "pino-pretty";
-import { mkdir } from "fs/promises";
+import { mkdir } from "node:fs/promises";
 
-const TEST_INSTANCES = parseInt(process.env.TEST_INSTANCES ?? "1", 10);
+const TEST_INSTANCES = Number.parseInt(process.env.TEST_INSTANCES ?? "1", 10);
 const BASE_DATABASE_URL = "postgresql://postgres:postgres@localhost:5499";
 
 if (process.env.SAITURI_ENV !== "test") {
@@ -102,11 +102,11 @@ async function startTestServers() {
   (async () => {
     while (true) {
       if (resetQueue.length > 0) {
-        // rome-ignore lint/style/noNonNullAssertion: guaranteed to succeed by length check
+        // biome-ignore lint/style/noNonNullAssertion: guaranteed to succeed by length check
         const [index, callback] = resetQueue.shift()!;
         console.log(`Resetting database ${index}`);
         await recreateDatabase(templateDb, index);
-        console.log(`Database ${index} reset successfully`)
+        console.log(`Database ${index} reset successfully`);
         callback();
       } else {
         await new Promise((resolve) => setTimeout(resolve, 5));

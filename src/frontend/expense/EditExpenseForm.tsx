@@ -5,7 +5,7 @@ import { useGetExpenseGroupQuery, useUpdateExpenseMutation } from "../redux/sait
 import { ExpenseEditor } from "./ExpenseEditor";
 import { ButtonLink } from "../common/Button";
 import { Breadcrumbs } from "../common/Breadcrumbs";
-import { CreateExpenseRequest } from "../../common/api";
+import type { CreateExpenseRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 import { delayMs } from "../delay";

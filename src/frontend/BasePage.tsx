@@ -3,7 +3,7 @@ import { createGlobalStyle, styled } from "styled-components";
 import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
-import { Link, Outlet } from "react-router-dom";
+import { type Link, Outlet } from "react-router-dom";
 import { IconPigMoney } from "@tabler/icons-react";
 
 const Container = styled.div`

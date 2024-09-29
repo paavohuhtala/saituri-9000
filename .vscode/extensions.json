@@ -2,6 +2,6 @@
   "recommendations": [
     "styled-components.vscode-styled-components",
     "Prisma.prisma",
-    "rome.rome"
+    "biomejs.biome"
   ]
 }

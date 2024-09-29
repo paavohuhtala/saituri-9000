@@ -1,6 +1,6 @@
-import { ExpenseGroupWithFullDetails } from "./api";
+import type { ExpenseGroupWithFullDetails } from "./api";
 import _ from "lodash";
-import { DbType } from "./domain";
+import type { DbType } from "./domain";
 
 export type SharesByMemberId = Partial<Record<string, number>>;
 
@@ -14,11 +14,14 @@ export type WeightByMemberId = Partial<Record<string, number>>;
 export function calculateShares(amount: number, participants: ParticipantWithWeight[]): SharesByMemberId {
   const totalWeight = participants.reduce((acc, { weight }) => acc + weight, 0);
 
-  const shares = participants.reduce((acc, { memberId, weight }) => {
-    const share = (amount * weight) / totalWeight;
-    acc[memberId] = share;
-    return acc;
-  }, {} as Partial<Record<string, number>>);
+  const shares = participants.reduce(
+    (acc, { memberId, weight }) => {
+      const share = (amount * weight) / totalWeight;
+      acc[memberId] = share;
+      return acc;
+    },
+    {} as Partial<Record<string, number>>,
+  );
 
   return shares;
 }
@@ -89,8 +92,11 @@ export function calculateSuggestedPayerId(matrix: BalanceMatrix, participantIds:
 export type BalancePerMember = Partial<Record<string, number>>;
 
 export function calculatePersonalBalances(matrix: BalanceMatrix): BalancePerMember {
-  return Object.entries(matrix).reduce((acc, [memberId, balances]) => {
-    acc[memberId] = Object.values(balances).reduce((acc, balance) => acc + balance, 0);
-    return acc;
-  }, {} as Partial<Record<string, number>>);
+  return Object.entries(matrix).reduce(
+    (acc, [memberId, balances]) => {
+      acc[memberId] = Object.values(balances).reduce((acc, balance) => acc + balance, 0);
+      return acc;
+    },
+    {} as Partial<Record<string, number>>,
+  );
 }

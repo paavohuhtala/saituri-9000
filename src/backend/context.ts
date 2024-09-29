@@ -1,7 +1,7 @@
 import { pino } from "pino";
 import pretty from "pino-pretty";
 import { PrismaClient } from "../../db/generated/client/index.js";
-import { mkdir } from "fs/promises";
+import { mkdir } from "node:fs/promises";
 
 export type Environment = "development" | "production" | "test";
 
@@ -76,6 +76,8 @@ export async function createContext(): Promise<BackendContext> {
     case "test": {
       console.error("Please use createTestContext for test environment");
       process.exit(1);
+      // Completely useless break because Biome doesn't understand process.exit
+      break;
     }
     default: {
       console.error(`Invalid environment ${maybeEnv}`);

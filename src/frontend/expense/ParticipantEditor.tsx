@@ -1,6 +1,6 @@
 import React from "react";
 import { css, styled } from "styled-components";
-import { Member } from "../../common/domain";
+import type { Member } from "../../common/domain";
 import { gray } from "../theme";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { FormConstant, FormField, FormLabel } from "../common/layout";
@@ -98,10 +98,10 @@ export function ParticipantEditor({ member, isParticipant, setIsParticipant, ini
               onBlur={() => {
                 if (pendingWeight !== undefined) {
                   const isValidFloat = /^\d*([,.]\d*)?$/.test(pendingWeight);
-                  const weight = parseFloat(pendingWeight.replace(",", "."));
+                  const weight = Number.parseFloat(pendingWeight.replace(",", "."));
 
                   // We use both regex and parsing to check, because parseFloat allows trailing garbage
-                  if (!isValidFloat || isNaN(weight)) {
+                  if (!isValidFloat || Number.isNaN(weight)) {
                     setPendingWeight("1,0");
                     setWeight(1);
                   } else {

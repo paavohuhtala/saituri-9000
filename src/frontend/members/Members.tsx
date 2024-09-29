@@ -1,9 +1,9 @@
 import { css, styled } from "styled-components";
-import { Member } from "../../common/domain";
+import type { Member } from "../../common/domain";
 import React from "react";
 import { skeletonStyle } from "../common/skeleton";
 import { FullWidthTextCell, MoneyCell, MoneyHeader, Table, TextCell } from "../common/Table";
-import { BalanceMatrix, calculatePersonalBalances } from "../../common/share";
+import { type BalanceMatrix, calculatePersonalBalances } from "../../common/share";
 import { centsToEurPrice } from "../../common/money";
 import { Link } from "react-router-dom";
 
