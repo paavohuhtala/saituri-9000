@@ -12,9 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           cache: "yarn"
@@ -28,7 +28,7 @@ jobs:
         run: yarn playwright install chromium --with-deps
       - name: Run tests
         run: yarn test:e2e:ci
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
@@ -37,7 +37,7 @@ jobs:
   docker_smoke_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Copy default env file
         run: cp .env.sample .env
       - name: Build and start Docker Compose environment
