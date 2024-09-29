@@ -64,7 +64,7 @@ function CreatePaymentCard({ payee, amount, payerId, expenseGroupId, onPaymentCr
       amount,
     });
 
-    if ("data" in response) {
+    if ("data" in response && response.data) {
       const paymentId = response.data.id;
       onPaymentCreated({ id: paymentId });
     }
