@@ -8,6 +8,7 @@ export interface CrumbParams {
   expenseGroup?: { name: string; id: string };
   member?: { name: string; id: string };
   expense?: { name: string; id: string };
+  payment?: { id: string };
 }
 
 export interface Crumb {

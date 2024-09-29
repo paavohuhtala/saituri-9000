@@ -1,26 +1,26 @@
 import React from "react";
 import { ViewContainer, ViewTitle } from "../common/layout";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useGetExpenseGroupQuery, useUpdateExpenseMutation } from "../redux/saituriApi";
-import { ExpenseEditor } from "./ExpenseEditor";
+import { useGetExpenseGroupQuery, useUpdatePaymentMutation } from "../redux/saituriApi";
+import { PaymentEditor } from "./PaymentEditor";
 import { ButtonLink } from "../common/Button";
 import { Breadcrumbs } from "../common/Breadcrumbs";
-import { CreateExpenseRequest } from "../../common/api";
+import { CreatePaymentRequest } from "../../common/api";
 import { SuccessAnimation } from "../common/Success";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 import { delayMs } from "../delay";
 
-export function EditExpenseForm() {
+export function EditPaymentForm() {
   const navigate = useNavigate();
-  const { expenseGroupId, expenseId } = useParams();
+  const { expenseGroupId, paymentId } = useParams();
 
-  if (!expenseGroupId || !expenseId) {
+  if (!expenseGroupId || !paymentId) {
     return <Navigate to="/" replace />;
   }
 
   // Use currentData to ensure we get the latest data from the server
   const { currentData: expenseGroup } = useGetExpenseGroupQuery(expenseGroupId, { refetchOnMountOrArgChange: true });
-  const [updateExpense, updateExpenseStatus] = useUpdateExpenseMutation();
+  const [updatePayment, updatePaymentStatus] = useUpdatePaymentMutation();
 
   if (!expenseGroup) {
     return (
@@ -30,30 +30,30 @@ export function EditExpenseForm() {
     );
   }
 
-  const expense = expenseGroup?.expenses.find((e) => e.id === expenseId);
+  const payment = expenseGroup?.payments.find((e) => e.id === paymentId);
 
-  if (!expense) {
+  if (!payment) {
     return (
       <ViewContainer>
-        <ViewTitle>Pyydettyä kulua ei löytynyt :(</ViewTitle>
+        <ViewTitle>Pyydettyä maksua ei löytynyt :(</ViewTitle>
         <ButtonLink to={`/expense-group/${expenseGroupId}`}>Palaa kuluryhmään</ButtonLink>
       </ViewContainer>
     );
   }
 
-  if (updateExpenseStatus.isSuccess) {
-    return <SuccessAnimation title="Kulu päivitetty!" />;
+  if (updatePaymentStatus.isSuccess) {
+    return <SuccessAnimation title="Maksu päivitetty!" />;
   }
 
-  const onSave = async (expense: CreateExpenseRequest) => {
-    if (updateExpenseStatus.isLoading) {
+  const onSave = async (payment: CreatePaymentRequest) => {
+    if (updatePaymentStatus.isLoading) {
       return;
     }
 
-    await updateExpense({
-      ...expense,
+    await updatePayment({
+      ...payment,
       expenseGroupId: expenseGroupId,
-      expenseId: expenseId,
+      paymentId: paymentId,
     });
 
     setTimeout(() => {
@@ -63,13 +63,13 @@ export function EditExpenseForm() {
 
   return (
     <ViewContainer>
-      <Breadcrumbs expenseGroup={expenseGroup} expense={expense} />
-      {updateExpenseStatus.isLoading && <LoadingIndicator />}
-      <ExpenseEditor
-        hidden={updateExpenseStatus.isLoading}
-        initialExpense={expense}
+      <Breadcrumbs expenseGroup={expenseGroup} payment={payment} />
+      <ViewTitle>Muokkaa maksua</ViewTitle>
+      <PaymentEditor
+        initialPayment={payment}
         expenseGroup={expenseGroup}
         onSave={onSave}
+        hidden={updatePaymentStatus.isLoading}
       />
     </ViewContainer>
   );

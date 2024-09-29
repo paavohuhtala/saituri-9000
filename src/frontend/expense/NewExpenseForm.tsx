@@ -18,7 +18,6 @@ export function NewExpenseForm() {
   }
 
   const { data: expenseGroup } = useGetExpenseGroupQuery(expenseGroupId);
-  const members = expenseGroup?.members ?? [];
   const [createExpense, createExpenseStatus] = useCreateExpenseMutation();
 
   if (!expenseGroup) {
@@ -33,7 +32,7 @@ export function NewExpenseForm() {
     return <SuccessAnimation title="Kulu luotu!" />;
   }
 
-  const onSaveExpense = async (expense: CreateExpenseRequest) => {
+  const onSave = async (expense: CreateExpenseRequest) => {
     if (createExpenseStatus.isLoading) {
       return;
     }
@@ -52,12 +51,7 @@ export function NewExpenseForm() {
     <ViewContainer>
       <Breadcrumbs expenseGroup={expenseGroup} />
       {createExpenseStatus.isLoading && <ViewTitle>Luodaan kulua...</ViewTitle>}
-      <ExpenseEditor
-        hidden={createExpenseStatus.isLoading}
-        expenseGroup={expenseGroup}
-        members={members}
-        onSaveExpense={onSaveExpense}
-      />
+      <ExpenseEditor hidden={createExpenseStatus.isLoading} expenseGroup={expenseGroup} onSave={onSave} />
     </ViewContainer>
   );
 }
