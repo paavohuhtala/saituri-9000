@@ -13,7 +13,8 @@
       "suspicious": {
         "noConfusingVoidType": "off"
       }
-    }
+    },
+    "ignore": ["node_modules"]
   },
   "formatter": {
     "enabled": true,

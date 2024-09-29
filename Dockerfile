@@ -18,7 +18,7 @@ COPY tsconfig.json .
 COPY src src
 RUN yarn build
 
-FROM node:18-alpine AS app
+FROM node:20-alpine AS app
 
 # Install curl
 RUN apk add --no-cache curl

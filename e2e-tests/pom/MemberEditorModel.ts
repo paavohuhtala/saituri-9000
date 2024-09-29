@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import { BreadcrumbsModel } from "./BreadcrumbsModel";
 
 export class MemberEditorModel {

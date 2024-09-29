@@ -19,3 +19,4 @@ yarn-error.log
 Dockerfile
 *compose.yml
 db/generated
+vite-cache

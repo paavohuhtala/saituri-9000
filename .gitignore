@@ -13,3 +13,4 @@ build
 /playwright-report/
 /playwright/.cache/
 logs
+vite-cache

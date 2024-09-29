@@ -2,6 +2,9 @@
 
 set -e
 
+# Ensure Chromium is installed
+yarn playwright install chromium
+
 # Start Docker
 yarn db:test:start
 
@@ -10,7 +13,7 @@ tmux \
     setw -g mouse on \; \
     split-window 'yarn playwright test --ui'
 
-function finish {
+finish() {
     # Shutdown Docker
     yarn db:test:stop
 }

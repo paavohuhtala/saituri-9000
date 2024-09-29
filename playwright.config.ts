@@ -40,5 +40,6 @@ export default defineConfig({
     command: `TEST_INSTANCES=${WORKERS} yarn backend:test:start`,
     url: `http://localhost:${TEST_SERVER_HEALTH_CHECK_PORT}/`,
     reuseExistingServer: !process.env.CI,
+    stdout: "pipe",
   },
 });
