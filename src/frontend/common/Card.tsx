@@ -19,7 +19,7 @@ const CardContainer = styled.div`
   color: ${gray.x50};
 `;
 
-const InteractiveCardContainer = styled(CardContainer).attrs({ as: "button" })`
+const InteractiveCardContainer = styled(CardContainer)`
   cursor: pointer;
   &:hover {
     background-color: ${gray.x700};
@@ -58,9 +58,9 @@ interface ButtonCardProps extends CardProps {
   onClick?: () => void;
 }
 
-export function ButtonCard({ title, subtitle, children, onClick, as }: ButtonCardProps) {
+export function ButtonCard({ title, subtitle, children, onClick, as = "button" }: ButtonCardProps) {
   return (
-    <InteractiveCardContainer onClick={onClick} as={as}>
+    <InteractiveCardContainer as={as} onClick={onClick}>
       <CardTitle>{title}</CardTitle>
       {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
       {children && <CardDetails>{children}</CardDetails>}
