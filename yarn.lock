@@ -1222,7 +1222,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"body-parser@npm:1.20.3, body-parser@npm:^1.20.3":
+"body-parser@npm:1.20.3":
   version: 1.20.3
   resolution: "body-parser@npm:1.20.3"
   dependencies:
@@ -3588,7 +3588,6 @@ __metadata:
     "@types/react": ^18.3.10
     "@types/react-dom": ^18.3.0
     axios: ^1.7.7
-    body-parser: ^1.20.3
     cookie-parser: ^1.4.6
     express: ^4.21.0
     express-basic-auth: ^1.2.1
