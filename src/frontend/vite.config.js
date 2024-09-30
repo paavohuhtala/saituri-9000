@@ -1,9 +1,8 @@
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 function getOutDir() {
-  console.log("process.env.SAITURI_ENV", process.env.SAITURI_ENV);
   if (process.env.SAITURI_ENV === "test") {
-    console.log("returning test dist");
     return "../../dist-test";
   }
   return "../../dist";
@@ -23,4 +22,5 @@ export default defineConfig({
       },
     },
   },
+  plugins: [react()],
 });

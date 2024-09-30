@@ -13,13 +13,14 @@ export interface BackendConfig {
     password: string;
   };
   assetPath: string;
+  cookieSecret: string;
 }
 
 export interface BackendContext {
   env: Environment;
   isCi?: boolean;
   config: BackendConfig;
-  db: PrismaClient;
+  db: DbClient;
   logger: pino.Logger;
 }
 
@@ -40,14 +41,21 @@ function getConfig(env: "development" | "production"): BackendConfig {
     };
   }
 
+  const cookieSecret = process.env.COOKIE_SECRET;
+
+  if (!cookieSecret) {
+    throw new Error("COOKIE_SECRET must be set");
+  }
+
   return {
     port: Number(process.env.PORT ?? 3001),
     basicAuth,
     assetPath: env === "production" ? "dist" : "dist-dev",
+    cookieSecret,
   };
 }
 
-export function createPrismaClient(databaseUrl?: string): PrismaClient {
+export function createPrismaClient(databaseUrl?: string) {
   const client = new PrismaClient(
     databaseUrl
       ? {
@@ -56,12 +64,19 @@ export function createPrismaClient(databaseUrl?: string): PrismaClient {
               url: databaseUrl,
             },
           },
+          omit: {
+            user: {
+              password: true,
+            },
+          },
         }
       : undefined,
   );
 
   return client;
 }
+
+export type DbClient = ReturnType<typeof createPrismaClient>;
 
 export async function createContext(): Promise<BackendContext> {
   const maybeEnv = process.env.SAITURI_ENV;

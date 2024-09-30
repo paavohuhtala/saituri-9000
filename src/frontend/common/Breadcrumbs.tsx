@@ -6,7 +6,7 @@ import React from "react";
 
 export interface CrumbParams {
   expenseGroup?: { name: string; id: string };
-  member?: { name: string; id: string };
+  member?: { name?: string | null; id: string };
   expense?: { name: string; id: string };
 }
 

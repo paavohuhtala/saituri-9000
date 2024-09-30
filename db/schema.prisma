@@ -4,17 +4,53 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
+  provider        = "prisma-client-js"
+  output          = "./generated/client"
+  previewFeatures = ["omitApi"]
 }
 
-model Member {
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  // Password hashed with argon2id
+  password  String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  groups      Group[]
+  memberships Member[]
+
+  @@unique([email])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  data      Json
+  expiresAt DateTime @db.Timestamptz(3)
+}
+
+model Group {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  expenseGroups ExpenseGroup[]
+  users         User[]
+  members       Member[]
+}
+
+model Member {
+  id        String   @id @default(uuid())
+  name      String?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
   phone     String?
   email     String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  groups    Group[]
 
   expenses                Expense[]
   sentPayments            Payment[]            @relation("SentPayments")
@@ -28,6 +64,8 @@ model ExpenseGroup {
   name      String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  group     Group?   @relation(fields: [groupId], references: [id])
+  groupId   String?
 
   expenses Expense[]
   payments Payment[]

@@ -3,8 +3,9 @@ import { createGlobalStyle, styled } from "styled-components";
 import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
-import { type Link, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { IconPigMoney } from "@tabler/icons-react";
+import { useGetLoggedInUserQuery } from "./redux/saituriApi";
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +50,29 @@ const NavContainer = styled.nav`
   border-bottom: 1px solid ${gray.x700};
 `;
 
+const NavItems = styled.div`
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`;
+
+const NavItem = styled.button`
+  background: none;
+  border: none;
+  color: ${gray.x50};
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const NavLink = styled(NavItem).attrs({ as: Link })``;
+
 const Logo = styled(StyledLink)`
   font-size: 24px;
   font-weight: 900;
@@ -90,6 +114,8 @@ const PiggyContainer = styled.div`
 `;
 
 export function Layout() {
+  const { data: loggedInUser } = useGetLoggedInUserQuery();
+
   return (
     <Container>
       <GlobalCss />
@@ -101,6 +127,9 @@ export function Layout() {
           <span>Saituri&nbsp;</span>
           <span>9000</span>
         </Logo>
+        <NavItems>
+          {loggedInUser ? <NavLink to="/logout">Kirjaudu ulos</NavLink> : <NavLink to="/login">Kirjaudu</NavLink>}
+        </NavItems>
       </NavContainer>
       <MainContent>
         <Outlet />

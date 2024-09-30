@@ -13,11 +13,12 @@ import type {
   MembersResponse,
 } from "../../common/api";
 import type { NewMember } from "../../common/domain";
+import type { LoggedInUser, LoginRequest, RegisterRequest } from "../../common/authApi";
 
 export const saituriApi = createApi({
   reducerPath: "saituriApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["ExpenseGroup", "Member"],
+  tagTypes: ["ExpenseGroup", "Member", "Login"],
   endpoints: (builder) => ({
     getExpenseGroups: builder.query<ExpenseGroupsResponse, void>({
       providesTags: ["ExpenseGroup"],
@@ -102,6 +103,26 @@ export const saituriApi = createApi({
         method: "DELETE",
       }),
     }),
+    login: builder.mutation<void, LoginRequest>({
+      invalidatesTags: ["Login"],
+      query: (loginUser) => ({
+        url: "/user/login",
+        method: "POST",
+        body: loginUser,
+      }),
+    }),
+    getLoggedInUser: builder.query<LoggedInUser, void>({
+      providesTags: ["Login"],
+      query: () => "/user/me",
+    }),
+    register: builder.mutation<void, RegisterRequest>({
+      invalidatesTags: ["Login"],
+      query: (loginUser) => ({
+        url: "/user/register",
+        method: "POST",
+        body: loginUser,
+      }),
+    }),
   }),
 });
 
@@ -117,4 +138,7 @@ export const {
   useUpdateMemberMutation,
   useCreatePaymentMutation,
   useDeletePaymentMutation,
+  useLoginMutation,
+  useGetLoggedInUserQuery,
+  useRegisterMutation,
 } = saituriApi;
