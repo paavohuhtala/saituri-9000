@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import { NonEmptyString, type LoggedInUser } from "./authApi";
 
 export const NewMember = t.partial({
   name: t.union([t.string, t.null]),
@@ -94,3 +95,22 @@ export type Payment = t.TypeOf<typeof Payment>;
 export type DbType<T> = {
   [P in keyof T]: P extends "createdAt" | "updatedAt" ? Date : DbType<T[P]>;
 };
+
+export interface Group {
+  id: string;
+  name: string;
+}
+
+export interface GroupWithUsers extends Group {
+  users: LoggedInUser[];
+}
+
+export interface GroupWithDetails extends Group {
+  members: Member[];
+  expenseGroups: ExpenseGroup[];
+}
+
+export const NewGroup = t.type({
+  name: NonEmptyString,
+});
+export type NewGroup = t.TypeOf<typeof NewGroup>;

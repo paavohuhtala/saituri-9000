@@ -1,5 +1,15 @@
 import * as t from "io-ts";
-import type { Expense, ExpenseGroup, ExpenseParticipant, Member, NewExpenseGroup, Payment } from "./domain";
+import type {
+  Expense,
+  ExpenseGroup,
+  ExpenseParticipant,
+  Group,
+  GroupWithDetails,
+  Member,
+  NewExpenseGroup,
+  NewGroup,
+  Payment,
+} from "./domain";
 import type { BalanceMatrix } from "./share";
 
 export interface ExpenseGroupWithDetails extends ExpenseGroup {
@@ -60,3 +70,9 @@ export const CreatePaymentRequest = t.type({
 });
 export type CreatePaymentRequest = t.TypeOf<typeof CreatePaymentRequest>;
 export type CreatePaymentResponse = { id: string };
+
+export type CreateGroupRequest = NewGroup;
+export type CreateGroupResponse = { id: string };
+
+export type GetGroupRequest = { id: string };
+export type GetGroupResponse = GroupWithDetails;

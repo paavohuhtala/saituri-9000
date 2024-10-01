@@ -44,6 +44,7 @@ const PaymentOptionsContainer = styled.div`
 `;
 
 interface CreatePaymentCardProps {
+  groupId: string;
   payee: Member;
   amount: number;
   payerId: string;
@@ -51,13 +52,21 @@ interface CreatePaymentCardProps {
   onPaymentCreated: ({ id }: { id: string }) => void;
 }
 
-function CreatePaymentCard({ payee, amount, payerId, expenseGroupId, onPaymentCreated }: CreatePaymentCardProps) {
+function CreatePaymentCard({
+  groupId,
+  payee,
+  amount,
+  payerId,
+  expenseGroupId,
+  onPaymentCreated,
+}: CreatePaymentCardProps) {
   const location = useLocation();
   const { name, phone } = payee;
   const [createPayment, createPaymentStatus] = useCreatePaymentMutation();
 
   const onCreatePayment = async () => {
     const response = await createPayment({
+      groupId,
       expenseGroupId,
       payerId,
       payeeId: payee.id,
@@ -71,7 +80,7 @@ function CreatePaymentCard({ payee, amount, payerId, expenseGroupId, onPaymentCr
   };
 
   return (
-    <Card title={name} subtitle={centsToEurPrice(amount)}>
+    <Card title={name ?? "Anonymous"} subtitle={centsToEurPrice(amount)}>
       {createPaymentStatus.isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -126,6 +135,7 @@ const CreatedPaymentContainer = styled.div`
 `;
 
 interface CreatedPaymentEntryProps {
+  groupId: string;
   payee: Member;
   paymentId: string;
   amount: number;
@@ -133,11 +143,19 @@ interface CreatedPaymentEntryProps {
   onUndoFinished: () => void;
 }
 
-function CreatedPaymentEntry({ payee, amount, paymentId, expenseGroupId, onUndoFinished }: CreatedPaymentEntryProps) {
+function CreatedPaymentEntry({
+  groupId,
+  payee,
+  amount,
+  paymentId,
+  expenseGroupId,
+  onUndoFinished,
+}: CreatedPaymentEntryProps) {
   const [deletePayment, deletePaymentStatus] = useDeletePaymentMutation();
 
   const onUndo = async () => {
     await deletePayment({
+      groupId,
       expenseGroupId,
       paymentId,
     });
@@ -158,7 +176,7 @@ function CreatedPaymentEntry({ payee, amount, paymentId, expenseGroupId, onUndoF
 }
 
 export function CreatePayments() {
-  const { expenseGroupId } = useParams();
+  const { groupId, expenseGroupId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const payerId = searchParams.get("payer") ?? "";
   const [createdPayments, setCreatedPayments] = React.useState<
@@ -169,11 +187,11 @@ export function CreatePayments() {
     }[]
   >([]);
 
-  if (!expenseGroupId) {
+  if (!groupId || !expenseGroupId) {
     return <Navigate to="/" replace />;
   }
 
-  const { data } = useGetExpenseGroupQuery(expenseGroupId);
+  const { data } = useGetExpenseGroupQuery({ groupId, expenseGroupId });
 
   const pendingPayments = React.useMemo(() => {
     if (!data) {
@@ -239,6 +257,7 @@ export function CreatePayments() {
         {pendingPayments.map(({ member, amount }) => (
           <CreatePaymentCard
             key={member.id}
+            groupId={groupId}
             payee={member}
             amount={amount}
             expenseGroupId={expenseGroupId}
@@ -258,6 +277,7 @@ export function CreatePayments() {
           return (
             <CreatedPaymentEntry
               key={paymentId}
+              groupId={groupId}
               payee={payee}
               paymentId={paymentId}
               amount={amount}

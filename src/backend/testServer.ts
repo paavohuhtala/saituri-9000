@@ -1,9 +1,8 @@
 import _ from "lodash";
 import express from "express";
-import { type BackendContext, type BackendConfig, createPrismaClient } from "./context.js";
+import { type BackendContext, type BackendConfig, createPrismaClient, type DbClient } from "./context.js";
 import { createServer } from "./server.js";
 import { execSync } from "node:child_process";
-import type { PrismaClient } from "../../db/generated/client/index.js";
 import { Parser, Response, type Route, route, router } from "typera-express";
 import { TEST_SERVER_FIRST_PORT, TEST_SERVER_HEALTH_CHECK_PORT, TestApiCommand } from "./testCommon.js";
 import { pino } from "pino";
@@ -18,7 +17,7 @@ if (process.env.SAITURI_ENV !== "test") {
   process.exit(1);
 }
 
-async function recreateDatabase(db: PrismaClient, i: number) {
+async function recreateDatabase(db: DbClient, i: number) {
   await db.$executeRawUnsafe(`
     DROP DATABASE IF EXISTS saituri_test_${i};
   `);
@@ -26,7 +25,7 @@ async function recreateDatabase(db: PrismaClient, i: number) {
 }
 
 // Returns a connection to the template database
-async function prepareTestDatabase(): Promise<PrismaClient> {
+async function prepareTestDatabase(): Promise<DbClient> {
   const databaseUrl = `${BASE_DATABASE_URL}/saituri_test`;
 
   const now = new Date();
@@ -61,6 +60,7 @@ async function createTestContext(index: number): Promise<BackendContext> {
     port: TEST_SERVER_FIRST_PORT + index,
     databaseUrl: `${BASE_DATABASE_URL}/saituri_test_${index}`,
     assetPath: "dist-test",
+    cookieSecret: "1234",
   };
 
   const db = createPrismaClient(config.databaseUrl);
@@ -171,7 +171,9 @@ async function startTestServers() {
   });
 }
 
-startTestServers().catch((err) => {
+try {
+  await startTestServers();
+} catch (err) {
   console.error("Error starting test servers", err);
   process.exit(1);
-});
+}

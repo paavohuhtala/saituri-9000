@@ -9,15 +9,16 @@ import { delayMs } from "../delay";
 
 export function EditMember() {
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const { currentData: members } = useGetAllMembersQuery();
+  const { groupId, id } = useParams();
 
-  const returnTo = searchParams.get("returnTo") ?? "/";
-
-  if (!id) {
+  if (!groupId || !id) {
     return <Navigate to="/" replace />;
   }
+
+  const [searchParams] = useSearchParams();
+  const { currentData: members } = useGetAllMembersQuery({ groupId });
+
+  const returnTo = searchParams.get("returnTo") ?? "/";
 
   if (!members) {
     return (
@@ -46,7 +47,7 @@ export function EditMember() {
   return (
     <ViewContainer>
       <Breadcrumbs member={member} />
-      <MemberEditor initialMember={member} onSaved={onSaved} />
+      <MemberEditor groupId={groupId} initialMember={member} onSaved={onSaved} />
     </ViewContainer>
   );
 }

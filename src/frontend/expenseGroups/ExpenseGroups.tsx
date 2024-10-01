@@ -4,7 +4,7 @@ import { useCreateExpenseGroupMutation, useGetExpenseGroupsQuery } from "../redu
 import { InputField } from "../common/inputs";
 import { Button } from "../common/Button";
 import { CardLinkArea, LinkCard, SkeletonCard } from "../common/Card";
-import { InlineForm, ViewContainer, ViewTitle } from "../common/layout";
+import { InlineForm, SectionTitle, ViewContainer, ViewTitle } from "../common/layout";
 import { times } from "lodash";
 import { ErrorView } from "../common/ErrorView";
 import { IconPlus } from "@tabler/icons-react";
@@ -16,8 +16,12 @@ const ExpenseList = styled.div`
   width: 100%;
 `;
 
-export function ExpenseGroups() {
-  const { isError, data, error, refetch } = useGetExpenseGroupsQuery();
+interface Props {
+  groupId: string;
+}
+
+export function ExpenseGroups({ groupId }: Props) {
+  const { isError, data, error, refetch } = useGetExpenseGroupsQuery({ groupId });
 
   const [newExpenseGroupName, setNewExpenseGroupName] = React.useState("");
   const [createExpenseGroup, newExpenseGroupStatus] = useCreateExpenseGroupMutation();
@@ -27,7 +31,7 @@ export function ExpenseGroups() {
   };
 
   const onCreateNewExpenseGroup = () => {
-    createExpenseGroup({ name: newExpenseGroupName }).then(() => {
+    createExpenseGroup({ groupId, name: newExpenseGroupName }).then(() => {
       setNewExpenseGroupName("");
     });
   };
@@ -35,7 +39,7 @@ export function ExpenseGroups() {
   if (!data) {
     return (
       <ViewContainer>
-        <ViewTitle>Kuluryhmät</ViewTitle>
+        <SectionTitle>Kuluryhmät</SectionTitle>
 
         <ExpenseList>
           {times(5, (i) => (
@@ -52,7 +56,7 @@ export function ExpenseGroups() {
 
   return (
     <ViewContainer>
-      <ViewTitle>Kuluryhmät</ViewTitle>
+      <SectionTitle>Kuluryhmät</SectionTitle>
 
       <ExpenseList>
         {newExpenseGroupStatus.isLoading && <SkeletonCard />}

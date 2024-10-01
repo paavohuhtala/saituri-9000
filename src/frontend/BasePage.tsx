@@ -5,7 +5,7 @@ import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
 import { Link, Outlet } from "react-router-dom";
 import { IconPigMoney } from "@tabler/icons-react";
-import { useGetLoggedInUserQuery } from "./redux/saituriApi";
+import { useGetCurrentUserQuery } from "./redux/saituriApi";
 
 const Container = styled.div`
   display: flex;
@@ -114,7 +114,7 @@ const PiggyContainer = styled.div`
 `;
 
 export function Layout() {
-  const { data: loggedInUser } = useGetLoggedInUserQuery();
+  const { data: loggedInUser } = useGetCurrentUserQuery();
 
   return (
     <Container>
@@ -128,7 +128,11 @@ export function Layout() {
           <span>9000</span>
         </Logo>
         <NavItems>
-          {loggedInUser ? <NavLink to="/logout">Kirjaudu ulos</NavLink> : <NavLink to="/login">Kirjaudu</NavLink>}
+          {loggedInUser?.type === "user" ? (
+            <NavLink to="/logout">Kirjaudu ulos</NavLink>
+          ) : (
+            <NavLink to="/login">Kirjaudu</NavLink>
+          )}
         </NavItems>
       </NavContainer>
       <MainContent>

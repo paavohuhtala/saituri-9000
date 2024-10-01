@@ -13,93 +13,108 @@ import type {
   MembersResponse,
 } from "../../common/api";
 import type { NewMember } from "../../common/domain";
-import type { LoggedInUser, LoginRequest, RegisterRequest } from "../../common/authApi";
+import type { LoginRequest, RegisterRequest, User } from "../../common/authApi";
 
 export const saituriApi = createApi({
   reducerPath: "saituriApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
   tagTypes: ["ExpenseGroup", "Member", "Login"],
   endpoints: (builder) => ({
-    getExpenseGroups: builder.query<ExpenseGroupsResponse, void>({
+    getExpenseGroups: builder.query<ExpenseGroupsResponse, { groupId: string }>({
       providesTags: ["ExpenseGroup"],
-      query: () => "/expense-groups",
+      query: ({ groupId }) => `/group/${groupId}/expense-groups`,
     }),
-    getExpenseGroup: builder.query<ExpenseGroupResponse, string>({
+    getExpenseGroup: builder.query<ExpenseGroupResponse, { groupId: string; expenseGroupId: string }>({
       providesTags: ["ExpenseGroup"],
-      query: (id) => `/expense-groups/${id}`,
+      query: ({ groupId, expenseGroupId }) => `/group/${groupId}/expense-groups/${expenseGroupId}`,
     }),
-    createExpenseGroup: builder.mutation<AddExpenseGroupResponse, AddExpenseGroupRequest>({
+    createExpenseGroup: builder.mutation<AddExpenseGroupResponse, { groupId: string } & AddExpenseGroupRequest>({
       invalidatesTags: ["ExpenseGroup"],
-      query: (newExpenseGroup) => ({
-        url: "/expense-groups",
+      query: ({ groupId, ...newExpenseGroup }) => ({
+        url: `/group/${groupId}/expense-groups`,
         method: "POST",
         body: newExpenseGroup,
       }),
     }),
-    addExpenseGroupMember: builder.mutation<void, AddExpenseGroupMemberRequest & { expenseGroupId: string }>({
+    addExpenseGroupMember: builder.mutation<
+      void,
+      AddExpenseGroupMemberRequest & { groupId: string; expenseGroupId: string }
+    >({
       invalidatesTags: ["ExpenseGroup"],
-      query: ({ memberId, expenseGroupId }) => ({
-        url: `/expense-groups/${expenseGroupId}/members`,
+      query: ({ groupId, memberId, expenseGroupId }) => ({
+        url: `/group/${groupId}/expense-groups/${expenseGroupId}/members`,
         method: "POST",
         body: { memberId },
       }),
     }),
-    createExpense: builder.mutation<CreateExpenseResponse, CreateExpenseRequest & { expenseGroupId: string }>({
+    createExpense: builder.mutation<
+      CreateExpenseResponse,
+      CreateExpenseRequest & { groupId: string; expenseGroupId: string }
+    >({
       invalidatesTags: ["ExpenseGroup"],
-      query: ({ expenseGroupId, ...newExpense }) => ({
-        url: `/expense-groups/${expenseGroupId}/expenses`,
+      query: ({ groupId, expenseGroupId, ...newExpense }) => ({
+        url: `/group/${groupId}/expense-groups/${expenseGroupId}/expenses`,
         method: "POST",
         body: newExpense,
       }),
     }),
-    updateExpense: builder.mutation<void, CreateExpenseRequest & { expenseGroupId: string; expenseId: string }>({
+    updateExpense: builder.mutation<
+      void,
+      CreateExpenseRequest & { groupId: string; expenseGroupId: string; expenseId: string }
+    >({
       invalidatesTags: ["ExpenseGroup"],
-      query: ({ expenseGroupId, expenseId, ...newExpense }) => ({
-        url: `/expense-groups/${expenseGroupId}/expenses/${expenseId}`,
+      query: ({ groupId, expenseGroupId, expenseId, ...newExpense }) => ({
+        url: `/group/${groupId}/expense-groups/${expenseGroupId}/expenses/${expenseId}`,
         method: "PUT",
         body: newExpense,
       }),
     }),
-    getAllMembers: builder.query<MembersResponse, void>({
+    getAllMembers: builder.query<MembersResponse, { groupId: string }>({
       providesTags: ["Member"],
-      query: () => "/members",
+      query: ({ groupId }) => `/group/${groupId}/members`,
     }),
-    addMember: builder.mutation<string, string>({
+    addMember: builder.mutation<string, { groupId: string; name: string }>({
       invalidatesTags: ["Member"],
-      query: (name) => ({
-        url: "/members",
+      query: ({ groupId, name }) => ({
+        url: `/group/${groupId}/members`,
         method: "POST",
         body: { name },
       }),
     }),
-    updateMember: builder.mutation<string, NewMember & { id: string }>({
+    updateMember: builder.mutation<string, NewMember & { groupId: string; id: string }>({
       invalidatesTags: ["Member", "ExpenseGroup"],
-      query: ({ id, ...body }) => ({
-        url: `/members/${id}`,
+      query: ({ groupId, id, ...body }) => ({
+        url: `/group/${groupId}/members/${id}`,
         method: "PUT",
         body,
       }),
     }),
-    createPayment: builder.mutation<CreatePaymentResponse, CreatePaymentRequest & { expenseGroupId: string }>({
+    createPayment: builder.mutation<
+      CreatePaymentResponse,
+      CreatePaymentRequest & { groupId: string; expenseGroupId: string }
+    >({
       invalidatesTags: ["ExpenseGroup"],
-      query: ({ expenseGroupId, ...newPayment }) => ({
-        url: `/expense-groups/${expenseGroupId}/payments`,
+      query: ({ groupId, expenseGroupId, ...newPayment }) => ({
+        url: `/group/${groupId}/expense-groups/${expenseGroupId}/payments`,
         method: "POST",
         body: newPayment,
       }),
     }),
-    updatePayment: builder.mutation<void, CreatePaymentRequest & { expenseGroupId: string; paymentId: string }>({
+    updatePayment: builder.mutation<
+      void,
+      CreatePaymentRequest & { groupId: string; expenseGroupId: string; paymentId: string }
+    >({
       invalidatesTags: ["ExpenseGroup"],
-      query: ({ expenseGroupId, paymentId, ...newPayment }) => ({
-        url: `/expense-groups/${expenseGroupId}/payments/${paymentId}`,
+      query: ({ groupId, expenseGroupId, paymentId, ...newPayment }) => ({
+        url: `/group/${groupId}/expense-groups/${expenseGroupId}/payments/${paymentId}`,
         method: "PUT",
         body: newPayment,
       }),
     }),
-    deletePayment: builder.mutation<void, { expenseGroupId: string; paymentId: string }>({
+    deletePayment: builder.mutation<void, { groupId: string; expenseGroupId: string; paymentId: string }>({
       invalidatesTags: ["ExpenseGroup"],
-      query: ({ expenseGroupId, paymentId }) => ({
-        url: `/expense-groups/${expenseGroupId}/payments/${paymentId}`,
+      query: ({ groupId, expenseGroupId, paymentId }) => ({
+        url: `/group/${groupId}/expense-groups/${expenseGroupId}/payments/${paymentId}`,
         method: "DELETE",
       }),
     }),
@@ -111,7 +126,7 @@ export const saituriApi = createApi({
         body: loginUser,
       }),
     }),
-    getLoggedInUser: builder.query<LoggedInUser, void>({
+    getCurrentUser: builder.query<User, void>({
       providesTags: ["Login"],
       query: () => "/user/me",
     }),
@@ -139,6 +154,6 @@ export const {
   useCreatePaymentMutation,
   useDeletePaymentMutation,
   useLoginMutation,
-  useGetLoggedInUserQuery,
+  useGetCurrentUserQuery,
   useRegisterMutation,
 } = saituriApi;

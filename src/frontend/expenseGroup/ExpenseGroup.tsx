@@ -16,14 +16,14 @@ import { Payments } from "./Payments";
 import { LoadingIndicator } from "../common/LoadingIndicator";
 
 export function ExpenseGroup() {
-  const { expenseGroupId } = useParams();
+  const { groupId, expenseGroupId } = useParams();
 
-  if (!expenseGroupId) {
+  if (!groupId || !expenseGroupId) {
     return <Navigate to="/" replace />;
   }
 
-  const { isLoading, data, error, refetch } = useGetExpenseGroupQuery(expenseGroupId);
-  const { isLoading: isLoadingAllMembers, data: allMembers } = useGetAllMembersQuery();
+  const { isLoading, data, error, refetch } = useGetExpenseGroupQuery({ groupId, expenseGroupId });
+  const { isLoading: isLoadingAllMembers, data: allMembers } = useGetAllMembersQuery({ groupId });
   const [addMember, newMemberStatus] = useAddExpenseGroupMemberMutation();
 
   const [selectedMember, setSelectedMember] = React.useState("");
@@ -50,7 +50,7 @@ export function ExpenseGroup() {
       return;
     }
 
-    addMember({ expenseGroupId: expenseGroupId, memberId: selectedMember }).then(() => {
+    addMember({ groupId, expenseGroupId, memberId: selectedMember }).then(() => {
       setSelectedMember("");
     });
   };

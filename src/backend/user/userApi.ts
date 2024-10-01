@@ -1,17 +1,16 @@
 import { Parser, Response, type Route, route, router } from "typera-express";
-import type { BackendContext } from "./context.js";
+import type { BackendContext } from "../context.js";
 import {
   RegisterRequest,
   LoginRequest,
   type RegisterError,
   type CreatedUser,
   type LoginError,
-  type LoggedInUser,
   type User,
-} from "../common/authApi.js";
+} from "../../common/authApi.js";
 import argon2 from "argon2";
-import { PrismaClientKnownRequestError } from "../../db/generated/client/runtime/library.js";
-import { PrismaErrorCode } from "./prismaUtils.js";
+import { PrismaClientKnownRequestError } from "../../../db/generated/client/runtime/library.js";
+import { PrismaErrorCode } from "../prismaUtils.js";
 
 export function createUserApi({ db, logger }: BackendContext) {
   const registerUser: Route<

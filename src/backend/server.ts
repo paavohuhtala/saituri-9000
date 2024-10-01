@@ -1,7 +1,6 @@
 import bodyParser from "body-parser";
 import express from "express";
 import type { Express } from "express";
-import { createExpenseGroupApi } from "./expenseGroupApi.js";
 import { createMemberApi } from "./memberApi.js";
 import basicAuth from "express-basic-auth";
 import type { BackendContext } from "./context.js";
@@ -10,8 +9,9 @@ import type { Request } from "express";
 import type { Response } from "express";
 import type { NextFunction } from "express";
 import cookieParser from "cookie-parser";
-import { createUserApi } from "./userApi.js";
+import { createUserApi } from "./user/userApi.js";
 import session from "express-session";
+import { createExpenseGroupApi } from "./group/expenseGroup/expenseGroupApi.js";
 
 export async function createServer(context: BackendContext, injectRoutes?: (server: Express) => void) {
   const { env, config, logger } = context;
