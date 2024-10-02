@@ -1,21 +1,25 @@
 import React from "react";
-import { ViewContainer, ViewTitle } from "../common/layout";
+import { SectionTitle, ViewContainer } from "../common/layout";
 import { Members, MembersSkeleton } from "./Members";
 import { useAddMemberMutation, useGetAllMembersQuery } from "../redux/saituriApi";
 import { NewMember } from "./NewMember";
 
-export function AllMembers() {
-  const { data } = useGetAllMembersQuery();
+interface Props {
+  groupId: string;
+}
+
+export function AllMembers({ groupId }: Props) {
+  const { data } = useGetAllMembersQuery({ groupId });
 
   const [addMember, _] = useAddMemberMutation();
 
   return (
     <ViewContainer>
-      <ViewTitle>Kaikki jäsenet</ViewTitle>
+      <SectionTitle>Kaikki jäsenet</SectionTitle>
       {data ? (
         <>
           <Members members={data} />
-          <NewMember onAddMember={async (name) => await addMember(name)} />
+          <NewMember onAddMember={async (name) => await addMember({ groupId, name })} />
         </>
       ) : (
         <MembersSkeleton />

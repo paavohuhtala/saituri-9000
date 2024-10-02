@@ -13,12 +13,14 @@
     "@swc/core": "^1.7.26",
     "@tabler/icons-react": "^3.19.0",
     "@types/cookie-parser": "^1.4.7",
+    "@types/express-session": "^1.18.0",
     "@types/lodash": "^4.17.9",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.7.4",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
     "axios": "^1.7.7",
     "nodemon": "^3.1.7",
     "qrcode": "^1.5.4",
@@ -31,10 +33,12 @@
     "vite": "^5.4.8"
   },
   "dependencies": {
+    "argon2": "^0.41.1",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.6",
     "express": "^4.21.0",
     "express-basic-auth": "^1.2.1",
+    "express-session": "^1.18.0",
     "fp-ts": "^2.16.9",
     "io-ts": "^2.2.21",
     "lodash": "^4.17.21",
@@ -46,8 +50,8 @@
     "typera-express": "^2.4.4"
   },
   "scripts": {
-    "backend:dev:start": "SAITURI_ENV=development nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/index.ts'",
-    "backend:test:start": "SAITURI_ENV=test nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm src/backend/testServer.ts'",
+    "backend:dev:start": "SAITURI_ENV=development nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm --env-file=.env src/backend/index.ts'",
+    "backend:test:start": "SAITURI_ENV=test nodemon --watch src/backend -e ts --exec 'node --loader @swc-node/register/esm --env-file=.env src/backend/testServer.ts'",
     "backend:build": "NODE_ENV=production tsc",
     "backend:prod:start": "NODE_ENV=production SAITURI_ENV=production node build/backend/index.js",
     "frontend:dev:start": "SAITURI_ENV=development PORT=1234 vite serve src/frontend",

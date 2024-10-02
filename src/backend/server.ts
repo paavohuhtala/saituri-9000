@@ -1,7 +1,6 @@
 import bodyParser from "body-parser";
 import express from "express";
 import type { Express } from "express";
-import { createExpenseGroupApi } from "./expenseGroupApi.js";
 import { createMemberApi } from "./memberApi.js";
 import basicAuth from "express-basic-auth";
 import type { BackendContext } from "./context.js";
@@ -10,6 +9,10 @@ import type { Request } from "express";
 import type { Response } from "express";
 import type { NextFunction } from "express";
 import cookieParser from "cookie-parser";
+import { createUserApi } from "./user/userApi.js";
+import session from "express-session";
+import { createExpenseGroupApi } from "./group/expenseGroup/expenseGroupApi.js";
+import { createGroupApi } from "./group/groupApi.js";
 
 export async function createServer(context: BackendContext, injectRoutes?: (server: Express) => void) {
   const { env, config, logger } = context;
@@ -17,7 +20,20 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
 
   const server = express();
   server.use(bodyParser.json());
-  server.use(cookieParser());
+  server.use(cookieParser(context.config.cookieSecret));
+
+  server.use(
+    session({
+      secret: context.config.cookieSecret,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: env === "production",
+      },
+    }),
+  );
 
   const httpLogger = pinoHttp({
     logger: context.logger,
@@ -55,6 +71,8 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
 
   server.use("/api", createExpenseGroupApi(context).handler());
   server.use("/api", createMemberApi(context).handler());
+  server.use("/api/user", createUserApi(context).handler());
+  server.use("/api", createGroupApi(context).handler());
 
   // The "catchall" handler: for any request that doesn't
   // match one above, send back React's index.html file.

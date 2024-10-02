@@ -10,14 +10,14 @@ import { delayMs } from "../delay";
 
 export function EditExpenseGroupMember() {
   const navigate = useNavigate();
-  const { memberId, expenseGroupId } = useParams();
+  const { groupId, memberId, expenseGroupId } = useParams();
 
-  if (!memberId || !expenseGroupId) {
+  if (!groupId || !memberId || !expenseGroupId) {
     return <Navigate to="/" replace />;
   }
 
-  const { currentData: members } = useGetAllMembersQuery();
-  const { data: expenseGroup } = useGetExpenseGroupQuery(expenseGroupId);
+  const { currentData: members } = useGetAllMembersQuery({ groupId });
+  const { data: expenseGroup } = useGetExpenseGroupQuery({ groupId, expenseGroupId });
 
   if (!members || !expenseGroup) {
     return (
@@ -46,7 +46,7 @@ export function EditExpenseGroupMember() {
   return (
     <ViewContainer>
       <Breadcrumbs member={member} expenseGroup={expenseGroup} />
-      <MemberEditor initialMember={member} onSaved={onSaved} />
+      <MemberEditor groupId={groupId} initialMember={member} onSaved={onSaved} />
     </ViewContainer>
   );
 }

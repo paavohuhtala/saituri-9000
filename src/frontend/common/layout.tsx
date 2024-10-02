@@ -36,6 +36,13 @@ export const ViewSubtitle = styled.h2`
   color: ${gray.x100};
 `;
 
+export const SectionTitle = styled.h2`
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  color: ${gray.x100};
+`;
+
 export const InlineForm = styled.div`
   display: flex;
   flex-direction: row;

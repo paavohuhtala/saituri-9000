@@ -17,12 +17,13 @@ const NameField = styled(InputField)`
 `;
 
 interface Props {
+  groupId: string;
   initialMember: Member;
   onSaved: () => void;
 }
 
-export function MemberEditor({ initialMember, onSaved }: Props) {
-  const [name, setName] = React.useState<string>(initialMember.name);
+export function MemberEditor({ groupId, initialMember, onSaved }: Props) {
+  const [name, setName] = React.useState<string>(initialMember.name ?? "");
   const [phone, setPhone] = React.useState<string>(initialMember.phone ?? "");
   const [email, setEmail] = React.useState<string>(initialMember.email ?? "");
 
@@ -39,6 +40,7 @@ export function MemberEditor({ initialMember, onSaved }: Props) {
 
     await updateMember({
       id: initialMember.id,
+      groupId,
       name,
       phone,
       email,

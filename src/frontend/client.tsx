@@ -14,6 +14,9 @@ import { EditMember } from "./member/EditMember";
 import { EditExpenseGroupMember } from "./member/EditExpenseGroupMember";
 import { CreatePayments } from "./payments/CreatePayments";
 import type { Crumb, CrumbParams } from "./common/Breadcrumbs";
+import { LoginPage } from "./auth/LoginPage";
+import { RegisterPage } from "./auth/RegisterPage";
+import { GroupHome } from "./GroupHome";
 
 const root = document.getElementById("root");
 
@@ -27,6 +30,12 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <Home /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> },
+      {
+        path: "group/:groupId",
+        element: <GroupHome />,
+      },
       {
         path: "member/:id",
         element: <EditMember />,

@@ -1,14 +1,11 @@
 import * as t from "io-ts";
+import { NonEmptyString, type LoggedInUser } from "./authApi";
 
-export const NewMember = t.intersection([
-  t.type({
-    name: t.string,
-  }),
-  t.partial({
-    phone: t.union([t.string, t.null]),
-    email: t.union([t.string, t.null]),
-  }),
-]);
+export const NewMember = t.partial({
+  name: t.union([t.string, t.null]),
+  phone: t.union([t.string, t.null]),
+  email: t.union([t.string, t.null]),
+});
 export type NewMember = t.TypeOf<typeof NewMember>;
 
 export const Member = t.intersection([
@@ -93,8 +90,40 @@ export const Payment = t.intersection([
 ]);
 export type Payment = t.TypeOf<typeof Payment>;
 
+type DateTimeField = "createdAt" | "updatedAt" | "expiresAt";
+
 // Recursively convert updatedAt and createdAt to Date objects
 // Hack because Prisma returns Date objects but our API returns ISO strings
 export type DbType<T> = {
-  [P in keyof T]: P extends "createdAt" | "updatedAt" ? Date : DbType<T[P]>;
+  [P in keyof T]: P extends DateTimeField ? Date : DbType<T[P]>;
 };
+
+export interface Group {
+  id: string;
+  name: string;
+}
+
+export interface GroupWithUsers extends Group {
+  users: LoggedInUser[];
+}
+
+export interface GroupWithDetails extends Group {
+  members: Member[];
+  expenseGroups: ExpenseGroup[];
+}
+
+export const NewGroup = t.type({
+  name: NonEmptyString,
+});
+export type NewGroup = t.TypeOf<typeof NewGroup>;
+
+export interface GroupInvite {
+  id: string;
+  groupId: string;
+  expiresAt: string;
+}
+
+export interface GroupInviteWithDetails extends GroupInvite {
+  groupName: string;
+  inviterName: string;
+}

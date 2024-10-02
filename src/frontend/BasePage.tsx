@@ -3,8 +3,10 @@ import { createGlobalStyle, styled } from "styled-components";
 import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
-import { type Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { IconPigMoney } from "@tabler/icons-react";
+import { useGetCurrentUserQuery } from "./redux/saituriApi";
+import { useLoginStatus, useLogout } from "./redux/hooks";
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +22,11 @@ const GlobalCss = createGlobalStyle`
     color: ${gray.x50};
     font-family: 'Inter', sans-serif;
     font-weight: 400;
+  }
+
+  // Prevent scrolling background when there's an open modal
+  body:has(dialog[open]) {
+    overflow: hidden;
   }
 
   a {
@@ -48,6 +55,29 @@ const NavContainer = styled.nav`
 
   border-bottom: 1px solid ${gray.x700};
 `;
+
+const NavItems = styled.div`
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`;
+
+const NavItem = styled.button`
+  background: none;
+  border: none;
+  color: ${gray.x50};
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const NavLink = styled(NavItem).attrs({ as: Link })``;
 
 const Logo = styled(StyledLink)`
   font-size: 24px;
@@ -90,6 +120,15 @@ const PiggyContainer = styled.div`
 `;
 
 export function Layout() {
+  const loginStatus = useLoginStatus();
+  const logout = useLogout();
+  const navigate = useNavigate();
+
+  const handleLogout = React.useCallback(async () => {
+    await logout();
+    navigate("/login");
+  }, [navigate, logout]);
+
   return (
     <Container>
       <GlobalCss />
@@ -101,6 +140,10 @@ export function Layout() {
           <span>Saituri&nbsp;</span>
           <span>9000</span>
         </Logo>
+        <NavItems>
+          {loginStatus === "loggedIn" && <NavItem onClick={handleLogout}>Kirjaudu ulos</NavItem>}
+          {loginStatus === "loggedOut" && <NavLink to="/login">Kirjaudu</NavLink>}
+        </NavItems>
       </NavContainer>
       <MainContent>
         <Outlet />
