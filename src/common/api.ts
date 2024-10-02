@@ -74,5 +74,25 @@ export type CreatePaymentResponse = { id: string };
 export type CreateGroupRequest = NewGroup;
 export type CreateGroupResponse = { id: string };
 
-export type GetGroupRequest = { id: string };
+export type GetGroupRequest = { groupId: string };
 export type GetGroupResponse = GroupWithDetails;
+
+export type GetGroupsResponse = Group[];
+
+export type CreateGroupInviteRequest = { groupId: string };
+export type CreateGroupInviteResponse = { id: string; groupId: string; expiresAt: string };
+
+export type GetGroupInviteRequest = { id: string };
+export type GetGroupInviteResponse = {
+  id: string;
+  groupId: string;
+  expiresAt: string;
+
+  groupName: string;
+  inviterName: string;
+};
+
+export type AcceptGroupInviteError = "invite-not-found" | "invite-expired" | "unknown-error";
+export type AcceptGroupInviteRequest = { id: string };
+export type AcceptGroupInviteResponse = { groupId: string };
+export type AcceptGroupInviteErrorResponse = { error: AcceptGroupInviteError };

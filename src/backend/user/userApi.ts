@@ -69,6 +69,19 @@ export function createUserApi({ db, logger }: BackendContext) {
         return Response.ok({ id: user.id });
       });
 
+  const logoutUser: Route<Response.Ok<void>> = route.post("/logout").handler(async (request) => {
+    await new Promise<void>((resolve) => {
+      request.req.session.destroy((err) => {
+        if (err) {
+          logger.error({ err }, "Failed to logout user");
+        }
+        resolve();
+      });
+    });
+
+    return Response.ok();
+  });
+
   const getCurrentUser: Route<Response.Ok<User> | Response.InternalServerError> = route
     .get("/me")
     .handler(async (request) => {
@@ -90,6 +103,6 @@ export function createUserApi({ db, logger }: BackendContext) {
       return Response.ok({ type: "user", id: user.id, name: user.name, email: user.email } as const);
     });
 
-  const userApi = router(registerUser, loginUser, getCurrentUser);
+  const userApi = router(registerUser, loginUser, logoutUser, getCurrentUser);
   return userApi;
 }

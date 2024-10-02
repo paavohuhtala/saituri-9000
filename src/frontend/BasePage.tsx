@@ -3,9 +3,10 @@ import { createGlobalStyle, styled } from "styled-components";
 import { gray } from "./theme";
 import { StyledLink } from "./common/StyledLink";
 import { pink, indigo } from "./theme";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { IconPigMoney } from "@tabler/icons-react";
 import { useGetCurrentUserQuery } from "./redux/saituriApi";
+import { useLoginStatus, useLogout } from "./redux/hooks";
 
 const Container = styled.div`
   display: flex;
@@ -21,6 +22,11 @@ const GlobalCss = createGlobalStyle`
     color: ${gray.x50};
     font-family: 'Inter', sans-serif;
     font-weight: 400;
+  }
+
+  // Prevent scrolling background when there's an open modal
+  body:has(dialog[open]) {
+    overflow: hidden;
   }
 
   a {
@@ -114,7 +120,14 @@ const PiggyContainer = styled.div`
 `;
 
 export function Layout() {
-  const { data: loggedInUser } = useGetCurrentUserQuery();
+  const loginStatus = useLoginStatus();
+  const logout = useLogout();
+  const navigate = useNavigate();
+
+  const handleLogout = React.useCallback(async () => {
+    await logout();
+    navigate("/login");
+  }, [navigate, logout]);
 
   return (
     <Container>
@@ -128,11 +141,8 @@ export function Layout() {
           <span>9000</span>
         </Logo>
         <NavItems>
-          {loggedInUser?.type === "user" ? (
-            <NavLink to="/logout">Kirjaudu ulos</NavLink>
-          ) : (
-            <NavLink to="/login">Kirjaudu</NavLink>
-          )}
+          {loginStatus === "loggedIn" && <NavItem onClick={handleLogout}>Kirjaudu ulos</NavItem>}
+          {loginStatus === "loggedOut" && <NavLink to="/login">Kirjaudu</NavLink>}
         </NavItems>
       </NavContainer>
       <MainContent>

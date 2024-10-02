@@ -18,8 +18,9 @@ model User {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  groups      Group[]
-  memberships Member[]
+  groups       Group[]
+  memberships  Member[]
+  groupInvites GroupInvite[]
 
   @@unique([email])
 }
@@ -43,10 +44,12 @@ model Group {
 }
 
 model GroupInvite {
-  id        String   @id @default(uuid())
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   String
-  expiresAt DateTime @db.Timestamptz(3)
+  id          String   @id @default(uuid())
+  group       Group    @relation(fields: [groupId], references: [id])
+  groupId     String
+  expiresAt   DateTime @db.Timestamptz(3)
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String
 }
 
 model Member {

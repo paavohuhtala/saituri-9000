@@ -29,3 +29,5 @@ export function createAuthMiddleware(ctx: BackendContext) {
 
   return authMiddleware;
 }
+
+export type AuthMiddlewareResponse = Response.Unauthorized<string>;

@@ -30,3 +30,5 @@ export function createGroupMiddleware(ctx: BackendContext) {
 
   return groupMiddleware;
 }
+
+export type GroupMiddlewareResponse = Response.Forbidden<string> | Response.NotFound<string>;

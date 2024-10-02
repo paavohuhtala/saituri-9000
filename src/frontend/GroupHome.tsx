@@ -2,13 +2,11 @@ import React from "react";
 import { ExpenseGroups } from "./expenseGroups/ExpenseGroups";
 import { AllMembers } from "./members/AllMembers";
 import { ViewContainer, ViewTitle } from "./common/layout";
-import type { Group } from "../common/domain";
+import { useParams } from "react-router-dom";
 
-interface Props {
-  group: Group;
-}
+export function GroupHome() {
+  const { groupId } = useParams();
 
-export function GroupHome({ group }: Props) {
   return (
     <ViewContainer>
       <ViewTitle>{group.name}</ViewTitle>

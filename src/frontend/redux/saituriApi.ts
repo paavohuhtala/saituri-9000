@@ -6,11 +6,22 @@ import type {
   AddExpenseGroupResponse,
   CreateExpenseRequest,
   CreateExpenseResponse,
+  CreateGroupInviteRequest,
+  CreateGroupInviteResponse,
+  CreateGroupRequest,
+  CreateGroupResponse,
   CreatePaymentRequest,
   CreatePaymentResponse,
   ExpenseGroupResponse,
   ExpenseGroupsResponse,
   MembersResponse,
+  GetGroupInviteRequest,
+  GetGroupInviteResponse,
+  GetGroupRequest,
+  GetGroupResponse,
+  GetGroupsResponse,
+  AcceptGroupInviteRequest,
+  AcceptGroupInviteResponse,
 } from "../../common/api";
 import type { NewMember } from "../../common/domain";
 import type { LoginRequest, RegisterRequest, User } from "../../common/authApi";
@@ -18,7 +29,7 @@ import type { LoginRequest, RegisterRequest, User } from "../../common/authApi";
 export const saituriApi = createApi({
   reducerPath: "saituriApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["ExpenseGroup", "Member", "Login"],
+  tagTypes: ["ExpenseGroup", "Member", "Login", "Group"],
   endpoints: (builder) => ({
     getExpenseGroups: builder.query<ExpenseGroupsResponse, { groupId: string }>({
       providesTags: ["ExpenseGroup"],
@@ -138,6 +149,44 @@ export const saituriApi = createApi({
         body: loginUser,
       }),
     }),
+    logout: builder.mutation<void, void>({
+      invalidatesTags: ["Login"],
+      query: () => {
+        return { url: "/user/logout", method: "POST" };
+      },
+    }),
+    getGroup: builder.query<GetGroupResponse, GetGroupRequest>({
+      providesTags: ["Group"],
+      query: ({ groupId }) => `/group/${groupId}`,
+    }),
+    getGroups: builder.query<GetGroupsResponse, void>({
+      providesTags: ["Group"],
+      query: () => "/group",
+    }),
+    createGroup: builder.mutation<CreateGroupResponse, CreateGroupRequest>({
+      invalidatesTags: ["Group"],
+      query: ({ name }) => ({
+        url: "/group",
+        method: "POST",
+        body: { name },
+      }),
+    }),
+    createGroupInvite: builder.mutation<CreateGroupInviteResponse, CreateGroupInviteRequest>({
+      query: ({ groupId }) => ({
+        url: `/group/${groupId}/invite`,
+        method: "POST",
+      }),
+    }),
+    getGroupInvite: builder.query<GetGroupInviteResponse, GetGroupInviteRequest>({
+      query: ({ id }) => `/group/invite/${id}`,
+    }),
+    acceptGroupInvite: builder.mutation<AcceptGroupInviteResponse, AcceptGroupInviteRequest>({
+      invalidatesTags: ["Group"],
+      query: ({ id }) => ({
+        url: `/group/invite/${id}/accept`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -154,6 +203,14 @@ export const {
   useCreatePaymentMutation,
   useDeletePaymentMutation,
   useLoginMutation,
+  useLogoutMutation,
   useGetCurrentUserQuery,
   useRegisterMutation,
+  useAcceptGroupInviteMutation,
+  useCreateGroupInviteMutation,
+  useGetGroupInviteQuery,
+  useGetGroupQuery,
+  useGetGroupsQuery,
+  useCreateGroupMutation,
+  useUpdatePaymentMutation,
 } = saituriApi;

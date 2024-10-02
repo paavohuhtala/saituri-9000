@@ -12,6 +12,7 @@ import cookieParser from "cookie-parser";
 import { createUserApi } from "./user/userApi.js";
 import session from "express-session";
 import { createExpenseGroupApi } from "./group/expenseGroup/expenseGroupApi.js";
+import { createGroupApi } from "./group/groupApi.js";
 
 export async function createServer(context: BackendContext, injectRoutes?: (server: Express) => void) {
   const { env, config, logger } = context;
@@ -71,6 +72,7 @@ export async function createServer(context: BackendContext, injectRoutes?: (serv
   server.use("/api", createExpenseGroupApi(context).handler());
   server.use("/api", createMemberApi(context).handler());
   server.use("/api/user", createUserApi(context).handler());
+  server.use("/api", createGroupApi(context).handler());
 
   // The "catchall" handler: for any request that doesn't
   // match one above, send back React's index.html file.

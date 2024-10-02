@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useRegisterMutation } from "../redux/saituriApi";
 import { decodeOrThrow } from "../../common/io-ts-util";
 import { NonEmptyString, ValidEmail } from "../../common/authApi";
+import { PasswordField } from "./authCommon";
 
 const CtaContainer = styled.section`
   display: flex;
@@ -23,7 +24,6 @@ export function RegisterPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Registering with", name, email, password);
 
     const validatedName = decodeOrThrow(NonEmptyString, name);
     const validatedEmail = decodeOrThrow(ValidEmail, email);
@@ -57,17 +57,7 @@ export function RegisterPage() {
             autoComplete="email"
           />
         </FormField>
-        <FormField>
-          <FormLabel>Salasana</FormLabel>
-          <InputField
-            required
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            name="password"
-            autoComplete="new-password"
-          />
-        </FormField>
+        <PasswordField value={password} onChange={setPassword} kind="new-password" />
         <Button type="submit">Rekisteröidy</Button>
       </Form>
       <CtaContainer hidden={registerStatus.isLoading}>

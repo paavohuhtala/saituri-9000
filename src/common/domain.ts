@@ -90,10 +90,12 @@ export const Payment = t.intersection([
 ]);
 export type Payment = t.TypeOf<typeof Payment>;
 
+type DateTimeField = "createdAt" | "updatedAt" | "expiresAt";
+
 // Recursively convert updatedAt and createdAt to Date objects
 // Hack because Prisma returns Date objects but our API returns ISO strings
 export type DbType<T> = {
-  [P in keyof T]: P extends "createdAt" | "updatedAt" ? Date : DbType<T[P]>;
+  [P in keyof T]: P extends DateTimeField ? Date : DbType<T[P]>;
 };
 
 export interface Group {
@@ -114,3 +116,14 @@ export const NewGroup = t.type({
   name: NonEmptyString,
 });
 export type NewGroup = t.TypeOf<typeof NewGroup>;
+
+export interface GroupInvite {
+  id: string;
+  groupId: string;
+  expiresAt: string;
+}
+
+export interface GroupInviteWithDetails extends GroupInvite {
+  groupName: string;
+  inviterName: string;
+}
