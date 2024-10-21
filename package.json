@@ -5,7 +5,7 @@
   "packageManager": "yarn@3.5.1",
   "type": "module",
   "devDependencies": {
-    "@biomejs/biome": "^1.9.2",
+    "@biomejs/biome": "^1.9.4",
     "@playwright/test": "^1.47.2",
     "@prisma/client": "5.20.0",
     "@reduxjs/toolkit": "^2.2.7",
