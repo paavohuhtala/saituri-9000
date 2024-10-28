@@ -990,13 +990,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.3.10":
-  version: 18.3.10
-  resolution: "@types/react@npm:18.3.10"
+"@types/react@npm:^18.3.12":
+  version: 18.3.12
+  resolution: "@types/react@npm:18.3.12"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^3.0.2
-  checksum: 04261654b5f4bc9584e9d882c7dfd5b36dc58963f958f8c3efd24cb68c9d205bc2d57558a1479b86d7827f0e5116d5bd111791d1253583d1e1c165f0aeb48c48
+  checksum: 4ab1577a8c2105a5e316536f724117c90eee5f4bd5c137fc82a2253d8c1fd299dedaa07e8dfc95d6e2f04a4be3cb8b0e1b06098c6233ebd55c508d88099395b7
   languageName: node
   linkType: hard
 
@@ -3585,7 +3585,7 @@ __metadata:
     "@types/luxon": ^3.4.2
     "@types/node": ^22.7.4
     "@types/qrcode": ^1.5.5
-    "@types/react": ^18.3.10
+    "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.0
     axios: ^1.7.7
     body-parser: ^1.20.3
