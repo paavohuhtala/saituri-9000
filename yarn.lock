@@ -896,10 +896,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.9":
-  version: 4.17.9
-  resolution: "@types/lodash@npm:4.17.9"
-  checksum: 6d1bf3e77f0a54d97532755a74260d402d8972259c5451b74612c16cb983b73e0760e5bfe4f9e68ab15051511c867812b40715a01f9805afe6bc36c7dd676378
+"@types/lodash@npm:^4.17.13":
+  version: 4.17.13
+  resolution: "@types/lodash@npm:4.17.13"
+  checksum: d0bf8fbd950be71946e0076b30fd40d492293baea75f05931b6b5b906fd62583708c6229abdb95b30205ad24ce1ed2f48bc9d419364f682320edd03405cc0c7e
   languageName: node
   linkType: hard
 
@@ -3581,7 +3581,7 @@ __metadata:
     "@swc/core": ^1.7.26
     "@tabler/icons-react": ^3.19.0
     "@types/cookie-parser": ^1.4.7
-    "@types/lodash": ^4.17.9
+    "@types/lodash": ^4.17.13
     "@types/luxon": ^3.4.2
     "@types/node": ^22.7.4
     "@types/qrcode": ^1.5.5
