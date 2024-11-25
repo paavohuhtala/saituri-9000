@@ -10,7 +10,7 @@
     "@prisma/client": "5.20.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@swc-node/register": "^1.10.9",
-    "@swc/core": "^1.7.26",
+    "@swc/core": "^1.9.3",
     "@tabler/icons-react": "^3.19.0",
     "@types/cookie-parser": "^1.4.7",
     "@types/lodash": "^4.17.9",
